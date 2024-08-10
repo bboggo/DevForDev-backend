@@ -79,47 +79,7 @@ public enum ErrorCode {
     UPDATE_ERROR(500, "9999", "Update Transaction Error Exception"),
 
     // Transaction Delete Error
-    DELETE_ERROR(500, "9999", "Delete Transaction Error Exception"),
-
-    // PROJECT
-    MEMBER_NOT_BELONG_TO_TEAM(400, "P001", "Member doesn't belong to this team"),
-    PROJECT_NOT_FOUND(404, "P002", "Project Not Found"),
-    NOT_PROJECT_MANAGER(403, "P003", "Only Project manager can do this work."),
-    PROJECT_STATE_NOT_FOUND(404, "POO4", "Project State Not Found"),
-    PROJECT_MEMBER_NOT_FOUND(404, "P005", "Project Member Not Found"),
-    MANAGER_ID_NOT_IN_MEMBER_ID_LIST(400, "P006", "Member id list doesn't include manager id. Include manager id in member id list"),
-
-    // TEAM
-    TEAM_NOT_FOUND(404, "T001", "Team Not Found"),
-    TEAM_MEMBER_NOT_FOUND(404, "T002", "Team member Not Found"),
-
-    TEAM_MEMBER_STATE_NOT_FOUND(404, "T003", "No matching data in the team invitation status table."),
-    INVITATION_ALREADY_SENT(404, "T004", "The invitation has already been sent."),
-    NOT_TEAM_LEADER(404, "T005", " Not the leader of the team."),
-    CANNOT_DELETE_TEAM_LEADER(404, "T006", "Team leader cannot be deleted"),
-    CANNOT_INVITE_TEAM_LEADER(404, "T007", "Team leaders are not eligible for invitations."),
-    INVALID_INVITE_RESPONSE(404, "T008", "InviteState values must be 1 or 2."),
-    DUPLICATE_TEAM_MEMBER(404, "T009", "This is a team member that already exists."),
-    TEAM_MEMBER_CANNOT_UPDATE(404, "T010", "Only the leader can edit team information."),
-
-    //TASK
-    TASK_NOT_FOUND(404, "TS001", "Task Not Found"),
-    TASK_STATE_NOT_FOUND(404, "TS002", "Task State Not Found"),
-    TASK_MEMBER_NOT_FOUND(404, "TS003", "Task Member Not Found"),
-
-    // MEMBER
-    DUPLICATED_EMAIL(409, "M001", "Email is duplicated"),
-    MEMBER_NOT_FOUND(404, "M002", "Member Not Found"),
-    PASSWORD_NOT_MATCH(403, "M003", "Password doesn't match"),
-    SAME_PASSWORD(400, "M004", "New password cannot be the same as the current password."),
-    CANNOT_WITHDRAW_TEAM_LEADER(400, "M005", "You cannot withdraw because you are the team leader."),
-    CANNOT_WITHDRAW_PROJECT_LEADER(400, "M005", "You cannot withdraw because you are the project leader."),
-    PROFILE_IMAGE_UPLOAD_FAILED(400, "M005", "Profile Image upload failed"),
-
-    // COMENT
-    COMMENT_NOT_FOUND(404, "C001", "Comment Not Found"),
-    COMMENT_DEPTH_EXCEED(404, "C002", "Comment Depth is Exceeded."),
-    NOT_COMMENT_WRITER(403, "C003", "Only comment writer can edit this comment.");
+    DELETE_ERROR(500, "9999", "Delete Transaction Error Exception");
 
     /**
      * ******************************* Error Code Constructor ***************************************

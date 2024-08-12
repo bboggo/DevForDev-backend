@@ -37,8 +37,8 @@ public class SwaggerConfig {
                                                                 .format("binary")))))))
                 .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
                 .info(new Info()
-                        .title("TaskWeaver API 명세서")
-                        .description("TaskWeaver API 명세서입니다.")
+                        .title("DevForDev API 명세서")
+                        .description("DevForDev API 명세서입니다.")
                         .version("1.0.0"));
     }
 }

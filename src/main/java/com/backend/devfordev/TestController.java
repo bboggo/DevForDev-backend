@@ -1,6 +1,7 @@
 package com.backend.devfordev;
 
 import com.backend.devfordev.apiPayload.ApiResponse;
+import com.backend.devfordev.security.TokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -25,5 +26,31 @@ public class TestController {
             // 예외 발생 시 ApiResponse로 에러 메시지 반환
             throw new RuntimeException(e);
         }
+    }
+
+    private final TokenProvider tokenProvider;
+
+    public TestController(TokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
+    }
+
+    @PostMapping("/access")
+    public String createAccessToken(@RequestParam String userSpecification) {
+        return tokenProvider.createAccessToken(userSpecification);
+    }
+
+    @GetMapping("/validate")
+    public String validateToken(@RequestParam String token) {
+        return tokenProvider.validateTokenAndGetSubject(token);
+    }
+
+    @PostMapping("/refresh")
+    public String createRefreshToken() {
+        return tokenProvider.createRefreshToken();
+    }
+
+    @PostMapping("/recreate")
+    public String recreateAccessToken(@RequestParam String oldAccessToken) throws Exception {
+        return tokenProvider.recreateAccessToken(oldAccessToken);
     }
 }

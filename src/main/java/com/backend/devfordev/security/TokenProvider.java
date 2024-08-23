@@ -58,16 +58,16 @@ public class TokenProvider {
                 .compact();
     }
 
-    // 액세스 토큰 재발급 메서드 (저장 기능 제거)
+    // 액세스 토큰 재발급 메서드
     public String recreateAccessToken(String oldAccessToken) throws JsonProcessingException {
         String subject = decodeJwtPayloadSubject(oldAccessToken);
         return createAccessToken(subject);
     }
 
-    // 리프레시 토큰 검증 메서드 (저장 기능 제거)
+
     public void validateRefreshToken(String refreshToken, String oldAccessToken) throws JsonProcessingException {
         validateAndParseToken(refreshToken);
-        decodeJwtPayloadSubject(oldAccessToken); // 단순히 검증을 위한 호출
+        decodeJwtPayloadSubject(oldAccessToken);
     }
 
     private Jws<Claims> validateAndParseToken(String token) {

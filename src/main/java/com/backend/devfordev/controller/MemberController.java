@@ -26,10 +26,10 @@ public class MemberController {
 
     @Operation(summary = "회원 가입")
     @PostMapping(value = "/v1/auth/sign-up")
-    public ResponseEntity<ApiResponse> join(@RequestBody SignUpRequest request){
+    public ResponseEntity<ApiResponse> createMember(@RequestBody SignUpRequest request){
         try {
             ApiResponse apiResponse = ApiResponse.builder()
-                    .result(memberService.registerMember(request))
+                    .result(memberService.registMember(request))
                     .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
                     .code(SuccessStatus._OK.getCode())
                     .message(SuccessStatus._OK.getMessage())

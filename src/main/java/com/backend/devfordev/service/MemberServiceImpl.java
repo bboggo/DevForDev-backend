@@ -15,7 +15,7 @@ public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
 
     @Transactional
-    public SignUpResponse registerMember(SignUpRequest request) {
+    public SignUpResponse registMember(SignUpRequest request) {
         Member member = MemberConverter.toMember(request);
         member = memberRepository.save(member);
         return MemberConverter.toSignUpResponse(member);

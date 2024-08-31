@@ -2,6 +2,7 @@ package com.backend.devfordev.dto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
@@ -21,6 +22,9 @@ public record SignUpRequest(
 
         @Schema(description = "이미지url", example = "domain.com")
         String imageUrl,
+
+        @Schema(description = "전공", example = "정보통신공학과")
+        String major,
 
         @Schema(description = "생년월일", example = "2000-08-19")
         @NotNull

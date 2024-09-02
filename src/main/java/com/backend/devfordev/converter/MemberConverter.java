@@ -3,13 +3,14 @@ package com.backend.devfordev.converter;
 import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.dto.SignUpRequest;
 import com.backend.devfordev.dto.SignUpResponse;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class MemberConverter {
-    public static Member toMember(SignUpRequest signUpRequest) {
+    public static Member toMember(SignUpRequest signUpRequest, PasswordEncoder encoder) {
         String imageUrl = "domain.com";
         return Member.builder()
                 .email(signUpRequest.email())
-                .password(signUpRequest.password())
+                .password(encoder.encode(signUpRequest.password()))
                 .name(signUpRequest.name())
                 .imageUrl(imageUrl)
                 .birth(signUpRequest.birth())

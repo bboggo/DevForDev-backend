@@ -27,7 +27,7 @@ public class MemberController {
     @Operation(summary = "회원 가입")
     @PostMapping(value = "/v1/auth/sign-up")
     public ResponseEntity<ApiResponse> createMember(@RequestBody SignUpRequest request){
-        try {
+
             ApiResponse apiResponse = ApiResponse.builder()
                     .result(memberService.registMember(request))
                     .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
@@ -35,9 +35,7 @@ public class MemberController {
                     .message(SuccessStatus._OK.getMessage())
                     .build();
             return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
 //        SignUpResponse member = memberService.registerMember(request);
 //        return ApiResponse.onSuccess(MemberConverter.toSignUpResponse(member));
     }

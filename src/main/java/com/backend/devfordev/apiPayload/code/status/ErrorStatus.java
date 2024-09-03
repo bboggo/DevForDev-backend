@@ -25,8 +25,12 @@ public enum ErrorStatus implements BaseErrorCode {
     UNSUPPORTED_JWT_TOKEN(BAD_REQUEST,"G017", "The provided JWT token is not supported"),
     TOKEN_TIME_OUT(UNAUTHORIZED, "AUTH4011", "토큰이 만료되었습니다."),
     INVALID_JWT_TOKEN(UNAUTHORIZED, "AUTH4012", "토큰 유효성 검사 실패 또는 거부된 토큰입니다."),
-    LOGIN_FAILED_PASSWORD_INCORRECT(UNAUTHORIZED,"AUTH4013", "비밀번호가 틀립니다.");
+    LOGIN_FAILED_PASSWORD_INCORRECT(UNAUTHORIZED,"AUTH4013", "비밀번호가 틀립니다."),
 
+    // 회원가입
+
+    DUPLICATED_NAME(BAD_REQUEST, "MEMBER001", "Nickname is duplicated"),
+    DUPLICATED_EMAIL(BAD_REQUEST, "MEMBER002", "Email is duplicated");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

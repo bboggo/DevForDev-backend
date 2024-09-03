@@ -30,6 +30,11 @@ public class MemberServiceImpl implements MemberService{
         if(memberRepository.findByName(member.getName()).isPresent()) {
             throw new ExceptionHandler(ErrorStatus.DUPLICATED_NAME);
         }
+
+        if(memberRepository.findByEmail(member.getEmail()).isPresent()) {
+            throw new ExceptionHandler(ErrorStatus.DUPLICATED_EMAIL);
+        }
+
         member = memberRepository.save(member);
         return MemberConverter.toSignUpResponse(member);
     }

@@ -1,8 +1,10 @@
 package com.backend.devfordev.converter;
 
 import com.backend.devfordev.domain.Member;
+import com.backend.devfordev.dto.SignInResponse;
 import com.backend.devfordev.dto.SignUpRequest;
 import com.backend.devfordev.dto.SignUpResponse;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class MemberConverter {
@@ -29,4 +31,16 @@ public class MemberConverter {
                 member.getBirth()
         );
     }
+
+    public static SignInResponse toSignInResponse(Member member, String accessToken, String refreshToken) {
+        return new SignInResponse(
+                member.getId(),
+                member.getEmail(),
+                member.getName(),
+                member.getImageUrl(),
+                accessToken,
+                refreshToken
+        );
+    }
 }
+

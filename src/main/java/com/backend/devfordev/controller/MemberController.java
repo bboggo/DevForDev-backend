@@ -6,7 +6,6 @@ import com.backend.devfordev.dto.SignUpRequest;
 import com.backend.devfordev.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,7 @@ public class MemberController {
     public ResponseEntity<ApiResponse> createMember(@RequestBody SignUpRequest request){
 
             ApiResponse apiResponse = ApiResponse.builder()
-                    .result(memberService.registMember(request))
+                    .result(memberService.signUp(request))
                     .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
                     .code(SuccessStatus._OK.getCode())
                     .message(SuccessStatus._OK.getMessage())

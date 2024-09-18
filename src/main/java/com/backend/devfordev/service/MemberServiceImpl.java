@@ -50,15 +50,16 @@ public class MemberServiceImpl implements MemberService{
     public SignInResponse signIn(SignInRequest request) {
         Member member = memberRepository.findByEmail(request.email())
                 .filter(it -> encoder.matches(request.password(), it.getPassword()))
-                .orElseThrow(() -> new MemberHandler(ErrorStatus.EXPIRED_JWT_ERROR));
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.NO_MATCHING_MEMBER));
         String accessToken = tokenProvider.createAccessToken(String.format("%s:%s", member.getId(), member.getName()));
         String refreshToken = tokenProvider.createRefreshToken();
 
         memberRefreshTokenRepository.findById(member.getId())
                 .ifPresentOrElse(
-                        it -> it.updateRefreshToken(refreshToken),
-                        ()-> memberRefreshTokenRepository.save(new MemberRefreshToken(member, refreshToken))
-                ) ;
+                        it -> it.updateRefreshToken(refreshToken), // 업데이트
+                        () -> memberRefreshTokenRepository.save(new MemberRefreshToken(member, refreshToken)) // 새로 생성
+                );
+
         return MemberConverter.toSignInResponse(member, accessToken, refreshToken);
 
     }

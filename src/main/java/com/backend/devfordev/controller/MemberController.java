@@ -2,6 +2,7 @@ package com.backend.devfordev.controller;
 
 import com.backend.devfordev.apiPayload.ApiResponse;
 import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
+import com.backend.devfordev.dto.SignInRequest;
 import com.backend.devfordev.dto.SignUpRequest;
 import com.backend.devfordev.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,6 +38,18 @@ public class MemberController {
 
 //        SignUpResponse member = memberService.registerMember(request);
 //        return ApiResponse.onSuccess(MemberConverter.toSignUpResponse(member));
+    }
+
+    @Operation(summary = "로그인")
+    @PostMapping(value = "/v1/auth/sign-in")
+    public ResponseEntity<ApiResponse> signIn(@RequestBody SignInRequest request) {
+        ApiResponse ar = ApiResponse.builder()
+                .result(memberService.signIn(request))
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message(SuccessStatus._OK.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(ar);
     }
 
 }

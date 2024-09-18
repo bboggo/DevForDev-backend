@@ -51,7 +51,7 @@ public class MemberServiceImpl implements MemberService{
         Member member = memberRepository.findByEmail(request.email())
                 .filter(it -> encoder.matches(request.password(), it.getPassword()))
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.EXPIRED_JWT_ERROR));
-        String accessToken = tokenProvider.createAccessToken(String.format("%s:%s", member.getId()));
+        String accessToken = tokenProvider.createAccessToken(String.format("%s:%s", member.getId(), member.getName()));
         String refreshToken = tokenProvider.createRefreshToken();
 
         memberRefreshTokenRepository.findById(member.getId())

@@ -30,7 +30,11 @@ public enum ErrorStatus implements BaseErrorCode {
     // 회원가입
 
     DUPLICATED_NAME(BAD_REQUEST, "MEMBER001", "Nickname is duplicated"),
-    DUPLICATED_EMAIL(BAD_REQUEST, "MEMBER002", "Email is duplicated");
+    DUPLICATED_EMAIL(BAD_REQUEST, "MEMBER002", "Email is duplicated"),
+
+    // 로그인
+    NO_MATCHING_MEMBER(BAD_REQUEST, "MEMBER003", "There is no matching member information.");
+
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

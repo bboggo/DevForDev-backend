@@ -32,4 +32,8 @@ public class MemberRefreshToken {
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
+
+    public void increaseReissueCount() {
+        reissueCount++;
+    }
 }

@@ -14,6 +14,7 @@ import com.backend.devfordev.dto.SignUpResponse;
 import com.backend.devfordev.repository.MemberRefreshTokenRepository;
 import com.backend.devfordev.repository.MemberRepository;
 import com.backend.devfordev.security.TokenProvider;
+import io.jsonwebtoken.io.IOException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -32,17 +33,19 @@ public class MemberServiceImpl implements MemberService{
     // 이미지 추가
     @Transactional
     public SignUpResponse signUp(SignUpRequest request) {
-        Member member = MemberConverter.toMember(request, encoder);
-        if(memberRepository.findByName(member.getName()).isPresent()) {
-            throw new ExceptionHandler(ErrorStatus.DUPLICATED_NAME);
-        }
 
-        if(memberRepository.findByEmail(member.getEmail()).isPresent()) {
-            throw new ExceptionHandler(ErrorStatus.DUPLICATED_EMAIL);
-        }
+            Member member = MemberConverter.toMember(request, encoder);
+            if(memberRepository.findByName(member.getName()).isPresent()) {
+                throw new ExceptionHandler(ErrorStatus.DUPLICATED_NAME);
+            }
 
-        member = memberRepository.save(member);
-        return MemberConverter.toSignUpResponse(member);
+            if(memberRepository.findByEmail(member.getEmail()).isPresent()) {
+                throw new ExceptionHandler(ErrorStatus.DUPLICATED_EMAIL);
+            }
+
+            member = memberRepository.save(member);
+            return MemberConverter.toSignUpResponse(member);
+
     }
 
     // 로그인

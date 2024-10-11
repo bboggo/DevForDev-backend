@@ -27,13 +27,15 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_JWT_TOKEN(UNAUTHORIZED, "AUTH4012", "토큰 유효성 검사 실패 또는 거부된 토큰입니다."),
     LOGIN_FAILED_PASSWORD_INCORRECT(UNAUTHORIZED,"AUTH4013", "비밀번호가 틀립니다."),
 
-    // 회원가입
+    // 회원
 
     DUPLICATED_NAME(BAD_REQUEST, "MEMBER001", "Nickname is duplicated"),
     DUPLICATED_EMAIL(BAD_REQUEST, "MEMBER002", "Email is duplicated"),
+    NO_MATCHING_MEMBER(BAD_REQUEST, "MEMBER003", "There is no matching member information."),
+    INVALID_MEMBER(BAD_REQUEST, "MEMBER004", "User information is incorrect."),
 
-    // 로그인
-    NO_MATCHING_MEMBER(BAD_REQUEST, "MEMBER003", "There is no matching member information.");
+    // 커뮤니티
+    INVALID_CATEGORY(BAD_REQUEST, "COM001", "Only SKILL, CAREER, and OTHER are available.");
 
     private final HttpStatus httpStatus;
     private final String code;

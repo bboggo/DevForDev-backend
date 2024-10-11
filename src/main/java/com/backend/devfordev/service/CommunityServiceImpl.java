@@ -1,5 +1,8 @@
 package com.backend.devfordev.service;
 
+import com.backend.devfordev.apiPayload.ExceptionHandler;
+import com.backend.devfordev.apiPayload.code.status.ErrorStatus;
+import com.backend.devfordev.apiPayload.exception.handler.MemberHandler;
 import com.backend.devfordev.converter.CommunityConverter;
 import com.backend.devfordev.domain.Community;
 import com.backend.devfordev.domain.Member;
@@ -20,11 +23,15 @@ public class CommunityServiceImpl implements CommunityService{
     @Override
     @Transactional
     public CommunityResponse.CommunityCreateResponse createCommunity(CommunityRequest.CommunityCreateRequest request, Long userId) {
-
         Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.INVALID_MEMBER));
+
 
         Community community = CommunityConverter.toCommunity(request, member);
+        String category = request.getCommunityCategory();
+        if(!"CAREER".equals(category) && !"OTHER".equals(category) && !"SKILL".equals(category)) {
+            throw new ExceptionHandler(ErrorStatus.INVALID_CATEGORY);
+        }
         communityRepository.save(community);
 
         return CommunityConverter.toCommunityResponse(community);

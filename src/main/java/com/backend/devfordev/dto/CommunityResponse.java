@@ -17,7 +17,7 @@ public class CommunityResponse {
         CommunityCategory communityCategory;
         String communityTitle;
         String communityContent;
-        Member member;
+        Long member;
     }
 
 }

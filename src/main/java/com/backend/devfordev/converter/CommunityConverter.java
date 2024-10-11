@@ -9,11 +9,12 @@ import com.backend.devfordev.dto.SignUpRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class CommunityConverter {
-    public static Community toCommunity(CommunityRequest.CommunityCreateRequest request) {
+    public static Community toCommunity(CommunityRequest.CommunityCreateRequest request, Member member) {
         return Community.builder()
                 .communityCategory(CommunityCategory.valueOf(request.getCommunityCategory()))
                 .communityTitle(request.getCommunityTitle())
                 .communityContent(request.getCommunityContent())
+                .member(member)
                 .build();
     }
 
@@ -24,7 +25,7 @@ public class CommunityConverter {
                 community.getCommunityCategory(),
                 community.getCommunityTitle(),
                 community.getCommunityContent(),
-                community.getMember()
+                community.getMember().getId()
         );
     }
 }

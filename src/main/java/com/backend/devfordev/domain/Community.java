@@ -28,7 +28,7 @@ public class Community extends BaseEntity{
     private String communityContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
 }

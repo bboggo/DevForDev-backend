@@ -2,9 +2,11 @@ package com.backend.devfordev.service;
 
 import com.backend.devfordev.converter.CommunityConverter;
 import com.backend.devfordev.domain.Community;
+import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.dto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.repository.CommunityRepository;
+import com.backend.devfordev.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CommunityServiceImpl implements CommunityService{
     private final CommunityRepository communityRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     @Transactional
-    public CommunityResponse.CommunityCreateResponse createCommunity(CommunityRequest.CommunityCreateRequest request) {
-        Community community = CommunityConverter.toCommunity(request);
+    public CommunityResponse.CommunityCreateResponse createCommunity(CommunityRequest.CommunityCreateRequest request, Long userId) {
+
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
+
+        Community community = CommunityConverter.toCommunity(request, member);
         communityRepository.save(community);
 
         return CommunityConverter.toCommunityResponse(community);

@@ -20,8 +20,8 @@ public class CommunityRequest {
         String communityTitle;
         @Schema(description = "커뮤니티 내용", example = "커뮤니티 내용1")
         String communityContent;
+        @Schema(description = "커뮤니티 AI 답변 동의 여부", example = "1")
+        Long communityAI;
     }
-
-
 
 }

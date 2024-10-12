@@ -14,6 +14,7 @@ public class CommunityConverter {
                 .communityCategory(CommunityCategory.valueOf(request.getCommunityCategory()))
                 .communityTitle(request.getCommunityTitle())
                 .communityContent(request.getCommunityContent())
+                .communityAI(request.getCommunityAI())
                 .member(member)
                 .build();
     }
@@ -25,7 +26,9 @@ public class CommunityConverter {
                 community.getCommunityCategory(),
                 community.getCommunityTitle(),
                 community.getCommunityContent(),
-                community.getMember().getId()
+                community.getMember().getId(),
+                community.getCommunityAI()
+
         );
     }
 }

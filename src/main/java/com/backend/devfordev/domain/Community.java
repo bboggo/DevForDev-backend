@@ -27,8 +27,12 @@ public class Community extends BaseEntity{
     @Column(name = "com_content", nullable = false)
     private String communityContent;
 
+    @Column(name = "com_ai")
+    private Long communityAI;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
 
 }

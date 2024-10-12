@@ -18,6 +18,7 @@ public class CommunityResponse {
         String communityTitle;
         String communityContent;
         Long member;
+        Long communityAI;
     }
 
 }

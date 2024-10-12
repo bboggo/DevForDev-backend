@@ -36,6 +36,4 @@ public class CommunityServiceImpl implements CommunityService{
 
         return CommunityConverter.toCommunityResponse(community);
      }
-
-
 }

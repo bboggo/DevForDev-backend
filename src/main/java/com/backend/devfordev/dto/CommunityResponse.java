@@ -32,6 +32,8 @@ public class CommunityResponse {
         private Long id;
         @Schema(description = "프로필 사진 url", example = "domain 주소")
         private String imageUrl;
+        @Schema(description = "멤버 이름", example = "김민지")
+        private String name;
 
     }
 

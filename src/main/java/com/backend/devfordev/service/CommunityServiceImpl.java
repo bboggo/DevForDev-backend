@@ -46,17 +46,31 @@ public class CommunityServiceImpl implements CommunityService{
 
     @Override
     @Transactional
-    public List<CommunityResponse.CommunityListResponse> getCommunityList(Optional<CommunityCategory> categoryOpt) {
-        List<Community> communities = categoryOpt
-                .map(communityRepository::findByCommunityCategory)  // 카테고리가 있으면 필터링
-                .orElseGet(communityRepository::findAll);
+    public List<CommunityResponse.CommunityListResponse> getCommunityList(Optional<CommunityCategory> categoryOpt,  Optional<String> searchTermOpt) {
+        List<Community> communities = communityRepository.findAll().stream()
+                .filter(community -> {
+                    // 카테고리 필터링
+                    return categoryOpt.map(communityCategory -> community.getCommunityCategory() == communityCategory).orElse(true);
+                })
+                .filter(community -> {
+                    // 검색 필터링: 제목, 작성자 이름, 내용 중 하나라도 일치하면 true 반환
+                    if (searchTermOpt.isPresent()) {
+                        String searchTerm = searchTermOpt.get().toLowerCase();
+                        return community.getCommunityTitle().toLowerCase().contains(searchTerm) ||
+                                community.getMember().getName().toLowerCase().contains(searchTerm) ||
+                                community.getCommunityContent().toLowerCase().contains(searchTerm);
+                    }
+                    return true;
+                })
+                .toList();
 
         // DTO 변환
         return communities.stream()
                 .map(community -> {
                     CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
                             community.getMember().getId(),
-                            community.getMember().getImageUrl()
+                            community.getMember().getImageUrl(),
+                            community.getMember().getName()
                     );
 
 

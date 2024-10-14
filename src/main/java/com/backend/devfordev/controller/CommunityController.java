@@ -48,9 +48,13 @@ public class CommunityController {
 
     @Operation(summary = "커뮤니티 글 전체 조회")
     @GetMapping(value = "/v1/community")
-    public ResponseEntity<ApiResponse> getCommunityList(@RequestParam(required = false) CommunityCategory category) {
+    public ResponseEntity<ApiResponse> getCommunityList(
+            @RequestParam(required = false) CommunityCategory category,
+            @RequestParam(required = false) String searchTerm) {
         // 카테고리가 있을 경우 서비스에 Optional로 전달
-        List<CommunityResponse.CommunityListResponse> communityList = communityService.getCommunityList(Optional.ofNullable(category));
+        List<CommunityResponse.CommunityListResponse> communityList = communityService.getCommunityList(
+                Optional.ofNullable(category),
+                Optional.ofNullable(searchTerm));
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(communityList)

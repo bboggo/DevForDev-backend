@@ -49,13 +49,12 @@ public class CommunityServiceImpl implements CommunityService{
 
         return communities.stream()
                 .map(community -> {
-                    // Member 정보 생성 (가정: member 엔티티에서 가져온다고 가정)
                     CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
                             community.getMember().getId(),
                             community.getMember().getImageUrl()
                     );
 
-                    // Community와 MemberInfo를 함께 toCommunityListResponse로 전달
+
                     return CommunityConverter.toCommunityListResponse(community, memberInfo);
                 })
                 .collect(Collectors.toList());

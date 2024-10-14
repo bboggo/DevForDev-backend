@@ -1,11 +1,10 @@
 package com.backend.devfordev.dto;
 
-import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.domain.enums.CommunityCategory;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 public class CommunityResponse {
     @Builder
@@ -20,5 +19,44 @@ public class CommunityResponse {
         Long member;
         Long communityAI;
     }
+
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MemberInfo {
+
+        @Schema(description = "멤버 id", example = "1")
+        private Long id;
+        @Schema(description = "프로필 사진 url", example = "domain 주소")
+        private String imageUrl;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CommunityListResponse {
+
+        Long id;
+
+        CommunityCategory communityCategory;
+
+        String communityTitle;
+
+        String communityContent;
+
+        MemberInfo member;
+
+        LocalDateTime createdAt;
+
+        Long answers;
+
+        Long views;
+
+        Long heart;
+    }
+
 
 }

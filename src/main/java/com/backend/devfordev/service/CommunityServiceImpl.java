@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class CommunityServiceImpl implements CommunityService{
@@ -36,4 +39,25 @@ public class CommunityServiceImpl implements CommunityService{
 
         return CommunityConverter.toCommunityResponse(community);
      }
+
+
+
+    @Override
+    @Transactional
+    public List<CommunityResponse.CommunityListResponse> getCommunityList() {
+        List<Community> communities = communityRepository.findAll();
+
+        return communities.stream()
+                .map(community -> {
+                    // Member 정보 생성 (가정: member 엔티티에서 가져온다고 가정)
+                    CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
+                            community.getMember().getId(),
+                            community.getMember().getImageUrl()
+                    );
+
+                    // Community와 MemberInfo를 함께 toCommunityListResponse로 전달
+                    return CommunityConverter.toCommunityListResponse(community, memberInfo);
+                })
+                .collect(Collectors.toList());
+    }
 }

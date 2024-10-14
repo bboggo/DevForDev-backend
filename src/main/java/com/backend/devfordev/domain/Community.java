@@ -3,6 +3,7 @@ package com.backend.devfordev.domain;
 import com.backend.devfordev.domain.enums.CommunityCategory;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "community")

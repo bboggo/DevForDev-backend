@@ -25,7 +25,8 @@ public class CommunityConverter {
                 community.getCommunityTitle(),
                 community.getCommunityContent(),
                 community.getMember().getId(),
-                community.getCommunityAI()
+                community.getCommunityAI(),
+                community.getCreatedAt()
 
         );
     }

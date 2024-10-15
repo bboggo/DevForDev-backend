@@ -10,6 +10,7 @@ import com.backend.devfordev.domain.enums.CommunityCategory;
 import com.backend.devfordev.dto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.repository.CommunityRepository;
+import com.backend.devfordev.repository.LikeRepository;
 import com.backend.devfordev.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 public class CommunityServiceImpl implements CommunityService{
     private final CommunityRepository communityRepository;
     private final MemberRepository memberRepository;
-
+    private final LikeRepository likeRepository;
     @Override
     @Transactional
     public CommunityResponse.CommunityCreateResponse createCommunity(CommunityRequest.CommunityCreateRequest request, Long userId) {
@@ -67,6 +68,7 @@ public class CommunityServiceImpl implements CommunityService{
         // DTO 변환
         return communities.stream()
                 .map(community -> {
+                    Long likeCount = likeRepository.countByCommunityId(community.getId());
                     CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
                             community.getMember().getId(),
                             community.getMember().getImageUrl(),
@@ -74,7 +76,7 @@ public class CommunityServiceImpl implements CommunityService{
                     );
 
 
-                    return CommunityConverter.toCommunityListResponse(community, memberInfo);
+                    return CommunityConverter.toCommunityListResponse(community, memberInfo, likeCount);
                 })
                 .collect(Collectors.toList());
     }

@@ -32,7 +32,7 @@ public class CommunityConverter {
         );
     }
 
-    public static CommunityResponse.CommunityListResponse toCommunityListResponse(Community community, CommunityResponse.MemberInfo member) {
+    public static CommunityResponse.CommunityListResponse toCommunityListResponse(Community community, CommunityResponse.MemberInfo member, Long likeCount) {
         return new CommunityResponse.CommunityListResponse(
                 community.getId(),
                 community.getCommunityCategory(),
@@ -42,7 +42,7 @@ public class CommunityConverter {
                 community.getCreatedAt(),
                 0L,
                 community.getCommunityViews(),
-                0L
+                likeCount
         );
 
     }

@@ -59,7 +59,7 @@ public class CommunityResponse {
 
         Long views;
 
-        Long heart;
+        Long likes;
     }
 
 

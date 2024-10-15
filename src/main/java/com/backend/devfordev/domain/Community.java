@@ -3,6 +3,8 @@ package com.backend.devfordev.domain;
 import com.backend.devfordev.domain.enums.CommunityCategory;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -30,6 +32,9 @@ public class Community extends BaseEntity{
 
     @Column(name = "com_ai")
     private Long communityAI;
+
+    @Column(name = "com_views", nullable = false)
+    private Long communityViews = 0L;  // 기본값 설정
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

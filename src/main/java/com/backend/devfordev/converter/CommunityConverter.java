@@ -14,6 +14,7 @@ public class CommunityConverter {
                 .communityContent(request.getCommunityContent())
                 .communityAI(request.getCommunityAI())
                 .member(member)
+                .communityViews(0L)
                 .build();
     }
 
@@ -40,7 +41,7 @@ public class CommunityConverter {
                 member,
                 community.getCreatedAt(),
                 0L,
-                0L,
+                community.getCommunityViews(),
                 0L
         );
 

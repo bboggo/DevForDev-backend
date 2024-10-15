@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -47,37 +48,44 @@ public class CommunityServiceImpl implements CommunityService{
 
     @Override
     @Transactional
-    public List<CommunityResponse.CommunityListResponse> getCommunityList(Optional<CommunityCategory> categoryOpt,  Optional<String> searchTermOpt) {
-        List<Community> communities = communityRepository.findAll().stream()
-                .filter(community -> {
+    public List<CommunityResponse.CommunityListResponse> getCommunityList(Optional<CommunityCategory> categoryOpt, Optional<String> searchTermOpt) {
+        // 커뮤니티와 좋아요 수를 한 번의 쿼리로 가져옴
+        List<Object[]> results = communityRepository.findAllWithLikesAndMember();
+
+        // 필터링 및 DTO 변환
+        return results.stream()
+                .map(result -> {
+                    Community community = (Community) result[0];  // 첫 번째는 Community 객체
+                    Long likeCount = (Long) result[1];            // 두 번째는 좋아요 수
+
                     // 카테고리 필터링
-                    return categoryOpt.map(communityCategory -> community.getCommunityCategory() == communityCategory).orElse(true);
-                })
-                .filter(community -> {
+                    if (categoryOpt.isPresent() && !community.getCommunityCategory().equals(categoryOpt.get())) {
+                        return null;
+                    }
+
                     // 검색 필터링: 제목, 작성자 이름, 내용 중 하나라도 일치하면 true 반환
                     if (searchTermOpt.isPresent()) {
                         String searchTerm = searchTermOpt.get().toLowerCase();
-                        return community.getCommunityTitle().toLowerCase().contains(searchTerm) ||
+                        boolean matches = community.getCommunityTitle().toLowerCase().contains(searchTerm) ||
                                 community.getMember().getName().toLowerCase().contains(searchTerm) ||
                                 community.getCommunityContent().toLowerCase().contains(searchTerm);
+                        if (!matches) {
+                            return null;
+                        }
                     }
-                    return true;
-                })
-                .toList();
 
-        // DTO 변환
-        return communities.stream()
-                .map(community -> {
-                    Long likeCount = likeRepository.countByCommunityId(community.getId());
+                    // MemberInfo 생성
                     CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
                             community.getMember().getId(),
                             community.getMember().getImageUrl(),
                             community.getMember().getName()
                     );
 
-
+                    // DTO 변환
                     return CommunityConverter.toCommunityListResponse(community, memberInfo, likeCount);
                 })
+                .filter(Objects::nonNull)  // 필터링에서 null이 반환된 경우 제거
                 .collect(Collectors.toList());
     }
+
 }

@@ -82,8 +82,14 @@ public class CommunityServiceImpl implements CommunityService{
                             community.getMember().getName()
                     );
 
+                    // communityContent를 80자까지만 잘라서 보여줌
+                    String shortenedContent = community.getCommunityContent();
+                    if (shortenedContent.length() > 80) {
+                        shortenedContent = shortenedContent.substring(0, 80) + "...";  // 80자까지만 자르고 "..." 추가
+                    }
+
                     // DTO 변환
-                    return CommunityConverter.toCommunityListResponse(community, memberInfo, likeCount);
+                    return CommunityConverter.toCommunityListResponse(community, memberInfo, likeCount, shortenedContent);
                 })
                 .filter(Objects::nonNull)  // 필터링에서 null이 반환된 경우 제거
                 .collect(Collectors.toList());

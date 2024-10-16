@@ -32,12 +32,12 @@ public class CommunityConverter {
         );
     }
 
-    public static CommunityResponse.CommunityListResponse toCommunityListResponse(Community community, CommunityResponse.MemberInfo member, Long likeCount) {
+    public static CommunityResponse.CommunityListResponse toCommunityListResponse(Community community, CommunityResponse.MemberInfo member, Long likeCount, String shortenedContent) {
         return new CommunityResponse.CommunityListResponse(
                 community.getId(),
                 community.getCommunityCategory(),
                 community.getCommunityTitle(),
-                community.getCommunityContent(),
+                shortenedContent,
                 member,
                 community.getCreatedAt(),
                 0L,

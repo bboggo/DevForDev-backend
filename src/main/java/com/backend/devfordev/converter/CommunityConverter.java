@@ -5,8 +5,6 @@ import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.domain.enums.CommunityCategory;
 import com.backend.devfordev.dto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityResponse;
-import com.backend.devfordev.dto.SignUpRequest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class CommunityConverter {
     public static Community toCommunity(CommunityRequest.CommunityCreateRequest request, Member member) {
@@ -16,6 +14,7 @@ public class CommunityConverter {
                 .communityContent(request.getCommunityContent())
                 .communityAI(request.getCommunityAI())
                 .member(member)
+                .communityViews(0L)
                 .build();
     }
 
@@ -27,8 +26,26 @@ public class CommunityConverter {
                 community.getCommunityTitle(),
                 community.getCommunityContent(),
                 community.getMember().getId(),
-                community.getCommunityAI()
+                community.getCommunityAI(),
+                community.getCreatedAt()
 
         );
     }
+
+    public static CommunityResponse.CommunityListResponse toCommunityListResponse(Community community, CommunityResponse.MemberInfo member, Long likeCount) {
+        return new CommunityResponse.CommunityListResponse(
+                community.getId(),
+                community.getCommunityCategory(),
+                community.getCommunityTitle(),
+                community.getCommunityContent(),
+                member,
+                community.getCreatedAt(),
+                0L,
+                community.getCommunityViews(),
+                likeCount
+        );
+
+    }
 }
+
+

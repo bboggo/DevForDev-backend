@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -22,6 +24,7 @@ public class CommunityRequest {
         String communityContent;
         @Schema(description = "커뮤니티 AI 답변 동의 여부", example = "1")
         Long communityAI;
+        Long communityViews;
     }
 
 }

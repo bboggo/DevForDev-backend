@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -48,12 +49,12 @@ public class CommunityServiceImpl implements CommunityService{
 
     @Override
     @Transactional
-    public List<CommunityResponse.CommunityListResponse> getCommunityList(Optional<CommunityCategory> categoryOpt, Optional<String> searchTermOpt) {
+    public List<CommunityResponse.CommunityListResponse> getCommunityList(Optional<CommunityCategory> categoryOpt, Optional<String> searchTermOpt, String sortBy) {
         // 커뮤니티와 좋아요 수를 한 번의 쿼리로 가져옴
         List<Object[]> results = communityRepository.findAllWithLikesAndMember();
 
         // 필터링 및 DTO 변환
-        return results.stream()
+        List<CommunityResponse.CommunityListResponse> communityList = results.stream()
                 .map(result -> {
                     Community community = (Community) result[0];  // 첫 번째는 Community 객체
                     Long likeCount = (Long) result[1];            // 두 번째는 좋아요 수
@@ -86,6 +87,22 @@ public class CommunityServiceImpl implements CommunityService{
                 })
                 .filter(Objects::nonNull)  // 필터링에서 null이 반환된 경우 제거
                 .collect(Collectors.toList());
+
+        // 정렬 기준에 따른 정렬
+        switch (sortBy.toLowerCase()) {
+            case "likes":   // 좋아요 순 정렬
+                communityList.sort(Comparator.comparingLong(CommunityResponse.CommunityListResponse::getLikes).reversed());
+                break;
+            case "views":   // 조회수 순 정렬
+                communityList.sort(Comparator.comparingLong(CommunityResponse.CommunityListResponse::getViews).reversed());
+                break;
+            case "recent":  // 최신순 정렬 (기본)
+            default:
+                communityList.sort(Comparator.comparing(CommunityResponse.CommunityListResponse::getCreatedAt).reversed());
+                break;
+        }
+
+        return communityList;
     }
 
 }

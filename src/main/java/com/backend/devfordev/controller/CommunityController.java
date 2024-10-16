@@ -50,11 +50,14 @@ public class CommunityController {
     @GetMapping(value = "/v1/community")
     public ResponseEntity<ApiResponse> getCommunityList(
             @RequestParam(required = false) CommunityCategory category,
-            @RequestParam(required = false) String searchTerm) {
+            @RequestParam(required = false) String searchTerm,
+            @RequestParam(required = false, defaultValue = "recent") String sortBy
+            ) {
         // 카테고리가 있을 경우 서비스에 Optional로 전달
         List<CommunityResponse.CommunityListResponse> communityList = communityService.getCommunityList(
                 Optional.ofNullable(category),
-                Optional.ofNullable(searchTerm));
+                Optional.ofNullable(searchTerm),
+                sortBy);
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(communityList)

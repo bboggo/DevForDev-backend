@@ -35,8 +35,8 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_MEMBER(BAD_REQUEST, "MEMBER004", "User information is incorrect."),
 
     // 커뮤니티
-    INVALID_CATEGORY(BAD_REQUEST, "COM001", "Only SKILL, CAREER, and OTHER are available.");
-
+    INVALID_CATEGORY(BAD_REQUEST, "COM001", "Only SKILL, CAREER, and OTHER are available."),
+    COMMUNITY_NOT_FOUND(BAD_REQUEST, "COM002", "Community Not Found");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

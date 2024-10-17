@@ -70,4 +70,20 @@ public class CommunityController {
 //        SignUpResponse member = memberService.registerMember(request);
 //        return ApiResponse.onSuccess(MemberConverter.toSignUpResponse(member));
     }
+
+
+    @Operation(summary = "커뮤니티 글 상세 조회")
+    @GetMapping(value = "/v1/community/{id}")
+    public ResponseEntity<ApiResponse> getCommunityDetail(@PathVariable Long id) {
+        CommunityResponse.CommunityDetailResponse communityDetail = communityService.getCommunityDetail(id);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .result(communityDetail)
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message(SuccessStatus._OK.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 }

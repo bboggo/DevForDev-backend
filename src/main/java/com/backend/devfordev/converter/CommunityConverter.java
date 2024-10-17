@@ -6,6 +6,8 @@ import com.backend.devfordev.domain.enums.CommunityCategory;
 import com.backend.devfordev.dto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityResponse;
 
+import java.time.LocalDateTime;
+
 public class CommunityConverter {
     public static Community toCommunity(CommunityRequest.CommunityCreateRequest request, Member member) {
         return Community.builder()
@@ -38,6 +40,21 @@ public class CommunityConverter {
                 community.getCommunityCategory(),
                 community.getCommunityTitle(),
                 shortenedContent,
+                member,
+                community.getCreatedAt(),
+                0L,
+                community.getCommunityViews(),
+                likeCount
+        );
+
+    }
+
+    public static CommunityResponse.CommunityDetailResponse toCommunityLDetailResponse(Community community, CommunityResponse.MemberInfo member, Long likeCount) {
+        return new CommunityResponse.CommunityDetailResponse(
+                community.getId(),
+                community.getCommunityCategory(),
+                community.getCommunityTitle(),
+                community.getCommunityContent(),
                 member,
                 community.getCreatedAt(),
                 0L,

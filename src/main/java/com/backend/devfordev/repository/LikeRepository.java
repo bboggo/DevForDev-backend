@@ -11,5 +11,4 @@ public interface LikeRepository extends JpaRepository<Heart, Long> {
 
     Long countByCommunityId(Long communityId);
 
-
 }

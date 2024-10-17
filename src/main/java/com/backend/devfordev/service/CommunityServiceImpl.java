@@ -2,6 +2,7 @@ package com.backend.devfordev.service;
 
 import com.backend.devfordev.apiPayload.ExceptionHandler;
 import com.backend.devfordev.apiPayload.code.status.ErrorStatus;
+import com.backend.devfordev.apiPayload.exception.handler.CommunityHandler;
 import com.backend.devfordev.apiPayload.exception.handler.MemberHandler;
 import com.backend.devfordev.converter.CommunityConverter;
 import com.backend.devfordev.domain.Community;
@@ -37,8 +38,9 @@ public class CommunityServiceImpl implements CommunityService{
 
         Community community = CommunityConverter.toCommunity(request, member);
         String category = request.getCommunityCategory();
+        // 필요없나,,?
         if(!"CAREER".equals(category) && !"OTHER".equals(category) && !"SKILL".equals(category)) {
-            throw new ExceptionHandler(ErrorStatus.INVALID_CATEGORY);
+            throw new CommunityHandler(ErrorStatus.INVALID_CATEGORY);
         }
         communityRepository.save(community);
 
@@ -111,4 +113,21 @@ public class CommunityServiceImpl implements CommunityService{
         return communityList;
     }
 
+    @Override
+    @Transactional
+    public CommunityResponse.CommunityDetailResponse getCommunityDetail(Long id) {
+        Community community = communityRepository.findById(id)
+                .orElseThrow(() -> new CommunityHandler(ErrorStatus.COMMUNITY_NOT_FOUND));
+
+        Long Likecount = likeRepository.countByCommunityId(id);
+        CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
+                community.getMember().getId(),
+                community.getMember().getImageUrl(),
+                community.getMember().getName()
+        );
+
+        return CommunityConverter.toCommunityLDetailResponse(community, memberInfo, Likecount);
+
+
+    }
 }

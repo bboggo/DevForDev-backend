@@ -44,21 +44,31 @@ public class CommunityResponse {
     public static class CommunityListResponse {
 
         Long id;
-
         CommunityCategory communityCategory;
-
         String communityTitle;
-
         String communityContent;
-
         MemberInfo member;
-
         LocalDateTime createdAt;
-
         Long answers;
-
         Long views;
+        Long likes;
+    }
 
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CommunityDetailResponse {
+
+        Long id;
+        CommunityCategory communityCategory;
+        String communityTitle;
+        String communityContent;
+        MemberInfo member;
+        LocalDateTime createdAt;
+        Long answers;
+        Long views;
         Long likes;
     }
 

@@ -20,13 +20,25 @@ public class LikeConverter {
                 .build();
     }
 
-    public static LikeResponse toLikeResponse(Heart heart, Long likes, Long memberId) {
-        return new LikeResponse(
-                memberId,
-                heart.getLikeId(),
-                heart.getLikeType(),
-                likes
-        );
-    }
+    public static LikeResponse toLikeResponse(Heart heart, Long likes, Long memberId, int likeStatus) {
+        if (heart == null) {
+            // 좋아요 취소 상태 (-1)
+            return LikeResponse.builder()
+                    .memberId(memberId)
+                    .likeId(null)
+                    .likeType(null)
+                    .likes(likes)
+                    .likeStatus(-1)  // 취소 상태
+                    .build();
+        }
 
+        // 좋아요 추가 상태 (+1)
+        return LikeResponse.builder()
+                .memberId(memberId)
+                .likeId(heart.getLikeId())
+                .likeType(heart.getLikeType())
+                .likes(likes)
+                .likeStatus(likeStatus)  // +1 or -1에 따라 처리
+                .build();
+    }
 }

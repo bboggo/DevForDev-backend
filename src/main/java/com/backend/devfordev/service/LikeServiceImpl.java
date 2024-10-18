@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +35,8 @@ public class LikeServiceImpl implements LikeService {
     @Transactional
     public LikeResponse createLike(LikeRequest request, Long userId) {
 
+        // Likes need to be calculated!!!!
+
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.INVALID_MEMBER));
         LikeType likeType;
@@ -44,12 +47,19 @@ public class LikeServiceImpl implements LikeService {
 
             throw new LikeHandler(ErrorStatus.INVALID_LIKE_TYPE);
         }
+        // 해당 유저가 이미 해당 게시물에 좋아요를 눌렀는지 확인
+        Optional<Heart> existingLike = likeRepository.findByMemberAndLikeIdAndLikeType(member, request.getLikeId(), likeType);
 
-        Heart heart = LikeConverter.toLike(request, member);
-        likeRepository.save(heart);
-
-        // Heart 객체 저장
-        return LikeConverter.toLikeResponse(heart, 0L, userId);// 저장 후 반환
+        if (existingLike.isPresent()) {
+            // 이미 좋아요를 누른 상태면 좋아요 취소 (삭제)
+            likeRepository.delete(existingLike.get());
+            return LikeConverter.toLikeResponse(null, 0L, userId, -1);  // 좋아요 취소 상태 (-1)
+        } else {
+            // 좋아요를 누르지 않았다면 새로 추가
+            Heart heart = LikeConverter.toLike(request, member);
+            likeRepository.save(heart);
+            return LikeConverter.toLikeResponse(heart, 1L, userId, +1);  // 좋아요 추가 상태 (+1)
+        }
     }
 }
 

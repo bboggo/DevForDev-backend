@@ -14,14 +14,17 @@ import lombok.NoArgsConstructor;
 public class LikeResponse {
 
     @Schema(description = "로그인한 유저 id", example = "1")
-    Long memberId;
+    private Long memberId;
 
     @Schema(description = "좋아요하는 게시글의 id", example = "1")
-    Long likeId;
+    private Long likeId;
 
     @Schema(description = "타입", example = "COMMUNITY")
-    LikeType likeType;
+    private LikeType likeType;
 
     @Schema(description = "전체 좋아요 수", example = "10")
-    Long likes;
+    private Long likes;
+
+    @Schema(description = "좋아요 상태 (+1: 추가, -1: 취소)", example = "+1")
+    private int likeStatus;  // 좋아요 상태 (추가: +1, 취소: -1)
 }

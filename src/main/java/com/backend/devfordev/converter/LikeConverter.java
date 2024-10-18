@@ -16,7 +16,7 @@ public class LikeConverter {
         return Heart.builder()
                 .member(member)  // 로그인한 유저 정보
                 .likeId(request.getLikeId())
-                .likeType(request.getLikeType())  // LikeType 설정
+                .likeType(LikeType.valueOf(request.getLikeType()))  // LikeType 설정
                 .build();
     }
 

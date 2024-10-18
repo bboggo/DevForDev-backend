@@ -2,6 +2,7 @@ package com.backend.devfordev.dto;
 
 import com.backend.devfordev.domain.enums.LikeType;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,6 @@ public class LikeRequest {
     private Long likeId;
 
     @Schema(description = "타입", example = "COMMUNITY")
-    private LikeType likeType;
+    private String likeType;
 
 }

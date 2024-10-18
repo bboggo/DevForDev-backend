@@ -50,16 +50,22 @@ public class LikeServiceImpl implements LikeService {
         // 해당 유저가 이미 해당 게시물에 좋아요를 눌렀는지 확인
         Optional<Heart> existingLike = likeRepository.findByMemberAndLikeIdAndLikeType(member, request.getLikeId(), likeType);
 
+
         if (existingLike.isPresent()) {
             // 이미 좋아요를 누른 상태면 좋아요 취소 (삭제)
             likeRepository.delete(existingLike.get());
-            return LikeConverter.toLikeResponse(null, 0L, userId, -1);  // 좋아요 취소 상태 (-1)
+            Long totalLikes = likeRepository.countByLikeIdAndLikeType(request.getLikeId(), likeType);
+            return LikeConverter.toLikeResponse(null, totalLikes, userId, -1);  // 좋아요 취소 상태 (-1)
         } else {
             // 좋아요를 누르지 않았다면 새로 추가
             Heart heart = LikeConverter.toLike(request, member);
             likeRepository.save(heart);
-            return LikeConverter.toLikeResponse(heart, 1L, userId, +1);  // 좋아요 추가 상태 (+1)
+            Long totalLikes = likeRepository.countByLikeIdAndLikeType(request.getLikeId(), likeType);
+            return LikeConverter.toLikeResponse(heart, totalLikes, userId, +1);  // 좋아요 추가 상태 (+1)
         }
+
+        // 전체 좋아요 수 계산
+        //return LikeConverter.toLikeResponse(existingLike.orElse(null), totalLikes, userId, existingLike.isPresent() ? -1 : +1);
     }
 }
 

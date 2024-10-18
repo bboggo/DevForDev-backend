@@ -1,17 +1,19 @@
 package com.backend.devfordev.domain;
 
+import com.backend.devfordev.domain.enums.LikeType;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
 
-import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "heart")
+@AllArgsConstructor
+@Builder
 public class Heart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +24,11 @@ public class Heart {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = EAGER)
-    @JoinColumn(name = "com_id", nullable = false)
-    private Community community;
+    @Column(name = "like_id", nullable = false)
+    private Long likeId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "like_type", nullable = false)
+    private LikeType likeType;
 
 }

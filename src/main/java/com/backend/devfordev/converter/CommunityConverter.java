@@ -30,7 +30,6 @@ public class CommunityConverter {
                 community.getMember().getId(),
                 community.getCommunityAI(),
                 community.getCreatedAt()
-
         );
     }
 

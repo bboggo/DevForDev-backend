@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface CommunityRepository extends JpaRepository<Community, Long> {
     List<Community> findByCommunityCategory(CommunityCategory category);
 
-    @Query("SELECT c, (SELECT COUNT(h) FROM Heart h WHERE h.community = c) as likeCount " +
+    @Query("SELECT c, (SELECT COUNT(h) FROM Heart h WHERE h.likeId = c.id AND h.likeType = 'COMMUNITY') as likeCount " +
             "FROM Community c JOIN FETCH c.member")
     List<Object[]> findAllWithLikesAndMember();
 }

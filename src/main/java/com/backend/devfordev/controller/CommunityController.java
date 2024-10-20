@@ -86,4 +86,23 @@ public class CommunityController {
 
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+
+
+    @Operation(summary = "인기 커뮤니티 Top 5 유저 조회 (좋아요 수 기준)")
+    @GetMapping(value = "/v1/community/top5")
+    public ResponseEntity<ApiResponse> getTop5UsersByTotalLikes() {
+        // 인기 Top 5 유저 조회
+        List<CommunityResponse.CommunityTop5Response> top5Users = communityService.getTop5UsersByTotalLikes();
+
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .result(top5Users)
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message(SuccessStatus._OK.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
 }

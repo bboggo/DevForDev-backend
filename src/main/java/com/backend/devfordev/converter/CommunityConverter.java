@@ -62,6 +62,11 @@ public class CommunityConverter {
         );
 
     }
+
+    public static CommunityResponse.CommunityTop5Response toCommunityTop5Response(CommunityResponse.MemberInfo member, Long totalLikes) {
+        return new CommunityResponse.CommunityTop5Response(
+                member,
+                totalLikes
+        );
+    }
 }
-
-

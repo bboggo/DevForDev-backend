@@ -12,4 +12,5 @@ public interface CommunityService {
     public List<CommunityResponse.CommunityListResponse> getCommunityList(Optional<CommunityCategory> categoryOpt,  Optional<String> searchTermOpt, String sortBy);
 
     public CommunityResponse.CommunityDetailResponse getCommunityDetail(Long id);
+    public List<CommunityResponse.CommunityTop5Response> getTop5UsersByTotalLikes();
 }

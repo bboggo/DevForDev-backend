@@ -72,5 +72,12 @@ public class CommunityResponse {
         Long likes;
     }
 
-
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CommunityTop5Response {
+        MemberInfo member;
+        Long totalLikes;
+    }
 }

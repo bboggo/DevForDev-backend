@@ -14,8 +14,11 @@ import com.backend.devfordev.repository.CommunityRepository;
 import com.backend.devfordev.repository.LikeRepository;
 import com.backend.devfordev.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.springframework.data.domain.Pageable;
 
 import java.util.Comparator;
 import java.util.List;
@@ -127,7 +130,40 @@ public class CommunityServiceImpl implements CommunityService{
         );
 
         return CommunityConverter.toCommunityLDetailResponse(community, memberInfo, Likecount);
+    }
 
 
+
+    @Transactional
+    public List<CommunityResponse.CommunityTop5Response> getTop5UsersByTotalLikes() {
+        // 유저별 총 좋아요 수 계산
+        List<Object[]> totalLikesForUsers = communityRepository.findTop5UsersByTotalLikes();
+
+        // 로그로 각 유저의 총 좋아요 수 출력
+        totalLikesForUsers.forEach(result -> {
+            Member member = (Member) result[0];
+            Long totalLikes = (Long) result[1];
+            System.out.println(member.getId());
+            //log.info("Member ID: {}, Name: {}, Total Likes: {}", member.getId(), member.getName(), totalLikes);
+        });
+
+        // 좋아요 수 기준으로 상위 5명의 유저를 가져옴
+        return totalLikesForUsers.stream()
+                .limit(5)  // 상위 5명 가져오기
+                .map(result -> {
+                    Member member = (Member) result[0];  // 유저 객체
+                    Long totalLikes = (Long) result[1];  // 총 좋아요 수
+
+                    // MemberInfo 생성
+                    CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
+                            member.getId(),
+                            member.getImageUrl(),
+                            member.getName()
+                    );
+
+                    // CommunityTop5Response로 변환
+                    return CommunityConverter.toCommunityTop5Response(memberInfo, totalLikes);
+                })
+                .collect(Collectors.toList());
     }
 }

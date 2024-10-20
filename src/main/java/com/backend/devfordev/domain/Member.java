@@ -34,4 +34,6 @@ public class Member extends BaseEntity{
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private String birth;
 
+
+
 }

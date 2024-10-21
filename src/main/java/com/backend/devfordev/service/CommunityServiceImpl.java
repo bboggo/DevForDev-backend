@@ -122,6 +122,10 @@ public class CommunityServiceImpl implements CommunityService{
         Community community = communityRepository.findById(id)
                 .orElseThrow(() -> new CommunityHandler(ErrorStatus.COMMUNITY_NOT_FOUND));
 
+        if (community.getDeletedAt() != null) {
+            throw new CommunityHandler(ErrorStatus.COMMUNITY_DELETED);
+        }
+
         Long Likecount = likeRepository.countByCommunityId(id);
         CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
                 community.getMember().getId(),

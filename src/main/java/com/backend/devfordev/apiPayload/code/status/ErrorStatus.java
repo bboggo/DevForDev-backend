@@ -3,6 +3,7 @@ package com.backend.devfordev.apiPayload.code.status;
 
 import com.backend.devfordev.apiPayload.code.BaseErrorCode;
 import com.backend.devfordev.apiPayload.code.ErrorReasonDTO;
+import com.backend.devfordev.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 커뮤니티
     INVALID_CATEGORY(BAD_REQUEST, "COM001", "Only SKILL, CAREER, and OTHER are available."),
-    COMMUNITY_NOT_FOUND(BAD_REQUEST, "COM002", "Community Not Found");
+    COMMUNITY_NOT_FOUND(BAD_REQUEST, "COM002", "Community Not Found"),
+    COMMUNITY_DELETED(BAD_REQUEST, "COM003", "This is a deleted post.");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

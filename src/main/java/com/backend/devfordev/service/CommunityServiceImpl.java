@@ -166,4 +166,14 @@ public class CommunityServiceImpl implements CommunityService{
                 })
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void deleteCommunity(Long id) {
+        Community community = communityRepository.findById(id)
+                .orElseThrow(() -> new CommunityHandler(ErrorStatus.COMMUNITY_NOT_FOUND));
+
+        community.deleteSoftly(); // BaseEntity에서 상속받은 softDelete 메소드 호출
+
+        communityRepository.save(community); // 변경된 엔티티 저장
+    }
 }

@@ -105,4 +105,17 @@ public class CommunityController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
+    @Operation(summary = "커뮤니티 글 삭제")
+    @DeleteMapping(value = "/v1/community/{id}")
+    public ResponseEntity<ApiResponse> deleteCommunity(@PathVariable Long id) {
+        communityService.deleteCommunity(id);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message(SuccessStatus._OK.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 }

@@ -29,11 +29,10 @@ public enum ErrorStatus implements BaseErrorCode {
     LOGIN_FAILED_PASSWORD_INCORRECT(UNAUTHORIZED,"AUTH4013", "비밀번호가 틀립니다."),
 
     // 전체
-    UNAUTHORIZED_USER(BAD_REQUEST, "ETC001","Only the user who created it can be deleted."),
+    UNAUTHORIZED_USER(BAD_REQUEST, "ETC001","Only the user who created it can delete or modify it09ㅐ"),
     // 좋아요
     INVALID_LIKE_TYPE(BAD_REQUEST, "LIKE001", "The LikeType value must be one of the following: COMMUNITY, TEAM, PORTFOLIO, PROJECT."),
     // 회원
-
     DUPLICATED_NAME(BAD_REQUEST, "MEMBER001", "Nickname is duplicated"),
     DUPLICATED_EMAIL(BAD_REQUEST, "MEMBER002", "Email is duplicated"),
     NO_MATCHING_MEMBER(BAD_REQUEST, "MEMBER003", "There is no matching member information."),

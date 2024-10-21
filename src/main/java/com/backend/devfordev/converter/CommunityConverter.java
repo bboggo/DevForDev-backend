@@ -69,4 +69,26 @@ public class CommunityConverter {
                 totalLikes
         );
     }
+
+    public static Community toUpdateCommunity(CommunityRequest.CommunityUpdateRequest request) {
+        return Community.builder()
+                .communityCategory(CommunityCategory.valueOf(request.getCommunityCategory()))
+                .communityTitle(request.getCommunityTitle())
+                .communityContent(request.getCommunityContent())
+                .build();
+    }
+
+
+    public static CommunityResponse.CommunityUpdateResponse toCommunityUpdateResponse(Community community) {
+        return new CommunityResponse.CommunityUpdateResponse(
+                community.getId(),
+                community.getCommunityCategory(),
+                community.getCommunityTitle(),
+                community.getCommunityContent(),
+                community.getMember().getId(),
+                community.getCommunityAI(),
+                community.getCreatedAt(),
+                community.getModifiedAt()
+        );
+    }
 }

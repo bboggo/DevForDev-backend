@@ -1,6 +1,5 @@
 package com.backend.devfordev.service;
 
-import com.backend.devfordev.apiPayload.ExceptionHandler;
 import com.backend.devfordev.apiPayload.code.status.ErrorStatus;
 import com.backend.devfordev.apiPayload.exception.handler.CommunityHandler;
 import com.backend.devfordev.apiPayload.exception.handler.MemberHandler;
@@ -14,11 +13,8 @@ import com.backend.devfordev.repository.CommunityRepository;
 import com.backend.devfordev.repository.LikeRepository;
 import com.backend.devfordev.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import org.springframework.data.domain.Pageable;
 
 import java.util.Comparator;
 import java.util.List;
@@ -138,6 +134,7 @@ public class CommunityServiceImpl implements CommunityService{
 
 
 
+    @Override
     @Transactional
     public List<CommunityResponse.CommunityTop5Response> getTop5UsersByTotalLikes() {
         // 유저별 총 좋아요 수 계산
@@ -171,12 +168,18 @@ public class CommunityServiceImpl implements CommunityService{
                 .collect(Collectors.toList());
     }
 
+    @Override
     @Transactional
     public void deleteCommunity(Long id, Long userId) {
 
 
         Community community = communityRepository.findById(id)
                 .orElseThrow(() -> new CommunityHandler(ErrorStatus.COMMUNITY_NOT_FOUND));
+
+        // 삭제된 커뮤니티는 수정 불가
+        if (community.getDeletedAt() != null) {
+            throw new CommunityHandler(ErrorStatus.COMMUNITY_DELETED);  // 삭제된 커뮤니티 예외 처리
+        }
 
         // 글 작성자와 로그인한 유저가 동일한지 확인
         if (!community.getMember().getId().equals(userId)) {
@@ -186,5 +189,36 @@ public class CommunityServiceImpl implements CommunityService{
         community.deleteSoftly(); // BaseEntity에서 상속받은 softDelete 메소드 호출
 
         communityRepository.save(community); // 변경된 엔티티 저장
+    }
+
+    @Override
+    @Transactional
+    public CommunityResponse.CommunityUpdateResponse updateCommunity(Long id, CommunityRequest.CommunityUpdateRequest request, Long userId) {
+
+        Community community = communityRepository.findById(id)
+                .orElseThrow(() -> new CommunityHandler(ErrorStatus.COMMUNITY_NOT_FOUND));
+
+        // 삭제된 커뮤니티는 수정 불가
+        if (community.getDeletedAt() != null) {
+            throw new CommunityHandler(ErrorStatus.COMMUNITY_DELETED);  // 삭제된 커뮤니티 예외 처리
+        }
+
+        // 글 작성자와 로그인한 유저가 동일한지 확인
+        if (!community.getMember().getId().equals(userId)) {
+            throw new CommunityHandler(ErrorStatus.UNAUTHORIZED_USER); // 예외 처리 (권한 없음)
+        }
+
+
+
+        // 컨버터를 사용하여 업데이트할 데이터 변환
+        Community updatedCommunity = CommunityConverter.toUpdateCommunity(request);
+
+        // 기존 데이터 수정
+        community.setCommunityCategory(updatedCommunity.getCommunityCategory());
+        community.setCommunityTitle(updatedCommunity.getCommunityTitle());
+        community.setCommunityContent(updatedCommunity.getCommunityContent());
+
+        communityRepository.save(community);
+        return CommunityConverter.toCommunityUpdateResponse(community);
     }
 }

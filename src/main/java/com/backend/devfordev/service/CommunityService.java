@@ -3,7 +3,6 @@ package com.backend.devfordev.service;
 import com.backend.devfordev.domain.enums.CommunityCategory;
 import com.backend.devfordev.dto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityResponse;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,4 +16,5 @@ public interface CommunityService {
 
 
     public void deleteCommunity(Long id, Long userId);
+    public CommunityResponse.CommunityUpdateResponse updateCommunity(Long id, CommunityRequest.CommunityUpdateRequest request, Long userId);
 }

@@ -118,4 +118,18 @@ public class CommunityController {
 
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+
+    @Operation(summary = "커뮤니티 글 수정")
+    @PatchMapping(value = "/v1/community/{id}")
+    public ResponseEntity<ApiResponse> updateCommunity(@RequestBody CommunityRequest.CommunityUpdateRequest request, @PathVariable Long id, @AuthenticationPrincipal User user) {
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .result(communityService.updateCommunity(id, request, Long.parseLong(user.getUsername())))
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message(SuccessStatus._OK.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 }

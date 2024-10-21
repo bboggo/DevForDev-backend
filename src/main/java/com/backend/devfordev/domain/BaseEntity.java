@@ -31,6 +31,10 @@ public class BaseEntity {
         this.deletedAt = LocalDateTime.now();
     }
 
+    public void modify() {
+        this.modifiedAt = LocalDateTime.now();
+    }
+
     // 확인
     public boolean isSoftDeleted() {
         return null != deletedAt;

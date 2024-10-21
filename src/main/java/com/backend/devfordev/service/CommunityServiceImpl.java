@@ -28,6 +28,7 @@ public class CommunityServiceImpl implements CommunityService{
     private final CommunityRepository communityRepository;
     private final MemberRepository memberRepository;
     private final LikeRepository likeRepository;
+    private final OpenAIService openAIService;
     @Override
     @Transactional
     public CommunityResponse.CommunityCreateResponse createCommunity(CommunityRequest.CommunityCreateRequest request, Long userId) {
@@ -42,6 +43,14 @@ public class CommunityServiceImpl implements CommunityService{
             throw new CommunityHandler(ErrorStatus.INVALID_CATEGORY);
         }
         communityRepository.save(community);
+        // communityAI 필드가 1인 경우 OpenAI API로 댓글 생성
+        if (community.getCommunityAI() == 1L) {
+            String aiCommentContent = openAIService.generateAIComment(community.getCommunityTitle(), community.getCommunityContent());
+
+            // 생성된 AI 댓글을 Comment 엔티티로 저장
+            System.out.println(aiCommentContent);
+        }
+
 
         return CommunityConverter.toCommunityResponse(community);
      }

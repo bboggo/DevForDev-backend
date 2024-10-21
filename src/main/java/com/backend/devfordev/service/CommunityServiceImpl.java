@@ -168,9 +168,16 @@ public class CommunityServiceImpl implements CommunityService{
     }
 
     @Transactional
-    public void deleteCommunity(Long id) {
+    public void deleteCommunity(Long id, Long userId) {
+
+
         Community community = communityRepository.findById(id)
                 .orElseThrow(() -> new CommunityHandler(ErrorStatus.COMMUNITY_NOT_FOUND));
+
+        // 글 작성자와 로그인한 유저가 동일한지 확인
+        if (!community.getMember().getId().equals(userId)) {
+            throw new CommunityHandler(ErrorStatus.UNAUTHORIZED_USER); // 예외 처리 (권한 없음)
+        }
 
         community.deleteSoftly(); // BaseEntity에서 상속받은 softDelete 메소드 호출
 

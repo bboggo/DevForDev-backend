@@ -107,8 +107,8 @@ public class CommunityController {
 
     @Operation(summary = "커뮤니티 글 삭제")
     @DeleteMapping(value = "/v1/community/{id}")
-    public ResponseEntity<ApiResponse> deleteCommunity(@PathVariable Long id) {
-        communityService.deleteCommunity(id);
+    public ResponseEntity<ApiResponse> deleteCommunity(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        communityService.deleteCommunity(id, Long.parseLong(user.getUsername()));
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())

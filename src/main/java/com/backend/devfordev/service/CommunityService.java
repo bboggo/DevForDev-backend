@@ -15,6 +15,6 @@ public interface CommunityService {
     public CommunityResponse.CommunityDetailResponse getCommunityDetail(Long id);
     public List<CommunityResponse.CommunityTop5Response> getTop5UsersByTotalLikes();
 
-    @Transactional
-    public void deleteCommunity(Long id);
+
+    public void deleteCommunity(Long id, Long userId);
 }

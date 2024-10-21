@@ -27,6 +27,8 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_JWT_TOKEN(UNAUTHORIZED, "AUTH4012", "토큰 유효성 검사 실패 또는 거부된 토큰입니다."),
     LOGIN_FAILED_PASSWORD_INCORRECT(UNAUTHORIZED,"AUTH4013", "비밀번호가 틀립니다."),
 
+    // 전체
+    UNAUTHORIZED_USER(BAD_REQUEST, "ETC001","Only the user who created it can be deleted."),
     // 좋아요
     INVALID_LIKE_TYPE(BAD_REQUEST, "LIKE001", "The LikeType value must be one of the following: COMMUNITY, TEAM, PORTFOLIO, PROJECT."),
     // 회원

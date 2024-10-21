@@ -27,4 +27,15 @@ public class CommunityRequest {
         Long communityViews;
     }
 
+
+    @Getter
+    public static class CommunityUpdateRequest {
+        @Schema(description = "커뮤니티 카테고리", example = "CAREER")
+        String communityCategory;
+        @Schema(description = "커뮤니티 제목", example = "커뮤니티 제목1")
+        String communityTitle;
+        @Schema(description = "커뮤니티 내용", example = "커뮤니티 내용1")
+        String communityContent;
+    }
+
 }

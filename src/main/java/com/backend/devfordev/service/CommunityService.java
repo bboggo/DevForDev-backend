@@ -13,4 +13,8 @@ public interface CommunityService {
 
     public CommunityResponse.CommunityDetailResponse getCommunityDetail(Long id);
     public List<CommunityResponse.CommunityTop5Response> getTop5UsersByTotalLikes();
+
+
+    public void deleteCommunity(Long id, Long userId);
+    public CommunityResponse.CommunityUpdateResponse updateCommunity(Long id, CommunityRequest.CommunityUpdateRequest request, Long userId);
 }

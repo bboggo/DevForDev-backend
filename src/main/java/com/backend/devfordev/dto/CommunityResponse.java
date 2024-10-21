@@ -80,4 +80,20 @@ public class CommunityResponse {
         MemberInfo member;
         Long totalLikes;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CommunityUpdateResponse {
+        Long id;
+        CommunityCategory communityCategory;
+        String communityTitle;
+        String communityContent;
+        Long member;
+        Long communityAI;
+        LocalDateTime createdAt;
+        LocalDateTime updatedAt;
+    }
+
 }

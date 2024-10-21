@@ -14,8 +14,10 @@ import java.util.Optional;
 public interface CommunityRepository extends JpaRepository<Community, Long> {
     List<Community> findByCommunityCategory(CommunityCategory category);
 
+
     @Query("SELECT c, (SELECT COUNT(h) FROM Heart h WHERE h.likeId = c.id AND h.likeType = 'COMMUNITY') as likeCount " +
-            "FROM Community c JOIN FETCH c.member")
+            "FROM Community c JOIN FETCH c.member " +
+            "WHERE c.deletedAt IS NULL")
     List<Object[]> findAllWithLikesAndMember();
 
 
@@ -35,6 +37,7 @@ public interface CommunityRepository extends JpaRepository<Community, Long> {
             "GROUP BY h.member.id, h.member.name, h.member.imageUrl " +
             "ORDER BY totalLikes DESC")
     List<Object[]> findTop5UsersByTotalLikes();
+
 
 
 

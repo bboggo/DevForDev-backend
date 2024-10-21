@@ -3,6 +3,7 @@ package com.backend.devfordev.apiPayload.code.status;
 
 import com.backend.devfordev.apiPayload.code.BaseErrorCode;
 import com.backend.devfordev.apiPayload.code.ErrorReasonDTO;
+import com.backend.devfordev.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -27,10 +28,11 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_JWT_TOKEN(UNAUTHORIZED, "AUTH4012", "토큰 유효성 검사 실패 또는 거부된 토큰입니다."),
     LOGIN_FAILED_PASSWORD_INCORRECT(UNAUTHORIZED,"AUTH4013", "비밀번호가 틀립니다."),
 
+    // 전체
+    UNAUTHORIZED_USER(BAD_REQUEST, "ETC001","Only the user who created it can delete or modify it09ㅐ"),
     // 좋아요
     INVALID_LIKE_TYPE(BAD_REQUEST, "LIKE001", "The LikeType value must be one of the following: COMMUNITY, TEAM, PORTFOLIO, PROJECT."),
     // 회원
-
     DUPLICATED_NAME(BAD_REQUEST, "MEMBER001", "Nickname is duplicated"),
     DUPLICATED_EMAIL(BAD_REQUEST, "MEMBER002", "Email is duplicated"),
     NO_MATCHING_MEMBER(BAD_REQUEST, "MEMBER003", "There is no matching member information."),
@@ -38,7 +40,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 커뮤니티
     INVALID_CATEGORY(BAD_REQUEST, "COM001", "Only SKILL, CAREER, and OTHER are available."),
-    COMMUNITY_NOT_FOUND(BAD_REQUEST, "COM002", "Community Not Found");
+    COMMUNITY_NOT_FOUND(BAD_REQUEST, "COM002", "Community Not Found"),
+    COMMUNITY_DELETED(BAD_REQUEST, "COM003", "This is a deleted post.");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

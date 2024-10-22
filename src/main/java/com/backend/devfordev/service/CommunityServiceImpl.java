@@ -5,16 +5,20 @@ import com.backend.devfordev.apiPayload.exception.handler.CommunityHandler;
 import com.backend.devfordev.apiPayload.exception.handler.MemberHandler;
 import com.backend.devfordev.converter.CommunityConverter;
 import com.backend.devfordev.domain.Community;
+import com.backend.devfordev.domain.CommunityComment;
 import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.domain.enums.CommunityCategory;
 import com.backend.devfordev.dto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityResponse;
+import com.backend.devfordev.repository.CommunityCommentRepository;
 import com.backend.devfordev.repository.CommunityRepository;
 import com.backend.devfordev.repository.LikeRepository;
 import com.backend.devfordev.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 
 import java.util.Comparator;
 import java.util.List;
@@ -29,6 +33,7 @@ public class CommunityServiceImpl implements CommunityService{
     private final MemberRepository memberRepository;
     private final LikeRepository likeRepository;
     private final OpenAIService openAIService;
+    private final CommunityCommentRepository communityCommentRepository;
     @Override
     @Transactional
     public CommunityResponse.CommunityCreateResponse createCommunity(CommunityRequest.CommunityCreateRequest request, Long userId) {
@@ -44,11 +49,25 @@ public class CommunityServiceImpl implements CommunityService{
         }
         communityRepository.save(community);
         // communityAI 필드가 1인 경우 OpenAI API로 댓글 생성
-        if (community.getCommunityAI() == 1L) {
+        try {
+            // OpenAI API 호출
             String aiCommentContent = openAIService.generateAIComment(community.getCommunityTitle(), community.getCommunityContent());
 
-            // 생성된 AI 댓글을 Comment 엔티티로 저장
-            System.out.println(aiCommentContent);
+            // 생성된 AI 댓글을 community_comment 테이블에 저장
+            CommunityComment aiComment = CommunityComment.builder()
+                    .community(community)
+                    .commentContent(aiCommentContent)
+                    .isAiComment(1L)  // AI 댓글임을 표시
+                    .build();
+
+            communityCommentRepository.save(aiComment);
+
+        } catch (HttpClientErrorException e) {
+            // OpenAI API에서 잘못된 요청이나 401 Unauthorized 등의 에러 처리
+            throw new CommunityHandler(ErrorStatus.OPENAI_API_ERROR);
+        } catch (RestClientException e) {
+            // API 요청 중 네트워크 오류 등의 일반적인 예외 처리
+            throw new CommunityHandler(ErrorStatus.OPENAI_API_ERROR);
         }
 
 

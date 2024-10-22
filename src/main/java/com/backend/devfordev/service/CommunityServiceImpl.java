@@ -17,6 +17,8 @@ import com.backend.devfordev.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 
 import java.util.Comparator;
 import java.util.List;
@@ -47,20 +49,25 @@ public class CommunityServiceImpl implements CommunityService{
         }
         communityRepository.save(community);
         // communityAI 필드가 1인 경우 OpenAI API로 댓글 생성
-        // communityAI 필드가 1인 경우 OpenAI API로 댓글 생성
-        if (community.getCommunityAI() == 1L) {
+        try {
+            // OpenAI API 호출
             String aiCommentContent = openAIService.generateAIComment(community.getCommunityTitle(), community.getCommunityContent());
 
-            // AI 댓글 객체 생성 및 저장
+            // 생성된 AI 댓글을 community_comment 테이블에 저장
             CommunityComment aiComment = CommunityComment.builder()
                     .community(community)
-                    .member(member)
                     .commentContent(aiCommentContent)
-                    .isAiComment(1L)
+                    .isAiComment(1L)  // AI 댓글임을 표시
                     .build();
 
-            // 댓글 저장
             communityCommentRepository.save(aiComment);
+
+        } catch (HttpClientErrorException e) {
+            // OpenAI API에서 잘못된 요청이나 401 Unauthorized 등의 에러 처리
+            throw new CommunityHandler(ErrorStatus.OPENAI_API_ERROR);
+        } catch (RestClientException e) {
+            // API 요청 중 네트워크 오류 등의 일반적인 예외 처리
+            throw new CommunityHandler(ErrorStatus.OPENAI_API_ERROR);
         }
 
 

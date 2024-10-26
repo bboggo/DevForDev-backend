@@ -23,6 +23,7 @@ public class TeamResponse {
         Long teamRecruitmentNum;
         List<String> teamTechStack;
         List<String> teamTags;
+        LocalDateTime createdAt;
     }
 
 }

@@ -3,6 +3,7 @@ package com.backend.devfordev.service;
 import com.backend.devfordev.apiPayload.code.status.ErrorStatus;
 import com.backend.devfordev.apiPayload.exception.handler.CommunityHandler;
 import com.backend.devfordev.apiPayload.exception.handler.MemberHandler;
+import com.backend.devfordev.apiPayload.exception.handler.TeamHandler;
 import com.backend.devfordev.converter.CommunityConverter;
 import com.backend.devfordev.converter.TeamConverter;
 import com.backend.devfordev.domain.*;
@@ -38,19 +39,24 @@ public class TeamServiceImpl implements TeamService{
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.INVALID_MEMBER));
 
-        // 태그를 DB에서 조회하고, 없는 경우 새로 생성
+        if (request.getTeamTechStack().size() > 5) {
+            throw new TeamHandler(ErrorStatus.INVALID_TECH_STACK_COUNT);
+        }
+        if (request.getTeamTags().size() > 5) {
+            throw new TeamHandler(ErrorStatus.INVALID_TAG_COUNT);
+        }
+
+
+
         List<TeamTag> tags = request.getTeamTags().stream()
                 .map(tagName -> teamTagRepository.findByName(tagName)
                         .orElseGet(() -> teamTagRepository.save(TeamTag.builder().name(tagName).build())))
                 .collect(Collectors.toList());
 
-        // Team 엔티티 생성
         Team team = TeamConverter.toTeam(request, member, tags);
 
-        // Team 저장
         teamRepository.save(team);
 
-        // Response 변환
         return TeamConverter.toTeamCreateResponse(team);
 
     }

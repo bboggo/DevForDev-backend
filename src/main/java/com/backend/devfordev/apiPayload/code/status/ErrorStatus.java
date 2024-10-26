@@ -42,7 +42,11 @@ public enum ErrorStatus implements BaseErrorCode {
     // 커뮤니티
     INVALID_CATEGORY(BAD_REQUEST, "COM001", "Only SKILL, CAREER, and OTHER are available."),
     COMMUNITY_NOT_FOUND(BAD_REQUEST, "COM002", "Community Not Found"),
-    COMMUNITY_DELETED(BAD_REQUEST, "COM003", "This is a deleted post.");
+    COMMUNITY_DELETED(BAD_REQUEST, "COM003", "This is a deleted post."),
+
+    // 팀
+    INVALID_TAG_COUNT(BAD_REQUEST, "TEAM001", "The maximum allowed tags are 5."),
+    INVALID_TECH_STACK_COUNT(BAD_REQUEST, "TEAM002", "The maximum allowed tech stacks are 5.");;
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

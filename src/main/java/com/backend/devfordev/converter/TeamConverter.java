@@ -64,6 +64,7 @@ public class TeamConverter {
                 .teamRecruitmentNum(Long.valueOf(team.getTeamRecruitmentNum()))
                 .teamTechStack(techStackNames)
                 .teamTags(tagNames)
+                .createdAt(team.getCreatedAt())
                 .build();
     }
 }

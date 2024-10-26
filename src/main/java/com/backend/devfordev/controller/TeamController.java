@@ -36,7 +36,7 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
-    @PatchMapping("/{teamId}/close")
+    @PatchMapping("v1/team/{teamId}/close")
     public ResponseEntity<ApiResponse> closeRecruitment(
             @PathVariable Long teamId,
             @AuthenticationPrincipal User user) {

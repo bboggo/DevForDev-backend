@@ -38,8 +38,15 @@ public class Team extends BaseEntity {
 
 
     @Column(name = "team_is_active", nullable = false)
-    private Long teamIsActive;
+    private Long teamIsActive = 1L;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamTechStack> teamTechStacks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TeamTagMap> teamTagMaps = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 }

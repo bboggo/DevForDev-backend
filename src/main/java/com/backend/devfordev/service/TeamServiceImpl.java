@@ -60,4 +60,18 @@ public class TeamServiceImpl implements TeamService{
         return TeamConverter.toTeamCreateResponse(team);
 
     }
+
+    @Transactional
+    @Override
+    public void closeRecruitment(Long teamId, Long userId) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new TeamHandler(ErrorStatus.TEAM_NOT_FOUND));
+
+        if (!team.getMember().getId().equals(userId)) {
+            throw new MemberHandler(ErrorStatus.UNAUTHORIZED_USER);
+        }
+
+        team.setTeamIsActive(0L);  // 모집 상태를 마감으로 설정
+        teamRepository.save(team);
+    }
 }

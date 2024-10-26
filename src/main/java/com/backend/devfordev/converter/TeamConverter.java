@@ -57,6 +57,7 @@ public class TeamConverter {
                 .collect(Collectors.toList());
 
         return TeamResponse.TeamCreateResponse.builder()
+                .id(team.getId())
                 .teamTitle(team.getTeamTitle())
                 .teamContent(team.getTeamContent())
                 .teamType(team.getTeamType())

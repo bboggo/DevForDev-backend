@@ -16,6 +16,7 @@ public class TeamResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class TeamCreateResponse {
+        Long id;
         String teamTitle;
         String teamContent;
         String teamType;

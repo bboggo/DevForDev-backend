@@ -13,10 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "팀 관련 API")
 @RequiredArgsConstructor
@@ -37,8 +34,21 @@ public class TeamController {
                 .message(SuccessStatus._OK.getMessage())
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+    }
 
-//        SignUpResponse member = memberService.registerMember(request);
-//        return ApiResponse.onSuccess(MemberConverter.toSignUpResponse(member));
+    @PatchMapping("v1/team/{teamId}/close")
+    public ResponseEntity<ApiResponse> closeRecruitment(
+            @PathVariable Long teamId,
+            @AuthenticationPrincipal User user) {
+
+        teamService.closeRecruitment(teamId, Long.parseLong(user.getUsername()));
+
+        ApiResponse response = ApiResponse.builder()
+                .isSuccess(true)
+                .code(SuccessStatus._OK.getCode())
+                .message("모집 상태가 마감되었습니다.")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

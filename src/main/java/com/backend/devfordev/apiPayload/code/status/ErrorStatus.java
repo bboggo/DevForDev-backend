@@ -46,7 +46,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 팀
     INVALID_TAG_COUNT(BAD_REQUEST, "TEAM001", "The maximum allowed tags are 5."),
-    INVALID_TECH_STACK_COUNT(BAD_REQUEST, "TEAM002", "The maximum allowed tech stacks are 5.");;
+    INVALID_TECH_STACK_COUNT(BAD_REQUEST, "TEAM002", "The maximum allowed tech stacks are 5."),
+    TEAM_NOT_FOUND(BAD_REQUEST, "TEAM003", "Team Not Found");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

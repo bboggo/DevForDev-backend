@@ -1,6 +1,7 @@
 package com.backend.devfordev.converter;
 
 import com.backend.devfordev.domain.*;
+import com.backend.devfordev.domain.enums.TeamType;
 import com.backend.devfordev.dto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.TeamRequest;
@@ -18,10 +19,11 @@ public class TeamConverter {
         Team team = Team.builder()
                 .teamTitle(request.getTeamTitle())
                 .teamContent(request.getTeamContent())
-                .teamType(request.getTeamType())
+                .teamType(TeamType.valueOf(String.valueOf(request.getTeamType())))
                 .teamPosition(request.getTeamPosition())
                 .teamRecruitmentNum(String.valueOf(request.getTeamRecruitmentNum()))
                 .teamIsActive(1L) // 기본 값 설정
+                .teamViews(0L) // 기본 값 설정
                 .member(member)
                 .build();
 
@@ -62,7 +64,7 @@ public class TeamConverter {
                 .id(team.getId())
                 .teamTitle(team.getTeamTitle())
                 .teamContent(team.getTeamContent())
-                .teamType(team.getTeamType())
+                .teamType(String.valueOf(team.getTeamType()))
                 .teamPosition(team.getTeamPosition())
                 .teamRecruitmentNum(Long.valueOf(team.getTeamRecruitmentNum()))
                 .teamTechStack(techStackNames)
@@ -87,7 +89,7 @@ public class TeamConverter {
                 member,
                 team.getTeamTitle(),
                 shortenedContent,
-                team.getTeamType(),
+                String.valueOf(team.getTeamType()),
                 team.getTeamPosition(),
                 Long.valueOf(team.getTeamRecruitmentNum()),
                 techStackNames,
@@ -119,7 +121,7 @@ public class TeamConverter {
                 member,
                 team.getTeamTitle(),
                 team.getTeamContent(),
-                team.getTeamType(),
+                String.valueOf(team.getTeamType()),
                 team.getTeamPosition(),
                 Long.valueOf(team.getTeamRecruitmentNum()),
                 techStackNames,

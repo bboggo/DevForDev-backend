@@ -1,5 +1,6 @@
 package com.backend.devfordev.domain;
 
+import com.backend.devfordev.domain.enums.TeamType;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,7 +29,8 @@ public class Team extends BaseEntity {
     private String teamContent;
 
     @Column(name = "team_type", nullable = false)
-    private String teamType;
+    @Enumerated(EnumType.STRING)
+    private TeamType teamType;
 
     @Column(name = "team_position", nullable = false)
     private String teamPosition;
@@ -53,5 +55,7 @@ public class Team extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+
 
 }

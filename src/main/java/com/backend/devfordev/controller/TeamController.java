@@ -4,6 +4,7 @@ import com.backend.devfordev.apiPayload.ApiResponse;
 import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
 
 import com.backend.devfordev.domain.enums.CommunityCategory;
+import com.backend.devfordev.domain.enums.TeamType;
 import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.TeamRequest;
 import com.backend.devfordev.dto.TeamResponse;
@@ -18,6 +19,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,33 +44,24 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
-    @Operation(summary = "팀 모집 마감")
-    @PatchMapping("v1/team/{teamId}/close")
-    public ResponseEntity<ApiResponse> closeRecruitment(
-            @PathVariable Long teamId,
-            @AuthenticationPrincipal User user) {
-
-        teamService.closeRecruitment(teamId, Long.parseLong(user.getUsername()));
-
-        ApiResponse response = ApiResponse.builder()
-                .isSuccess(true)
-                .code(SuccessStatus._OK.getCode())
-                .message("모집 상태가 마감되었습니다.")
-                .build();
-
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
 
     @Operation(summary = "팀 모집글 전체 조회")
     @GetMapping(value = "/v1/team")
     public ResponseEntity<ApiResponse> getTeamList(
             @RequestParam(required = false) String searchTerm,
-            @RequestParam(required = false, defaultValue = "recent") String sortBy
-    ) {
+            @RequestParam(required = false) TeamType teamType,
+            @RequestParam(required = false) List<String> positions,
+            @RequestParam(required = false) List<String> techStacks,
+            @RequestParam(defaultValue = "recent") String sortBy) {
         // 카테고리가 있을 경우 서비스에 Optional로 전달
-        List<TeamResponse.TeamListResponse> teamList = teamService.getTeamList(
-                Optional.ofNullable(searchTerm),
-                sortBy);
+            List<TeamResponse.TeamListResponse> teamList = teamService.getTeamList(
+                    Optional.ofNullable(searchTerm),
+                    Optional.ofNullable(teamType),
+                    positions != null ? positions : Collections.emptyList(),
+                    techStacks != null ? techStacks : Collections.emptyList(),
+                    sortBy
+            );
+
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(teamList)
@@ -95,6 +88,24 @@ public class TeamController {
 
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+    @Operation(summary = "팀 모집 마감")
+    @PatchMapping("v1/team/{teamId}/close")
+    public ResponseEntity<ApiResponse> closeRecruitment(
+            @PathVariable Long teamId,
+            @AuthenticationPrincipal User user) {
+
+        teamService.closeRecruitment(teamId, Long.parseLong(user.getUsername()));
+
+        ApiResponse response = ApiResponse.builder()
+                .isSuccess(true)
+                .code(SuccessStatus._OK.getCode())
+                .message("모집 상태가 마감되었습니다.")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 
     @Operation(summary = "팀 모집글 삭제")
     @DeleteMapping(value = "/v1/team/{id}")

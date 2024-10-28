@@ -8,6 +8,7 @@ import com.backend.devfordev.converter.CommunityConverter;
 import com.backend.devfordev.converter.TeamConverter;
 import com.backend.devfordev.domain.*;
 import com.backend.devfordev.domain.enums.CommunityCategory;
+import com.backend.devfordev.domain.enums.TeamType;
 import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.TeamRequest;
 import com.backend.devfordev.dto.TeamResponse;
@@ -74,19 +75,37 @@ public class TeamServiceImpl implements TeamService{
         teamRepository.save(team);
     }
 
+
     @Override
     @Transactional
-    public List<TeamResponse.TeamListResponse> getTeamList(Optional<String> searchTermOpt, String sortBy) {
+    public List<TeamResponse.TeamListResponse> getTeamList(Optional<String> searchTermOpt, Optional<TeamType> teamTypeOpt, List<String> positions, List<String> techStacks, String sortBy) {
 
         List<Object[]> results = teamRepository.findAllWithLikesAndMember();
 
         List<TeamResponse.TeamListResponse> teamList = results.stream()
                 .map(result -> {
-                    Team team = (Team) result[0];  // 첫 번째는 Community 객체
+                    Team team = (Team) result[0];
                     Long likeCount = (Long) result[1];
 
+                    if (teamTypeOpt.isPresent() && !team.getTeamType().equals(teamTypeOpt.get())) {
+                        return null;
+                    }
 
-                    // 검색 필터링: 제목, 작성자 이름, 내용 중 하나라도 일치하면 true 반환
+
+                    // `teamPosition` filter
+                    if (!positions.isEmpty() && positions.stream().noneMatch(pos -> team.getTeamPosition().contains(pos))) {
+                        return null;
+                    }
+
+                    // `teamTechStack` filter
+                    List<String> teamStackNames = team.getTeamTechStacks().stream()
+                            .map(TeamTechStack::getName)
+                            .collect(Collectors.toList());
+                    if (!techStacks.isEmpty() && techStacks.stream().noneMatch(teamStackNames::contains)) {
+                        return null;
+                    }
+
+                    // Search term filtering
                     if (searchTermOpt.isPresent()) {
                         String searchTerm = searchTermOpt.get().toLowerCase();
                         boolean matches = team.getTeamTitle().toLowerCase().contains(searchTerm) ||
@@ -97,15 +116,17 @@ public class TeamServiceImpl implements TeamService{
                         }
                     }
 
+                    // Construct MemberInfo
                     CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
                             team.getMember().getId(),
                             team.getMember().getImageUrl(),
                             team.getMember().getName()
                     );
 
+                    // Shortened content
                     String shortenedContent = team.getTeamContent();
                     if (shortenedContent.length() > 80) {
-                        shortenedContent = shortenedContent.substring(0, 80) + "...";  // 80자까지만 자르고 "..." 추가
+                        shortenedContent = shortenedContent.substring(0, 80) + "...";
                     }
 
                     return TeamConverter.toTeamListResponse(team, memberInfo, likeCount, shortenedContent);
@@ -113,15 +134,14 @@ public class TeamServiceImpl implements TeamService{
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        // 정렬 기준에 따른 정렬
+        // Sorting
         switch (sortBy.toLowerCase()) {
-            case "likes":   // 좋아요 순 정렬
+            case "likes":
                 teamList.sort(Comparator.comparingLong(TeamResponse.TeamListResponse::getLikes).reversed());
                 break;
-            case "views":   // 조회수 순 정렬
+            case "views":
                 teamList.sort(Comparator.comparingLong(TeamResponse.TeamListResponse::getViews).reversed());
                 break;
-            case "recent":  // 최신순 정렬 (기본)
             default:
                 teamList.sort(Comparator.comparing(TeamResponse.TeamListResponse::getCreatedAt).reversed());
                 break;
@@ -129,6 +149,7 @@ public class TeamServiceImpl implements TeamService{
 
         return teamList;
     }
+
 
     @Override
     @Transactional

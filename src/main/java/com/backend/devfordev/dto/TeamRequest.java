@@ -1,5 +1,6 @@
 package com.backend.devfordev.dto;
 
+import com.backend.devfordev.domain.enums.TeamType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,13 +22,14 @@ public class TeamRequest {
         String teamContent;
 
         @Schema(description = "팀 모집 유형", example = "STUDY")
-        String teamType;
+        TeamType teamType;
 
         @Schema(description = "팀 모집 포지션", example = "BACKEND")
         String teamPosition;
 
         @Schema(description = "팀 모집 인원", example = "1")
         Long teamRecruitmentNum;
+
 
         // 기술 스택 , 태그
         @Schema(description = "기술 스택", example = "[\"Java\", \"Spring\", \"AWS\"]")

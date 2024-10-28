@@ -3,6 +3,7 @@ package com.backend.devfordev.controller;
 import com.backend.devfordev.apiPayload.ApiResponse;
 import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
 
+import com.backend.devfordev.domain.enums.CommunityCategory;
 import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.TeamRequest;
 import com.backend.devfordev.dto.TeamResponse;
@@ -16,6 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Tag(name = "팀 API")
 @RequiredArgsConstructor
@@ -53,6 +57,27 @@ public class TeamController {
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @Operation(summary = "팀 모집글 전체 조회")
+    @GetMapping(value = "/v1/team")
+    public ResponseEntity<ApiResponse> getTeamList(
+            @RequestParam(required = false) String searchTerm,
+            @RequestParam(required = false, defaultValue = "recent") String sortBy
+    ) {
+        // 카테고리가 있을 경우 서비스에 Optional로 전달
+        List<TeamResponse.TeamListResponse> teamList = teamService.getTeamList(
+                Optional.ofNullable(searchTerm),
+                sortBy);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .result(teamList)
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message(SuccessStatus._OK.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+
     }
 
 

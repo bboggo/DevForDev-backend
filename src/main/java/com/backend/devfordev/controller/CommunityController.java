@@ -88,7 +88,6 @@ public class CommunityController {
     }
 
 
-
     @Operation(summary = "인기 커뮤니티 Top 5 유저 조회 (좋아요 수 기준)")
     @GetMapping(value = "/v1/community/top5")
     public ResponseEntity<ApiResponse> getTop5UsersByTotalLikes() {
@@ -98,6 +97,19 @@ public class CommunityController {
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(top5Users)
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message(SuccessStatus._OK.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @Operation(summary = "커뮤니티 글 수정")
+    @PatchMapping(value = "/v1/community/{id}")
+    public ResponseEntity<ApiResponse> updateCommunity(@RequestBody CommunityRequest.CommunityUpdateRequest request, @PathVariable Long id, @AuthenticationPrincipal User user) {
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .result(communityService.updateCommunity(id, request, Long.parseLong(user.getUsername())))
                 .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
                 .code(SuccessStatus._OK.getCode())
                 .message(SuccessStatus._OK.getMessage())
@@ -116,20 +128,6 @@ public class CommunityController {
                 .message(SuccessStatus._OK.getMessage())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
-    }
-
-
-    @Operation(summary = "커뮤니티 글 수정")
-    @PatchMapping(value = "/v1/community/{id}")
-    public ResponseEntity<ApiResponse> updateCommunity(@RequestBody CommunityRequest.CommunityUpdateRequest request, @PathVariable Long id, @AuthenticationPrincipal User user) {
-
-        ApiResponse apiResponse = ApiResponse.builder()
-                .result(communityService.updateCommunity(id, request, Long.parseLong(user.getUsername())))
-                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
-                .code(SuccessStatus._OK.getCode())
-                .message(SuccessStatus._OK.getMessage())
-                .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 }

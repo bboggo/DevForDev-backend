@@ -7,7 +7,8 @@ import com.backend.devfordev.apiPayload.exception.handler.TeamHandler;
 import com.backend.devfordev.converter.CommunityConverter;
 import com.backend.devfordev.converter.TeamConverter;
 import com.backend.devfordev.domain.*;
-import com.backend.devfordev.dto.CommunityRequest;
+import com.backend.devfordev.domain.enums.CommunityCategory;
+import com.backend.devfordev.domain.enums.TeamType;
 import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.TeamRequest;
 import com.backend.devfordev.dto.TeamResponse;
@@ -15,10 +16,11 @@ import com.backend.devfordev.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClientException;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -71,6 +73,81 @@ public class TeamServiceImpl implements TeamService{
 
         team.setTeamIsActive(0L);  // 모집 상태를 마감으로 설정
         teamRepository.save(team);
+    }
+
+
+    @Override
+    @Transactional
+    public List<TeamResponse.TeamListResponse> getTeamList(Optional<String> searchTermOpt, Optional<TeamType> teamTypeOpt, List<String> positions, List<String> techStacks, String sortBy) {
+
+        List<Object[]> results = teamRepository.findAllWithLikesAndMember();
+
+        List<TeamResponse.TeamListResponse> teamList = results.stream()
+                .map(result -> {
+                    Team team = (Team) result[0];
+                    Long likeCount = (Long) result[1];
+
+                    if (teamTypeOpt.isPresent() && !team.getTeamType().equals(teamTypeOpt.get())) {
+                        return null;
+                    }
+
+
+                    // `teamPosition` filter
+                    if (!positions.isEmpty() && positions.stream().noneMatch(pos -> team.getTeamPosition().contains(pos))) {
+                        return null;
+                    }
+
+                    // `teamTechStack` filter
+                    List<String> teamStackNames = team.getTeamTechStacks().stream()
+                            .map(TeamTechStack::getName)
+                            .collect(Collectors.toList());
+                    if (!techStacks.isEmpty() && techStacks.stream().noneMatch(teamStackNames::contains)) {
+                        return null;
+                    }
+
+                    // Search term filtering
+                    if (searchTermOpt.isPresent()) {
+                        String searchTerm = searchTermOpt.get().toLowerCase();
+                        boolean matches = team.getTeamTitle().toLowerCase().contains(searchTerm) ||
+                                team.getMember().getName().toLowerCase().contains(searchTerm) ||
+                                team.getTeamContent().toLowerCase().contains(searchTerm);
+                        if (!matches) {
+                            return null;
+                        }
+                    }
+
+                    // Construct MemberInfo
+                    CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
+                            team.getMember().getId(),
+                            team.getMember().getImageUrl(),
+                            team.getMember().getName()
+                    );
+
+                    // Shortened content
+                    String shortenedContent = team.getTeamContent();
+                    if (shortenedContent.length() > 80) {
+                        shortenedContent = shortenedContent.substring(0, 80) + "...";
+                    }
+
+                    return TeamConverter.toTeamListResponse(team, memberInfo, likeCount, shortenedContent);
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        // Sorting
+        switch (sortBy.toLowerCase()) {
+            case "likes":
+                teamList.sort(Comparator.comparingLong(TeamResponse.TeamListResponse::getLikes).reversed());
+                break;
+            case "views":
+                teamList.sort(Comparator.comparingLong(TeamResponse.TeamListResponse::getViews).reversed());
+                break;
+            default:
+                teamList.sort(Comparator.comparing(TeamResponse.TeamListResponse::getCreatedAt).reversed());
+                break;
+        }
+
+        return teamList;
     }
 
 

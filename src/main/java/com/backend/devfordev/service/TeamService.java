@@ -7,4 +7,5 @@ public interface TeamService {
     public TeamResponse.TeamCreateResponse createTeam(TeamRequest.TeamCreateRequest request, Long userId);
     public void closeRecruitment(Long teamId, Long userId);
     public TeamResponse.TeamDetailResponse getTeamDetail(Long id);
+    public void deleteTeam(Long id, Long userId);
 }

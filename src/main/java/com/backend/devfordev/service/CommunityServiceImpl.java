@@ -204,19 +204,18 @@ public class CommunityServiceImpl implements CommunityService{
         Community community = communityRepository.findById(id)
                 .orElseThrow(() -> new CommunityHandler(ErrorStatus.COMMUNITY_NOT_FOUND));
 
-        // 삭제된 커뮤니티는 수정 불가
+
         if (community.getDeletedAt() != null) {
-            throw new CommunityHandler(ErrorStatus.COMMUNITY_DELETED);  // 삭제된 커뮤니티 예외 처리
+            throw new CommunityHandler(ErrorStatus.COMMUNITY_DELETED);
         }
 
-        // 글 작성자와 로그인한 유저가 동일한지 확인
         if (!community.getMember().getId().equals(userId)) {
-            throw new CommunityHandler(ErrorStatus.UNAUTHORIZED_USER); // 예외 처리 (권한 없음)
+            throw new CommunityHandler(ErrorStatus.UNAUTHORIZED_USER);
         }
 
-        community.deleteSoftly(); // BaseEntity에서 상속받은 softDelete 메소드 호출
+        community.deleteSoftly();
 
-        communityRepository.save(community); // 변경된 엔티티 저장
+        communityRepository.save(community);
     }
 
     @Override

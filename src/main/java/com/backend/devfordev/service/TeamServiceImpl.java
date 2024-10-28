@@ -94,4 +94,23 @@ public class TeamServiceImpl implements TeamService{
         return TeamConverter.toTeamDetailResponse(team, memberInfo, Likecount);
     }
 
+    @Override
+    @Transactional
+    public void deleteTeam(Long id, Long userId) {
+        Team team = teamRepository.findById(id)
+                .orElseThrow(() -> new TeamHandler(ErrorStatus.TEAM_NOT_FOUND));
+
+        if (team.getDeletedAt() != null) {
+            throw new CommunityHandler(ErrorStatus.TEAM_DELETED);
+        }
+
+
+        if (!team.getMember().getId().equals(userId)) {
+            throw new CommunityHandler(ErrorStatus.UNAUTHORIZED_USER);
+        }
+
+        team.deleteSoftly();
+
+        teamRepository.save(team);
+    }
 }

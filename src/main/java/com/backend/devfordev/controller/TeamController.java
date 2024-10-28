@@ -71,4 +71,17 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
+    @Operation(summary = "팀 모집글 삭제")
+    @DeleteMapping(value = "/v1/team/{id}")
+    public ResponseEntity<ApiResponse> deleteTeam(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        teamService.deleteTeam(id, Long.parseLong(user.getUsername()));
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message(SuccessStatus._OK.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 }

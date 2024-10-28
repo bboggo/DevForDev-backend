@@ -40,6 +40,10 @@ public class Team extends BaseEntity {
     @Column(name = "team_is_active", nullable = false)
     private Long teamIsActive = 1L;
 
+    @Column(name = "team_views", nullable = false)
+    private Long teamViews = 0L;  // 기본값 설정
+
+
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamTechStack> teamTechStacks = new ArrayList<>();
 
@@ -49,4 +53,5 @@ public class Team extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
 }

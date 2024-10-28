@@ -27,4 +27,24 @@ public class TeamResponse {
         LocalDateTime createdAt;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TeamDetailResponse {
+        Long id;
+        CommunityResponse.MemberInfo member;
+        String teamTitle;
+        String teamContent;
+        String teamType;
+        String teamPosition;
+        Long teamRecruitmentNum;
+        List<String> teamTechStack;
+        List<String> teamTags;
+        LocalDateTime createdAt;
+        Long teamIsActive;
+        Long views;
+        Long answers;
+        Long likes;
+    }
 }

@@ -71,6 +71,36 @@ public class TeamConverter {
                 .build();
     }
 
+    public static TeamResponse.TeamListResponse toTeamListResponse(
+        Team team, CommunityResponse.MemberInfo member, Long likeCount) {
+
+        List<String> techStackNames = team.getTeamTechStacks().stream()
+                .map(TeamTechStack::getName)
+                .collect(Collectors.toList());
+
+        List<String> tagNames = team.getTeamTagMaps().stream()
+                .map(teamTagMap -> teamTagMap.getTag().getName())
+                .collect(Collectors.toList());
+
+        return new TeamResponse.TeamListResponse(
+                team.getId(),
+                member,
+                team.getTeamTitle(),
+                team.getTeamContent(),
+                team.getTeamType(),
+                team.getTeamPosition(),
+                Long.valueOf(team.getTeamRecruitmentNum()),
+                techStackNames,
+                tagNames,
+                team.getCreatedAt(),
+                team.getTeamIsActive(),
+                team.getTeamViews(),
+                0L,
+                likeCount
+
+        );
+    }
+
     public static TeamResponse.TeamDetailResponse toTeamDetailResponse(
             Team team, CommunityResponse.MemberInfo member, Long likeCount) {
 
@@ -84,22 +114,23 @@ public class TeamConverter {
                 .collect(Collectors.toList());
 
         // TeamDetailResponse 객체 반환
-        return TeamResponse.TeamDetailResponse.builder()
-                .id(team.getId())
-                .member(member)
-                .teamTitle(team.getTeamTitle())
-                .teamContent(team.getTeamContent())
-                .teamType(team.getTeamType())
-                .teamPosition(team.getTeamPosition())
-                .teamRecruitmentNum(Long.valueOf(team.getTeamRecruitmentNum()))
-                .teamTechStack(techStackNames)
-                .teamTags(tagNames)
-                .createdAt(team.getCreatedAt())
-                .teamIsActive(team.getTeamIsActive())
-                .views(team.getTeamViews())
-                .answers(0L) // 필요한 경우 업데이트
-                .likes(likeCount)
-                .build();
+        return new TeamResponse.TeamDetailResponse(
+                team.getId(),
+                member,
+                team.getTeamTitle(),
+                team.getTeamContent(),
+                team.getTeamType(),
+                team.getTeamPosition(),
+                Long.valueOf(team.getTeamRecruitmentNum()),
+                techStackNames,
+                tagNames,
+                team.getCreatedAt(),
+                team.getTeamIsActive(),
+                team.getTeamViews(),
+                0L, // 필요한 경우 업데이트
+                likeCount
+
+        );
     }
 
 }

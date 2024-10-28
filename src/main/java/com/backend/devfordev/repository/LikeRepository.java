@@ -11,9 +11,13 @@ import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Heart, Long> {
 
-    // 커뮤니티의 좋아요 수를 카운트 (like 필드를 통해 communityId와 매칭)
+    // 커뮤니티의 좋아요 수를 카운트
     @Query("SELECT COUNT(h) FROM Heart h WHERE h.likeId = :communityId AND h.likeType = 'COMMUNITY'")
     Long countByCommunityId(Long communityId);
+
+    // 팀 모집공고의 좋아요 수를 카운트
+    @Query("SELECT COUNT(h) FROM Heart h WHERE h.likeId = :teamId AND h.likeType = 'TEAM'")
+    Long countByTeamId(Long teamId);
 
     // 특정 게시물에 대한 전체 좋아요 수 계산
     @Query("SELECT COUNT(h) FROM Heart h WHERE h.likeId = :likeId AND h.likeType = :likeType")

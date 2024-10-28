@@ -2,11 +2,13 @@ package com.backend.devfordev.converter;
 
 import com.backend.devfordev.domain.*;
 import com.backend.devfordev.dto.CommunityRequest;
+import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.TeamRequest;
 import com.backend.devfordev.dto.TeamResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,4 +70,37 @@ public class TeamConverter {
                 .createdAt(team.getCreatedAt())
                 .build();
     }
+
+    public static TeamResponse.TeamDetailResponse toTeamDetailResponse(
+            Team team, CommunityResponse.MemberInfo member, Long likeCount) {
+
+        // 기술 스택과 태그를 문자열 리스트로 변환
+        List<String> techStackNames = team.getTeamTechStacks().stream()
+                .map(TeamTechStack::getName)
+                .collect(Collectors.toList());
+
+        List<String> tagNames = team.getTeamTagMaps().stream()
+                .map(teamTagMap -> teamTagMap.getTag().getName())
+                .collect(Collectors.toList());
+
+        // TeamDetailResponse 객체 반환
+        return TeamResponse.TeamDetailResponse.builder()
+                .id(team.getId())
+                .member(member)
+                .teamTitle(team.getTeamTitle())
+                .teamContent(team.getTeamContent())
+                .teamType(team.getTeamType())
+                .teamPosition(team.getTeamPosition())
+                .teamRecruitmentNum(Long.valueOf(team.getTeamRecruitmentNum()))
+                .teamTechStack(techStackNames)
+                .teamTags(tagNames)
+                .createdAt(team.getCreatedAt())
+                .teamIsActive(team.getTeamIsActive())
+                .views(team.getTeamViews())
+                .answers(0L) // 필요한 경우 업데이트
+                .likes(likeCount)
+                .build();
+    }
+
 }
+

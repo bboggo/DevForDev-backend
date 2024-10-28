@@ -3,7 +3,9 @@ package com.backend.devfordev.controller;
 import com.backend.devfordev.apiPayload.ApiResponse;
 import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
 
+import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.TeamRequest;
+import com.backend.devfordev.dto.TeamResponse;
 import com.backend.devfordev.service.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,7 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "팀 관련 API")
+@Tag(name = "팀 API")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping
@@ -36,6 +38,7 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
+    @Operation(summary = "팀 모집 마감")
     @PatchMapping("v1/team/{teamId}/close")
     public ResponseEntity<ApiResponse> closeRecruitment(
             @PathVariable Long teamId,
@@ -51,4 +54,21 @@ public class TeamController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+
+    @Operation(summary = "팀 모집글 상세 조회")
+    @GetMapping(value = "/v1/team/{id}")
+    public ResponseEntity<ApiResponse> getTeamDetail(@PathVariable Long id) {
+        TeamResponse.TeamDetailResponse teamDetail = teamService.getTeamDetail(id);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .result(teamDetail)
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message(SuccessStatus._OK.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
 }

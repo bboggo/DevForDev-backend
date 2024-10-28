@@ -11,10 +11,7 @@ import com.backend.devfordev.dto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.TeamRequest;
 import com.backend.devfordev.dto.TeamResponse;
-import com.backend.devfordev.repository.MemberRepository;
-import com.backend.devfordev.repository.TeamRepository;
-import com.backend.devfordev.repository.TeamTagRepository;
-import com.backend.devfordev.repository.TeamTechStackRepository;
+import com.backend.devfordev.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +27,7 @@ public class TeamServiceImpl implements TeamService{
     private final TeamRepository teamRepository;
     private final MemberRepository memberRepository;
     private final TeamTagRepository teamTagRepository;
+    private final LikeRepository likeRepository;
     private final TeamTechStackRepository teamTechStackRepository;
 
     @Override
@@ -74,4 +72,26 @@ public class TeamServiceImpl implements TeamService{
         team.setTeamIsActive(0L);  // 모집 상태를 마감으로 설정
         teamRepository.save(team);
     }
+
+
+    @Override
+    @Transactional
+    public TeamResponse.TeamDetailResponse getTeamDetail(Long id) {
+        Team team = teamRepository.findById(id)
+                .orElseThrow(() -> new CommunityHandler(ErrorStatus.TEAM_NOT_FOUND));
+
+        if(team.getDeletedAt() != null) {
+            throw new CommunityHandler(ErrorStatus.TEAM_DELETED);
+        }
+
+        Long Likecount = likeRepository.countByTeamId(id);
+        CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
+                team.getMember().getId(),
+                team.getMember().getImageUrl(),
+                team.getMember().getName()
+        );
+
+        return TeamConverter.toTeamDetailResponse(team, memberInfo, Likecount);
+    }
+
 }

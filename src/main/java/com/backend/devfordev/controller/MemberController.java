@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "회원 가입 및 로그인")
+@Tag(name = "회원 가입 및 로그인 API")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping

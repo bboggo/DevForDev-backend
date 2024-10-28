@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "좋아요")
+@Tag(name = "좋아요 API")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping

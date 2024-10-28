@@ -21,7 +21,7 @@ import org.springframework.security.core.userdetails.User;
 import java.util.List;
 import java.util.Optional;
 
-@Tag(name = "커뮤니티 관련 API")
+@Tag(name = "커뮤니티 API")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping

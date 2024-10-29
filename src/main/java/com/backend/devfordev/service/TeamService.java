@@ -1,6 +1,7 @@
 package com.backend.devfordev.service;
 
 import com.backend.devfordev.domain.enums.TeamType;
+import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.TeamRequest;
 import com.backend.devfordev.dto.TeamResponse;
 
@@ -14,4 +15,5 @@ public interface TeamService {
     public List<TeamResponse.TeamListResponse> getTeamList(Optional<String> searchTermOpt, Optional<TeamType> teamTypeOpt, List<String> positions, List<String> techStacks, String sortBy);
     public TeamResponse.TeamDetailResponse getTeamDetail(Long id);
     public void deleteTeam(Long id, Long userId);
+    public List<CommunityResponse.MemberInfo> searchMembersByNickname(String name);
 }

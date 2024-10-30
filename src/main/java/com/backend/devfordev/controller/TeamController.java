@@ -120,4 +120,21 @@ public class TeamController {
 
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+
+    @Operation(summary = "멤버 리스트 검색")
+    @GetMapping("/v1/team/{teamId}/search-members")
+    public ResponseEntity<ApiResponse> searchMembers(@RequestParam String nickname,
+                                                     @PathVariable Long teamId,
+                                                     @AuthenticationPrincipal User user) {
+        List<CommunityResponse.MemberInfo> members = teamService.searchMembersByNickname(nickname, Long.parseLong(user.getUsername()), teamId);
+        ApiResponse apiResponse = ApiResponse.builder()
+                .result(members)
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message(SuccessStatus._OK.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 }

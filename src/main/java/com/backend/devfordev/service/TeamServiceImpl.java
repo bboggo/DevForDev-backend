@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class TeamServiceImpl implements TeamService{
+public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
     private final MemberRepository memberRepository;
     private final TeamTagRepository teamTagRepository;
@@ -45,7 +45,6 @@ public class TeamServiceImpl implements TeamService{
         if (request.getTeamTags().size() > 5) {
             throw new TeamHandler(ErrorStatus.INVALID_TAG_COUNT);
         }
-
 
 
         List<TeamTag> tags = request.getTeamTags().stream()
@@ -157,7 +156,7 @@ public class TeamServiceImpl implements TeamService{
         Team team = teamRepository.findById(id)
                 .orElseThrow(() -> new CommunityHandler(ErrorStatus.TEAM_NOT_FOUND));
 
-        if(team.getDeletedAt() != null) {
+        if (team.getDeletedAt() != null) {
             throw new CommunityHandler(ErrorStatus.TEAM_DELETED);
         }
 
@@ -189,5 +188,23 @@ public class TeamServiceImpl implements TeamService{
         team.deleteSoftly();
 
         teamRepository.save(team);
+    }
+
+
+    @Override
+    @Transactional
+    public List<CommunityResponse.MemberInfo> searchMembersByNickname(String name, Long userId, Long teamId) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new TeamHandler(ErrorStatus.TEAM_NOT_FOUND));
+
+        // 작성자인지 확인
+        if (!team.getMember().getId().equals(userId)) {
+            throw new TeamHandler(ErrorStatus.UNAUTHORIZED_USER); // 권한 없음 예외 발생
+        }
+        List<Member> members = memberRepository.findByNameContainingIgnoreCase(name);
+        return members.stream()
+                .map(member -> new CommunityResponse.MemberInfo(member.getId(), member.getName(), member.getImageUrl()))
+                .collect(Collectors.toList());
+
     }
 }

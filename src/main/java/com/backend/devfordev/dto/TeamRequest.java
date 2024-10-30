@@ -39,4 +39,10 @@ public class TeamRequest {
         List<String> teamTags;
     }
 
+    @Getter
+    public static class TeamAddMemberRequest {
+        @Schema(description = "추가할 멤버 id", example = "1")
+        private Long memberId;
+    }
+
 }

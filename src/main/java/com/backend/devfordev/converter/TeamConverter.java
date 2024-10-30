@@ -2,14 +2,11 @@ package com.backend.devfordev.converter;
 
 import com.backend.devfordev.domain.*;
 import com.backend.devfordev.domain.enums.TeamType;
-import com.backend.devfordev.dto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.TeamRequest;
 import com.backend.devfordev.dto.TeamResponse;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -135,5 +132,21 @@ public class TeamConverter {
         );
     }
 
-}
+    public static TeamMember toTeamMember(Team team, Member member) {
+        TeamMember teamMember = TeamMember.builder()
+                .team(team)
+                .member(member)
+                .build();
+        return teamMember;
+    }
 
+    public static TeamResponse.TeamAddMemberResponse toTeamMemberResponse(TeamMember teamMember, Team team, Member member) {
+        return new TeamResponse.TeamAddMemberResponse(
+                teamMember.getId(),
+                team.getId(),
+                member.getId()
+        );
+    }
+
+
+}

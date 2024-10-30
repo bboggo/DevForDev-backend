@@ -26,7 +26,7 @@ public enum ErrorStatus implements BaseErrorCode {
     UNSUPPORTED_JWT_TOKEN(BAD_REQUEST,"G017", "The provided JWT token is not supported"),
     TOKEN_TIME_OUT(UNAUTHORIZED, "AUTH4011", "토큰이 만료되었습니다."),
     INVALID_JWT_TOKEN(UNAUTHORIZED, "AUTH4012", "토큰 유효성 검사 실패 또는 거부된 토큰입니다."),
-    LOGIN_FAILED_PASSWORD_INCORRECT(UNAUTHORIZED,"AUTH4013", "비밀번호가 틀립니다."),
+    LOGIN_FAILED_PASSWORD_INCORRECT(UNAUTHORIZED,"AUTH4013", "Your email and password are incorrect.."),
 
     // 전체
     UNAUTHORIZED_USER(BAD_REQUEST, "ETC001","Only the author can do this."),
@@ -38,6 +38,7 @@ public enum ErrorStatus implements BaseErrorCode {
     DUPLICATED_EMAIL(BAD_REQUEST, "MEMBER002", "Email is duplicated"),
     NO_MATCHING_MEMBER(BAD_REQUEST, "MEMBER003", "There is no matching member information."),
     INVALID_MEMBER(BAD_REQUEST, "MEMBER004", "User information is incorrect."),
+    MEMBER_NOT_FOUND(BAD_REQUEST, "MEMBER005", "Member Not Found"),
 
     // 커뮤니티
     INVALID_CATEGORY(BAD_REQUEST, "COM001", "Only SKILL, CAREER, and OTHER are available."),
@@ -48,7 +49,9 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_TAG_COUNT(BAD_REQUEST, "TEAM001", "The maximum allowed tags are 5."),
     INVALID_TECH_STACK_COUNT(BAD_REQUEST, "TEAM002", "The maximum allowed tech stacks are 5."),
     TEAM_NOT_FOUND(BAD_REQUEST, "TEAM003", "Team Not Found"),
-    TEAM_DELETED(BAD_REQUEST, "TEAM004", "This is a deleted post.");
+    TEAM_DELETED(BAD_REQUEST, "TEAM004", "This is a deleted post."),
+    ALREADY_TEAM_MEMBER(BAD_REQUEST, "TEAM005", "This member has already been added."),
+    CANNOT_ADD_OWNER_AS_MEMBER(BAD_REQUEST, "TEAM006", "Authors cannot be added as team members.");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

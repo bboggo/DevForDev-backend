@@ -16,4 +16,5 @@ public interface TeamService {
     public TeamResponse.TeamDetailResponse getTeamDetail(Long id);
     public void deleteTeam(Long id, Long userId);
     public List<CommunityResponse.MemberInfo> searchMembersByNickname(String name, Long userId, Long teamId);
+    public TeamResponse.TeamAddMemberResponse AddTeamMember(TeamRequest.TeamAddMemberRequest request, Long userId, Long teamId);
 }

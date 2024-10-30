@@ -15,5 +15,5 @@ public interface TeamService {
     public List<TeamResponse.TeamListResponse> getTeamList(Optional<String> searchTermOpt, Optional<TeamType> teamTypeOpt, List<String> positions, List<String> techStacks, String sortBy);
     public TeamResponse.TeamDetailResponse getTeamDetail(Long id);
     public void deleteTeam(Long id, Long userId);
-    public List<CommunityResponse.MemberInfo> searchMembersByNickname(String name);
+    public List<CommunityResponse.MemberInfo> searchMembersByNickname(String name, Long userId, Long teamId);
 }

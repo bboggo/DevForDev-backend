@@ -29,7 +29,7 @@ public enum ErrorStatus implements BaseErrorCode {
     LOGIN_FAILED_PASSWORD_INCORRECT(UNAUTHORIZED,"AUTH4013", "비밀번호가 틀립니다."),
 
     // 전체
-    UNAUTHORIZED_USER(BAD_REQUEST, "ETC001","Only the user who created it can delete or modify it"),
+    UNAUTHORIZED_USER(BAD_REQUEST, "ETC001","Only the author can do this."),
     OPENAI_API_ERROR(BAD_REQUEST, "ETC002", "An error occurred while calling the OpenAI API"),
     // 좋아요
     INVALID_LIKE_TYPE(BAD_REQUEST, "LIKE001", "The LikeType value must be one of the following: COMMUNITY, TEAM, PORTFOLIO, PROJECT."),

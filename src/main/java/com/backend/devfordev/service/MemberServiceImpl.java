@@ -53,7 +53,7 @@ public class MemberServiceImpl implements MemberService{
     public SignInResponse signIn(SignInRequest request) {
         Member member = memberRepository.findByEmail(request.email())
                 .filter(it -> encoder.matches(request.password(), it.getPassword()))
-                .orElseThrow(() -> new MemberHandler(ErrorStatus.NO_MATCHING_MEMBER));
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.LOGIN_FAILED_PASSWORD_INCORRECT));
 
         String accessToken = tokenProvider.createAccessToken(String.format("%s:%s", member.getId(), member.getName()));
         String refreshToken = tokenProvider.createRefreshToken();

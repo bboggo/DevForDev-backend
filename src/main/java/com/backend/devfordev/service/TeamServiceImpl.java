@@ -31,6 +31,7 @@ public class TeamServiceImpl implements TeamService {
     private final TeamTagRepository teamTagRepository;
     private final LikeRepository likeRepository;
     private final TeamTechStackRepository teamTechStackRepository;
+    private final TeamMemberRepository teamMemberRepository;
 
     @Override
     @Transactional
@@ -207,4 +208,41 @@ public class TeamServiceImpl implements TeamService {
                 .collect(Collectors.toList());
 
     }
+
+
+    @Override
+    @Transactional
+    public TeamResponse.TeamAddMemberResponse AddTeamMember(TeamRequest.TeamAddMemberRequest request, Long userId, Long teamId) {
+        // 팀 모집 공고 조회
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new TeamHandler(ErrorStatus.TEAM_NOT_FOUND));
+
+        // 작성자인지 확인
+        if (!team.getMember().getId().equals(userId)) {
+            throw new TeamHandler(ErrorStatus.UNAUTHORIZED_USER); // 권한 없음 예외 발생
+        }
+
+
+        Member memberToInvite = memberRepository.findById(request.getMemberId())
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+
+
+        // 작성자가 스스로를 추가하려는 경우 예외 처리
+        if (team.getMember().getId().equals(request.getMemberId())) {
+            throw new TeamHandler(ErrorStatus.CANNOT_ADD_OWNER_AS_MEMBER); // 작성자 추가 불가 예외 발생
+        }
+        // 이미 팀에 추가된 멤버인지 확인
+        boolean isAlreadyMember = teamMemberRepository.existsByTeamAndMember(team, memberToInvite);
+        if (isAlreadyMember) {
+            throw new TeamHandler(ErrorStatus.ALREADY_TEAM_MEMBER);
+        }
+
+        // 팀에 멤버 추가
+        TeamMember teamMember = TeamConverter.toTeamMember(team, memberToInvite);
+
+        teamMemberRepository.save(teamMember);
+
+        return TeamConverter.toTeamMemberResponse(teamMember, team, memberToInvite);
+    }
+
 }

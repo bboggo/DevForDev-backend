@@ -137,4 +137,22 @@ public class TeamController {
 
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+    @Operation(summary = "팀 멤버 추가")
+    @PostMapping("/v1/team/{teamId}/add")
+    public ResponseEntity<ApiResponse> addMemberToTeam(
+            @RequestBody TeamRequest.TeamAddMemberRequest request,
+            @PathVariable Long teamId,
+            @AuthenticationPrincipal User user) {
+
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .result(teamService.AddTeamMember(request, Long.parseLong(user.getUsername()), teamId))
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message(SuccessStatus._OK.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+    }
+
 }

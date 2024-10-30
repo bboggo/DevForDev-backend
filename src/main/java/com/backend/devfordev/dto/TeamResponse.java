@@ -1,7 +1,5 @@
 package com.backend.devfordev.dto;
 
-import com.backend.devfordev.domain.enums.CommunityCategory;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -67,5 +65,15 @@ public class TeamResponse {
         Long views;
         Long answers;
         Long likes;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TeamAddMemberResponse {
+        Long id;
+        Long teamId;
+        Long memberId;
     }
 }

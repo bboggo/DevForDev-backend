@@ -23,10 +23,10 @@ public class MemberConverter {
     }
 
     public static MemberInfo toMemberInfo(SignUpRequest signUpRequest, Member member) {
-        String defaultImageUrl = "domain.com";
+        String defaultImageUrl = "https://imageUrl.com";
         return MemberInfo.builder()
                 .nickname(signUpRequest.name()) // 기본 닉네임은 name 필드로 설정
-                .imageUrl(signUpRequest.imageUrl() != null ? signUpRequest.imageUrl() : defaultImageUrl)
+                .imageUrl(defaultImageUrl)
                 .member(member)
                 .build();
     }

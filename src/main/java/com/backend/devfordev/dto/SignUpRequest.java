@@ -18,8 +18,8 @@ public record SignUpRequest(
         @NotNull
         String password,
 
-        @Schema(description = "이미지 url", example = "이미지 도메인(추후 수정 예정)")
-        String imageUrl,
+//        @Schema(description = "이미지 url", example = "이미지 도메인(추후 수정 예정)")
+//        String imageUrl,
 
 
         @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = " 닉네임은 영문, 숫자, 한글만 허용됩니다.")

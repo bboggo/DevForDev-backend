@@ -2,17 +2,12 @@ package com.backend.devfordev.service;
 
 
 import com.backend.devfordev.apiPayload.code.status.ErrorStatus;
-import com.backend.devfordev.apiPayload.exception.handler.CommunityHandler;
 import com.backend.devfordev.apiPayload.exception.handler.LikeHandler;
 import com.backend.devfordev.apiPayload.exception.handler.MemberHandler;
-import com.backend.devfordev.converter.CommunityConverter;
 import com.backend.devfordev.converter.LikeConverter;
-import com.backend.devfordev.domain.Community;
 import com.backend.devfordev.domain.Heart;
 import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.domain.enums.LikeType;
-import com.backend.devfordev.dto.CommunityRequest;
-import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.LikeRequest;
 import com.backend.devfordev.dto.LikeResponse;
 import com.backend.devfordev.repository.LikeRepository;
@@ -21,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.EnumSet;
 import java.util.Optional;
 
 @Service
@@ -55,13 +49,13 @@ public class LikeServiceImpl implements LikeService {
             // 이미 좋아요를 누른 상태면 좋아요 취소 (삭제)
             likeRepository.delete(existingLike.get());
             Long totalLikes = likeRepository.countByLikeIdAndLikeType(request.getLikeId(), likeType);
-            return LikeConverter.toLikeResponse(null, totalLikes, userId, -1);  // 좋아요 취소 상태 (-1)
+            return LikeConverter.toLikeResponse(null, totalLikes, userId);  // 좋아요 취소 상태 (-1)
         } else {
             // 좋아요를 누르지 않았다면 새로 추가
             Heart heart = LikeConverter.toLike(request, member);
             likeRepository.save(heart);
             Long totalLikes = likeRepository.countByLikeIdAndLikeType(request.getLikeId(), likeType);
-            return LikeConverter.toLikeResponse(heart, totalLikes, userId, +1);  // 좋아요 추가 상태 (+1)
+            return LikeConverter.toLikeResponse(heart, totalLikes, userId);  // 좋아요 추가 상태 (+1)
         }
 
         // 전체 좋아요 수 계산

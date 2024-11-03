@@ -17,10 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -32,13 +29,21 @@ public class TeamServiceImpl implements TeamService {
     private final LikeRepository likeRepository;
     private final TeamTechStackRepository teamTechStackRepository;
     private final TeamMemberRepository teamMemberRepository;
-
+    private final MemberInfoRepository memberInfoRepository;
     @Override
     @Transactional
     public TeamResponse.TeamCreateResponse createTeam(TeamRequest.TeamCreateRequest request, Long userId) {
         // 작성자 확인
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.INVALID_MEMBER));
+
+
+        TeamType teamType;
+        try {
+            teamType = TeamType.valueOf(request.getTeamType());
+        } catch (IllegalArgumentException e) {
+            throw new TeamHandler(ErrorStatus.INVALID_TEAM);
+        }
 
         if (request.getTeamTechStack().size() > 5) {
             throw new TeamHandler(ErrorStatus.INVALID_TECH_STACK_COUNT);
@@ -53,7 +58,7 @@ public class TeamServiceImpl implements TeamService {
                         .orElseGet(() -> teamTagRepository.save(TeamTag.builder().name(tagName).build())))
                 .collect(Collectors.toList());
 
-        Team team = TeamConverter.toTeam(request, member, tags);
+        Team team = TeamConverter.toTeam(request, member, tags, teamType);
 
         teamRepository.save(team);
 
@@ -71,14 +76,14 @@ public class TeamServiceImpl implements TeamService {
             throw new MemberHandler(ErrorStatus.UNAUTHORIZED_USER);
         }
 
-        team.setTeamIsActive(0L);  // 모집 상태를 마감으로 설정
+        team.setTeamIsActive(false);  // 모집 상태를 마감으로 설정
         teamRepository.save(team);
     }
 
 
     @Override
     @Transactional
-    public List<TeamResponse.TeamListResponse> getTeamList(Optional<String> searchTermOpt, Optional<TeamType> teamTypeOpt, List<String> positions, List<String> techStacks, String sortBy) {
+    public List<TeamResponse.TeamListResponse> getTeamList(Optional<String> searchTermOpt, Optional<TeamType> teamTypeOpt, List<String> positions, List<String> techStacks, String sortBy, Optional<Boolean> teamIsActive) {
 
         List<Object[]> results = teamRepository.findAllWithLikesAndMember();
 
@@ -86,6 +91,16 @@ public class TeamServiceImpl implements TeamService {
                 .map(result -> {
                     Team team = (Team) result[0];
                     Long likeCount = (Long) result[1];
+
+
+                    // 모집 여부 필터링
+                    if (teamIsActive.isPresent()) {
+                        boolean isRecruiting = teamIsActive.get();
+                        if ((isRecruiting && !team.getTeamIsActive()) ||
+                                (!isRecruiting && team.getTeamIsActive())) {
+                            return null;
+                        }
+                    }
 
                     if (teamTypeOpt.isPresent() && !team.getTeamType().equals(teamTypeOpt.get())) {
                         return null;
@@ -115,12 +130,14 @@ public class TeamServiceImpl implements TeamService {
                             return null;
                         }
                     }
+                    MemberInfo memberInfoEntity = memberInfoRepository.findByMember(team.getMember());
+
 
                     // Construct MemberInfo
                     CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
                             team.getMember().getId(),
-                            team.getMember().getImageUrl(),
-                            team.getMember().getName()
+                            memberInfoEntity.getImageUrl(),
+                            memberInfoEntity.getNickname()
                     );
 
                     // Shortened content
@@ -162,10 +179,13 @@ public class TeamServiceImpl implements TeamService {
         }
 
         Long Likecount = likeRepository.countByTeamId(id);
+        MemberInfo memberInfoEntity = memberInfoRepository.findByMember(team.getMember());
+
+        // Construct MemberInfo
         CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
                 team.getMember().getId(),
-                team.getMember().getImageUrl(),
-                team.getMember().getName()
+                memberInfoEntity.getImageUrl(),
+                memberInfoEntity.getNickname()
         );
 
         return TeamConverter.toTeamDetailResponse(team, memberInfo, Likecount);
@@ -194,17 +214,21 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     @Transactional
-    public List<CommunityResponse.MemberInfo> searchMembersByNickname(String name, Long userId, Long teamId) {
+    public List<CommunityResponse.MemberInfo> searchMembersByNickname(String nickname, Long userId, Long teamId) {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new TeamHandler(ErrorStatus.TEAM_NOT_FOUND));
+
 
         // 작성자인지 확인
         if (!team.getMember().getId().equals(userId)) {
             throw new TeamHandler(ErrorStatus.UNAUTHORIZED_USER); // 권한 없음 예외 발생
         }
-        List<Member> members = memberRepository.findByNameContainingIgnoreCase(name);
-        return members.stream()
-                .map(member -> new CommunityResponse.MemberInfo(member.getId(), member.getName(), member.getImageUrl()))
+
+
+        // nickname을 기준으로 검색
+        List<MemberInfo> memberInfos = memberInfoRepository.findByNicknameContainingIgnoreCase(nickname);
+        return memberInfos.stream()
+                .map(memberInfo -> new CommunityResponse.MemberInfo(memberInfo.getMember().getId(), memberInfo.getImageUrl(), memberInfo.getNickname()))
                 .collect(Collectors.toList());
 
     }

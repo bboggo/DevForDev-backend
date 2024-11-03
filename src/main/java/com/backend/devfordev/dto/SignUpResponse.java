@@ -11,21 +11,18 @@ public record SignUpResponse (
     @Schema(description = "회원 이메일", example = "xxx@naver.com")
     String email,
 
-    @Schema(description = "회원 비밀번호", example = "bboggo1234!")
-    String password,
-
     @Schema(description = "회원 이름", example = "BBOGGO")
     String name,
 
-    @Schema(description = "이미지url", example = "domain.com")
-    String imageUrl,
+    @Schema(description = "깃허브", example = "bboggo")
+    String gitHub,
 
-    @Schema(description = "전공", example = "정보통신공학과")
-    String major,
+    @Schema(description = "회원 닉네임", example = "뽀꼬")
+    String nickname,
 
+    @Schema(description = "프로필 사진 url", example = "aaa.com")
+    String imageUrl
 
-    @Schema(description = "생년월일", example = "2000-08-19")
-    String birth
 ) {
 
 }

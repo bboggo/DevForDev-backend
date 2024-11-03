@@ -1,13 +1,10 @@
 package com.backend.devfordev.converter;
 
-import com.backend.devfordev.domain.Community;
 import com.backend.devfordev.domain.Heart;
 import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.domain.enums.LikeType;
-import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.LikeRequest;
 import com.backend.devfordev.dto.LikeResponse;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 
 public class LikeConverter {
@@ -20,25 +17,23 @@ public class LikeConverter {
                 .build();
     }
 
-    public static LikeResponse toLikeResponse(Heart heart, Long likes, Long memberId, int likeStatus) {
+    public static LikeResponse toLikeResponse(Heart heart, Long likes, Long memberId) {
         if (heart == null) {
             // 좋아요 취소 상태 (-1)
-            return LikeResponse.builder()
+            return LikeResponse.MinusLikeResponse.builder()
                     .memberId(memberId)
-                    .likeId(null)
-                    .likeType(null)
                     .likes(likes)
-                    .likeStatus(-1)  // 취소 상태
+                    .likeStatus("-")  // 취소 상태
                     .build();
         }
 
         // 좋아요 추가 상태 (+1)
-        return LikeResponse.builder()
+        return LikeResponse.PlusLikeResponse.builder()
                 .memberId(memberId)
                 .likeId(heart.getLikeId())
                 .likeType(heart.getLikeType())
                 .likes(likes)
-                .likeStatus(likeStatus)  // +1 or -1에 따라 처리
+                .likeStatus("+")  // 추가 상태
                 .build();
     }
 }

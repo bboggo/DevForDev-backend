@@ -9,9 +9,10 @@ import com.backend.devfordev.dto.CommunityResponse;
 import java.time.LocalDateTime;
 
 public class CommunityConverter {
-    public static Community toCommunity(CommunityRequest.CommunityCreateRequest request, Member member) {
+    public static Community toCommunity(CommunityRequest.CommunityCreateRequest request, Member member, CommunityCategory category) {
+
         return Community.builder()
-                .communityCategory(CommunityCategory.valueOf(request.getCommunityCategory()))
+                .communityCategory(category)
                 .communityTitle(request.getCommunityTitle())
                 .communityContent(request.getCommunityContent())
                 .communityAI(request.getCommunityAI())
@@ -54,6 +55,7 @@ public class CommunityConverter {
                 community.getCommunityCategory(),
                 community.getCommunityTitle(),
                 community.getCommunityContent(),
+                community.getCommunityAI(),
                 member,
                 community.getCreatedAt(),
                 0L,

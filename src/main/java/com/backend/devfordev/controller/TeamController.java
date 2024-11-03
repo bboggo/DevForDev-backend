@@ -52,14 +52,16 @@ public class TeamController {
             @RequestParam(required = false) TeamType teamType,
             @RequestParam(required = false) List<String> positions,
             @RequestParam(required = false) List<String> techStacks,
-            @RequestParam(defaultValue = "recent") String sortBy) {
+            @RequestParam(defaultValue = "recent") String sortBy,
+            @RequestParam(required = false) Boolean teamIsActive) {
         // 카테고리가 있을 경우 서비스에 Optional로 전달
             List<TeamResponse.TeamListResponse> teamList = teamService.getTeamList(
                     Optional.ofNullable(searchTerm),
                     Optional.ofNullable(teamType),
                     positions != null ? positions : Collections.emptyList(),
                     techStacks != null ? techStacks : Collections.emptyList(),
-                    sortBy
+                    sortBy,
+                    Optional.ofNullable(teamIsActive)
             );
 
 
@@ -124,7 +126,7 @@ public class TeamController {
 
     @Operation(summary = "멤버 리스트 검색")
     @GetMapping("/v1/team/{teamId}/search-members")
-    public ResponseEntity<ApiResponse> searchMembers(@RequestParam String nickname,
+    public ResponseEntity<ApiResponse> searchMembers(@RequestParam(required = false) String nickname,
                                                      @PathVariable Long teamId,
                                                      @AuthenticationPrincipal User user) {
         List<CommunityResponse.MemberInfo> members = teamService.searchMembersByNickname(nickname, Long.parseLong(user.getUsername()), teamId);

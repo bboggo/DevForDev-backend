@@ -40,7 +40,7 @@ public class TeamResponse {
         List<String> teamTechStack;
         List<String> teamTags;
         LocalDateTime createdAt;
-        Long teamIsActive;
+        Boolean teamIsActive;
         Long views;
         Long answers;
         Long likes;
@@ -61,7 +61,7 @@ public class TeamResponse {
         List<String> teamTechStack;
         List<String> teamTags;
         LocalDateTime createdAt;
-        Long teamIsActive;
+        Boolean teamIsActive;
         Long views;
         Long answers;
         Long likes;

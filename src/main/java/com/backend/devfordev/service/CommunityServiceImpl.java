@@ -7,13 +7,11 @@ import com.backend.devfordev.converter.CommunityConverter;
 import com.backend.devfordev.domain.Community;
 import com.backend.devfordev.domain.CommunityComment;
 import com.backend.devfordev.domain.Member;
+import com.backend.devfordev.domain.MemberInfo;
 import com.backend.devfordev.domain.enums.CommunityCategory;
 import com.backend.devfordev.dto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityResponse;
-import com.backend.devfordev.repository.CommunityCommentRepository;
-import com.backend.devfordev.repository.CommunityRepository;
-import com.backend.devfordev.repository.LikeRepository;
-import com.backend.devfordev.repository.MemberRepository;
+import com.backend.devfordev.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +32,7 @@ public class CommunityServiceImpl implements CommunityService{
     private final LikeRepository likeRepository;
     private final OpenAIService openAIService;
     private final CommunityCommentRepository communityCommentRepository;
+    private final MemberInfoRepository memberInfoRepository;
     @Override
     @Transactional
     public CommunityResponse.CommunityCreateResponse createCommunity(CommunityRequest.CommunityCreateRequest request, Long userId) {
@@ -41,35 +40,42 @@ public class CommunityServiceImpl implements CommunityService{
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.INVALID_MEMBER));
 
 
-        Community community = CommunityConverter.toCommunity(request, member);
-        String category = request.getCommunityCategory();
-        // 필요없나,,?
-        if(!"CAREER".equals(category) && !"OTHER".equals(category) && !"SKILL".equals(category)) {
+        // communityCategory 예외 처리
+        CommunityCategory category;
+        try {
+            category = CommunityCategory.valueOf(request.getCommunityCategory().toUpperCase());
+        } catch (IllegalArgumentException e) {
             throw new CommunityHandler(ErrorStatus.INVALID_CATEGORY);
         }
+
+        // Community 생성 (category를 직접 전달)
+        Community community = CommunityConverter.toCommunity(request, member, category);
+
+
         communityRepository.save(community);
         // communityAI 필드가 1인 경우 OpenAI API로 댓글 생성
-        try {
-            // OpenAI API 호출
-            String aiCommentContent = openAIService.generateAIComment(community.getCommunityTitle(), community.getCommunityContent());
+        if (Boolean.TRUE.equals(request.getCommunityAI())) {
+            try {
+                // OpenAI API 호출
+                String aiCommentContent = openAIService.generateAIComment(community.getCommunityTitle(), community.getCommunityContent());
 
-            // 생성된 AI 댓글을 community_comment 테이블에 저장
-            CommunityComment aiComment = CommunityComment.builder()
-                    .community(community)
-                    .commentContent(aiCommentContent)
-                    .isAiComment(1L)  // AI 댓글임을 표시
-                    .build();
+                // 생성된 AI 댓글을 community_comment 테이블에 저장
+                CommunityComment aiComment = CommunityComment.builder()
+                        .community(community)
+                        .commentContent(aiCommentContent)
+                        .isAiComment(true)  // AI 댓글임을 표시
+                        .build();
 
-            communityCommentRepository.save(aiComment);
+                communityCommentRepository.save(aiComment);
 
-        } catch (HttpClientErrorException e) {
-            // OpenAI API에서 잘못된 요청이나 401 Unauthorized 등의 에러 처리
-            throw new CommunityHandler(ErrorStatus.OPENAI_API_ERROR);
-        } catch (RestClientException e) {
-            // API 요청 중 네트워크 오류 등의 일반적인 예외 처리
-            throw new CommunityHandler(ErrorStatus.OPENAI_API_ERROR);
+            } catch (HttpClientErrorException e) {
+                // OpenAI API에서 잘못된 요청이나 401 Unauthorized 등의 에러 처리
+                throw new CommunityHandler(ErrorStatus.OPENAI_API_ERROR);
+            } catch (RestClientException e) {
+                // API 요청 중 네트워크 오류 등의 일반적인 예외 처리
+                throw new CommunityHandler(ErrorStatus.OPENAI_API_ERROR);
+            }
         }
-
 
         return CommunityConverter.toCommunityResponse(community);
      }
@@ -103,12 +109,13 @@ public class CommunityServiceImpl implements CommunityService{
                             return null;
                         }
                     }
+                    MemberInfo memberInfoEntity = memberInfoRepository.findByMember(community.getMember());
 
                     // MemberInfo 생성
                     CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
                             community.getMember().getId(),
-                            community.getMember().getImageUrl(),
-                            community.getMember().getName()
+                            memberInfoEntity.getImageUrl(),
+                            memberInfoEntity.getNickname()
                     );
 
                     // communityContent를 80자까지만 잘라서 보여줌
@@ -151,10 +158,14 @@ public class CommunityServiceImpl implements CommunityService{
         }
 
         Long Likecount = likeRepository.countByCommunityId(id);
+
+        // Member와 연관된 MemberInfo 조회
+        MemberInfo memberInfoEntity = memberInfoRepository.findByMember(community.getMember());
+
         CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
                 community.getMember().getId(),
-                community.getMember().getImageUrl(),
-                community.getMember().getName()
+                memberInfoEntity.getImageUrl(), // MemberInfo의 imageUrl 사용
+                memberInfoEntity.getNickname()  // MemberInfo의 nickname 사용
         );
 
         return CommunityConverter.toCommunityLDetailResponse(community, memberInfo, Likecount);
@@ -183,11 +194,13 @@ public class CommunityServiceImpl implements CommunityService{
                     Member member = (Member) result[0];  // 유저 객체
                     Long totalLikes = (Long) result[1];  // 총 좋아요 수
 
+                    // Member와 연관된 MemberInfo 조회
+                    MemberInfo memberInfoEntity = memberInfoRepository.findByMember(member);
                     // MemberInfo 생성
                     CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
                             member.getId(),
-                            member.getImageUrl(),
-                            member.getName()
+                            memberInfoEntity.getImageUrl(),
+                            memberInfoEntity.getNickname()
                     );
 
                     // CommunityTop5Response로 변환
@@ -225,6 +238,14 @@ public class CommunityServiceImpl implements CommunityService{
         Community community = communityRepository.findById(id)
                 .orElseThrow(() -> new CommunityHandler(ErrorStatus.COMMUNITY_NOT_FOUND));
 
+        // communityCategory 예외 처리
+        CommunityCategory category;
+        try {
+            category = CommunityCategory.valueOf(request.getCommunityCategory().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new CommunityHandler(ErrorStatus.INVALID_CATEGORY);
+        }
+
         // 삭제된 커뮤니티는 수정 불가
         if (community.getDeletedAt() != null) {
             throw new CommunityHandler(ErrorStatus.COMMUNITY_DELETED);  // 삭제된 커뮤니티 예외 처리
@@ -235,8 +256,6 @@ public class CommunityServiceImpl implements CommunityService{
             throw new CommunityHandler(ErrorStatus.UNAUTHORIZED_USER); // 예외 처리 (권한 없음)
         }
 
-
-
         // 컨버터를 사용하여 업데이트할 데이터 변환
         Community updatedCommunity = CommunityConverter.toUpdateCommunity(request);
 
@@ -245,7 +264,7 @@ public class CommunityServiceImpl implements CommunityService{
         community.setCommunityTitle(updatedCommunity.getCommunityTitle());
         community.setCommunityContent(updatedCommunity.getCommunityContent());
 
-        communityRepository.save(community);
+        //communityRepository.save(community);
         return CommunityConverter.toCommunityUpdateResponse(community);
     }
 }

@@ -17,7 +17,7 @@ public class CommunityResponse {
         String communityTitle;
         String communityContent;
         Long member;
-        Long communityAI;
+        Boolean communityAI;
         LocalDateTime createdAt;
     }
 
@@ -33,7 +33,7 @@ public class CommunityResponse {
         @Schema(description = "프로필 사진 url", example = "domain 주소")
         private String imageUrl;
         @Schema(description = "멤버 이름", example = "김민지")
-        private String name;
+        private String nickname;
 
     }
 
@@ -65,6 +65,7 @@ public class CommunityResponse {
         CommunityCategory communityCategory;
         String communityTitle;
         String communityContent;
+        Boolean communityAI;
         MemberInfo member;
         LocalDateTime createdAt;
         Long answers;
@@ -91,7 +92,7 @@ public class CommunityResponse {
         String communityTitle;
         String communityContent;
         Long member;
-        Long communityAI;
+        Boolean communityAI;
         LocalDateTime createdAt;
         LocalDateTime updatedAt;
     }

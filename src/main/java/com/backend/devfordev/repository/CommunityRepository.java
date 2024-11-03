@@ -33,8 +33,9 @@ public interface CommunityRepository extends JpaRepository<Community, Long> {
 
     @Query("SELECT h.member, COUNT(h.id) as totalLikes " +
             "FROM Heart h " +
+            "JOIN MemberInfo mi ON h.member.id = mi.member.id " +
             "WHERE h.likeType = 'COMMUNITY' " +
-            "GROUP BY h.member.id, h.member.name, h.member.imageUrl " +
+            "GROUP BY h.member.id, h.member.name, mi.nickname, mi.imageUrl " +
             "ORDER BY totalLikes DESC")
     List<Object[]> findTop5UsersByTotalLikes();
 

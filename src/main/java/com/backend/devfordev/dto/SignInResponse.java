@@ -11,6 +11,9 @@ public record SignInResponse(
         @Schema(description = "회원 이름", example = "김민지")
         String name,
 
+        @Schema(description = "회원 닉네임", example = "뽀꼬")
+        String nickname,
+
         @Schema(description = "프로필 사진 url", example = "aaa.com")
         String imageUrl,
 

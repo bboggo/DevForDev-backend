@@ -1,10 +1,14 @@
 package com.backend.devfordev.converter;
 
 import com.backend.devfordev.domain.Member;
+import com.backend.devfordev.domain.MemberInfo;
 import com.backend.devfordev.dto.SignInResponse;
 import com.backend.devfordev.dto.SignUpRequest;
 import com.backend.devfordev.dto.SignUpResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class MemberConverter {
@@ -14,30 +18,39 @@ public class MemberConverter {
                 .email(signUpRequest.email())
                 .password(encoder.encode(signUpRequest.password()))
                 .name(signUpRequest.name())
-                .imageUrl(imageUrl)
-                .birth(signUpRequest.birth())
-                .major(signUpRequest.major())
+                .github(signUpRequest.gitHub())
                 .build();
     }
 
-    public static SignUpResponse toSignUpResponse(Member member) {
+    public static MemberInfo toMemberInfo(SignUpRequest signUpRequest, Member member) {
+        String defaultImageUrl = "domain.com";
+        return MemberInfo.builder()
+                .nickname(signUpRequest.name()) // 기본 닉네임은 name 필드로 설정
+                .imageUrl(signUpRequest.imageUrl() != null ? signUpRequest.imageUrl() : defaultImageUrl)
+                .member(member)
+                .build();
+    }
+
+
+    public static SignUpResponse toSignUpResponse(Member member, MemberInfo memberInfo) {
         return new SignUpResponse(
                 member.getId(),
                 member.getEmail(),
                 member.getPassword(),
                 member.getName(),
-                member.getImageUrl(),
-                member.getMajor(),
-                member.getBirth()
+                member.getGithub(),
+                memberInfo.getNickname(),
+                memberInfo.getImageUrl()
         );
     }
 
-    public static SignInResponse toSignInResponse(Member member, String accessToken, String refreshToken) {
+    public static SignInResponse toSignInResponse(Member member,  MemberInfo memberInfo, String accessToken, String refreshToken) {
         return new SignInResponse(
                 member.getId(),
                 member.getEmail(),
                 member.getName(),
-                member.getImageUrl(),
+                memberInfo.getNickname(),
+                memberInfo.getImageUrl(),
                 accessToken,
                 refreshToken
         );

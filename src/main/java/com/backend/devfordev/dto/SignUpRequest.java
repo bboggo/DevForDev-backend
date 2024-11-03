@@ -18,19 +18,17 @@ public record SignUpRequest(
         @NotNull
         String password,
 
+        @Schema(description = "이미지 url", example = "이미지 도메인(추후 수정 예정)")
+        String imageUrl,
+
+
         @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = " 닉네임은 영문, 숫자, 한글만 허용됩니다.")
         @Schema(description = "회원 이름", example = "BBOGGO")
         @NotNull
         String name,
 
-        @Schema(description = "이미지url", example = "domain.com")
-        String imageUrl,
+        @Schema(description = "깃허브", example = "bboggo")
+        String gitHub
 
-        @Schema(description = "전공", example = "정보통신공학과")
-        String major,
-
-        @Schema(description = "생년월일", example = "2000-08-19")
-        @NotNull
-        String birth
 ) {
 }

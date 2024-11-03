@@ -25,14 +25,9 @@ public class Member extends BaseEntity{
     @Column(nullable = false)
     private String password;
 
-    @Column
-    private String imageUrl;
 
     @Column(nullable = false)
-    private String major;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private String birth;
+    private String github;
 
 
 

@@ -7,13 +7,11 @@ import com.backend.devfordev.converter.CommunityConverter;
 import com.backend.devfordev.domain.Community;
 import com.backend.devfordev.domain.CommunityComment;
 import com.backend.devfordev.domain.Member;
+import com.backend.devfordev.domain.MemberInfo;
 import com.backend.devfordev.domain.enums.CommunityCategory;
 import com.backend.devfordev.dto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityResponse;
-import com.backend.devfordev.repository.CommunityCommentRepository;
-import com.backend.devfordev.repository.CommunityRepository;
-import com.backend.devfordev.repository.LikeRepository;
-import com.backend.devfordev.repository.MemberRepository;
+import com.backend.devfordev.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +32,7 @@ public class CommunityServiceImpl implements CommunityService{
     private final LikeRepository likeRepository;
     private final OpenAIService openAIService;
     private final CommunityCommentRepository communityCommentRepository;
+    private final MemberInfoRepository memberInfoRepository;
     @Override
     @Transactional
     public CommunityResponse.CommunityCreateResponse createCommunity(CommunityRequest.CommunityCreateRequest request, Long userId) {
@@ -103,12 +102,13 @@ public class CommunityServiceImpl implements CommunityService{
                             return null;
                         }
                     }
+                    MemberInfo memberInfoEntity = memberInfoRepository.findByMember(community.getMember());
 
                     // MemberInfo 생성
                     CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
                             community.getMember().getId(),
-                            community.getMember().getImageUrl(),
-                            community.getMember().getName()
+                            memberInfoEntity.getImageUrl(),
+                            memberInfoEntity.getNickname()
                     );
 
                     // communityContent를 80자까지만 잘라서 보여줌
@@ -151,10 +151,14 @@ public class CommunityServiceImpl implements CommunityService{
         }
 
         Long Likecount = likeRepository.countByCommunityId(id);
+
+        // Member와 연관된 MemberInfo 조회
+        MemberInfo memberInfoEntity = memberInfoRepository.findByMember(community.getMember());
+
         CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
                 community.getMember().getId(),
-                community.getMember().getImageUrl(),
-                community.getMember().getName()
+                memberInfoEntity.getImageUrl(), // MemberInfo의 imageUrl 사용
+                memberInfoEntity.getNickname()  // MemberInfo의 nickname 사용
         );
 
         return CommunityConverter.toCommunityLDetailResponse(community, memberInfo, Likecount);
@@ -183,11 +187,13 @@ public class CommunityServiceImpl implements CommunityService{
                     Member member = (Member) result[0];  // 유저 객체
                     Long totalLikes = (Long) result[1];  // 총 좋아요 수
 
+                    // Member와 연관된 MemberInfo 조회
+                    MemberInfo memberInfoEntity = memberInfoRepository.findByMember(member);
                     // MemberInfo 생성
                     CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
                             member.getId(),
-                            member.getImageUrl(),
-                            member.getName()
+                            memberInfoEntity.getImageUrl(),
+                            memberInfoEntity.getNickname()
                     );
 
                     // CommunityTop5Response로 변환

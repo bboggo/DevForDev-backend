@@ -79,7 +79,7 @@ public class TeamServiceImpl implements TeamService {
             throw new MemberHandler(ErrorStatus.UNAUTHORIZED_USER);
         }
 
-        team.setTeamIsActive(0L);  // 모집 상태를 마감으로 설정
+        team.setTeamIsActive(false);  // 모집 상태를 마감으로 설정
         teamRepository.save(team);
     }
 
@@ -124,6 +124,7 @@ public class TeamServiceImpl implements TeamService {
                         }
                     }
                     MemberInfo memberInfoEntity = memberInfoRepository.findByMember(team.getMember());
+
 
                     // Construct MemberInfo
                     CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(

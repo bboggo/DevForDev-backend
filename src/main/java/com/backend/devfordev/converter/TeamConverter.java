@@ -19,7 +19,7 @@ public class TeamConverter {
                 .teamType(teamType)
                 .teamPosition(request.getTeamPosition())
                 .teamRecruitmentNum(String.valueOf(request.getTeamRecruitmentNum()))
-                .teamIsActive(1L) // 기본 값 설정
+                .teamIsActive(true) // 기본 값 설정
                 .teamViews(0L) // 기본 값 설정
                 .member(member)
                 .build();

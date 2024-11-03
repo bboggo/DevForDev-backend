@@ -40,7 +40,7 @@ public class Team extends BaseEntity {
 
 
     @Column(name = "team_is_active", nullable = false)
-    private Long teamIsActive = 1L;
+    private Boolean teamIsActive;
 
     @Column(name = "team_views", nullable = false)
     private Long teamViews = 0L;  // 기본값 설정

@@ -36,7 +36,6 @@ public class MemberConverter {
         return new SignUpResponse(
                 member.getId(),
                 member.getEmail(),
-                member.getPassword(),
                 member.getName(),
                 member.getGithub(),
                 memberInfo.getNickname(),

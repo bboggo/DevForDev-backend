@@ -14,11 +14,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class MemberConverter {
     public static Member toMember(SignUpRequest signUpRequest, PasswordEncoder encoder) {
         String imageUrl = "domain.com";
+        String githubUrl = "https://github.com/" + signUpRequest.gitHub();  // 깃허브 URL 생성
         return Member.builder()
                 .email(signUpRequest.email())
                 .password(encoder.encode(signUpRequest.password()))
                 .name(signUpRequest.name())
-                .github(signUpRequest.gitHub())
+                .github(githubUrl)
                 .build();
     }
 

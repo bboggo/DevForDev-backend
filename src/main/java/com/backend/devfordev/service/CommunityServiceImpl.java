@@ -248,8 +248,6 @@ public class CommunityServiceImpl implements CommunityService{
             throw new CommunityHandler(ErrorStatus.UNAUTHORIZED_USER); // 예외 처리 (권한 없음)
         }
 
-
-
         // 컨버터를 사용하여 업데이트할 데이터 변환
         Community updatedCommunity = CommunityConverter.toUpdateCommunity(request);
 
@@ -258,7 +256,7 @@ public class CommunityServiceImpl implements CommunityService{
         community.setCommunityTitle(updatedCommunity.getCommunityTitle());
         community.setCommunityContent(updatedCommunity.getCommunityContent());
 
-        communityRepository.save(community);
+        //communityRepository.save(community);
         return CommunityConverter.toCommunityUpdateResponse(community);
     }
 }

@@ -12,7 +12,7 @@ public interface TeamService {
     public TeamResponse.TeamCreateResponse createTeam(TeamRequest.TeamCreateRequest request, Long userId);
     public void closeRecruitment(Long teamId, Long userId);
 
-    public List<TeamResponse.TeamListResponse> getTeamList(Optional<String> searchTermOpt, Optional<TeamType> teamTypeOpt, List<String> positions, List<String> techStacks, String sortBy);
+    public List<TeamResponse.TeamListResponse> getTeamList(Optional<String> searchTermOpt, Optional<TeamType> teamTypeOpt, List<String> positions, List<String> techStacks, String sortBy, Optional<Boolean> teamIsActive);
     public TeamResponse.TeamDetailResponse getTeamDetail(Long id);
     public void deleteTeam(Long id, Long userId);
     public List<CommunityResponse.MemberInfo> searchMembersByNickname(String name, Long userId, Long teamId);

@@ -86,7 +86,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     @Transactional
-    public List<TeamResponse.TeamListResponse> getTeamList(Optional<String> searchTermOpt, Optional<TeamType> teamTypeOpt, List<String> positions, List<String> techStacks, String sortBy) {
+    public List<TeamResponse.TeamListResponse> getTeamList(Optional<String> searchTermOpt, Optional<TeamType> teamTypeOpt, List<String> positions, List<String> techStacks, String sortBy, Optional<Boolean> teamIsActive) {
 
         List<Object[]> results = teamRepository.findAllWithLikesAndMember();
 
@@ -94,6 +94,16 @@ public class TeamServiceImpl implements TeamService {
                 .map(result -> {
                     Team team = (Team) result[0];
                     Long likeCount = (Long) result[1];
+
+
+                    // 모집 여부 필터링
+                    if (teamIsActive.isPresent()) {
+                        boolean isRecruiting = teamIsActive.get();
+                        if ((isRecruiting && !team.getTeamIsActive()) ||
+                                (!isRecruiting && team.getTeamIsActive())) {
+                            return null;
+                        }
+                    }
 
                     if (teamTypeOpt.isPresent() && !team.getTeamType().equals(teamTypeOpt.get())) {
                         return null;

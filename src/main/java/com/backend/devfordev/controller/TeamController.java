@@ -126,7 +126,7 @@ public class TeamController {
 
     @Operation(summary = "멤버 리스트 검색")
     @GetMapping("/v1/team/{teamId}/search-members")
-    public ResponseEntity<ApiResponse> searchMembers(@RequestParam String nickname,
+    public ResponseEntity<ApiResponse> searchMembers(@RequestParam(required = false) String nickname,
                                                      @PathVariable Long teamId,
                                                      @AuthenticationPrincipal User user) {
         List<CommunityResponse.MemberInfo> members = teamService.searchMembersByNickname(nickname, Long.parseLong(user.getUsername()), teamId);

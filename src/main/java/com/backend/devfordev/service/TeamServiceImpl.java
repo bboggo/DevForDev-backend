@@ -17,10 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -227,11 +224,11 @@ public class TeamServiceImpl implements TeamService {
             throw new TeamHandler(ErrorStatus.UNAUTHORIZED_USER); // 권한 없음 예외 발생
         }
 
-        MemberInfo memberInfoEntity = memberInfoRepository.findByMember(team.getMember());
 
-        List<Member> members = memberRepository.findByNameContainingIgnoreCase(nickname);
-        return members.stream()
-                .map(member -> new CommunityResponse.MemberInfo(member.getId(), memberInfoEntity.getNickname(), memberInfoEntity.getImageUrl()))
+        // nickname을 기준으로 검색
+        List<MemberInfo> memberInfos = memberInfoRepository.findByNicknameContainingIgnoreCase(nickname);
+        return memberInfos.stream()
+                .map(memberInfo -> new CommunityResponse.MemberInfo(memberInfo.getMember().getId(), memberInfo.getImageUrl(), memberInfo.getNickname()))
                 .collect(Collectors.toList());
 
     }

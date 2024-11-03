@@ -55,6 +55,7 @@ public class CommunityConverter {
                 community.getCommunityCategory(),
                 community.getCommunityTitle(),
                 community.getCommunityContent(),
+                community.getCommunityAI(),
                 member,
                 community.getCreatedAt(),
                 0L,

@@ -65,6 +65,7 @@ public class CommunityResponse {
         CommunityCategory communityCategory;
         String communityTitle;
         String communityContent;
+        Boolean communityAI;
         MemberInfo member;
         LocalDateTime createdAt;
         Long answers;

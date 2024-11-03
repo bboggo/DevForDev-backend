@@ -48,10 +48,12 @@ public enum ErrorStatus implements BaseErrorCode {
     // 팀
     INVALID_TAG_COUNT(BAD_REQUEST, "TEAM001", "The maximum allowed tags are 5."),
     INVALID_TECH_STACK_COUNT(BAD_REQUEST, "TEAM002", "The maximum allowed tech stacks are 5."),
+
     TEAM_NOT_FOUND(BAD_REQUEST, "TEAM003", "Team Not Found"),
     TEAM_DELETED(BAD_REQUEST, "TEAM004", "This is a deleted post."),
     ALREADY_TEAM_MEMBER(BAD_REQUEST, "TEAM005", "This member has already been added."),
-    CANNOT_ADD_OWNER_AS_MEMBER(BAD_REQUEST, "TEAM006", "Authors cannot be added as team members.");
+    CANNOT_ADD_OWNER_AS_MEMBER(BAD_REQUEST, "TEAM006", "Authors cannot be added as team members."),
+    INVALID_TEAM(BAD_REQUEST, "TEAM007", "Only STUDY, PROJECT, and MENTORING are available.");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

@@ -28,8 +28,8 @@ public class Team extends BaseEntity {
     @Column(name = "team_content", columnDefinition = "TEXT", nullable = false)
     private String teamContent;
 
-    @Column(name = "team_type", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(name = "team_type", nullable = false)
     private TeamType teamType;
 
     @Column(name = "team_position", nullable = false)

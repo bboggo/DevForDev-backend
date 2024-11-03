@@ -40,6 +40,14 @@ public class TeamServiceImpl implements TeamService {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.INVALID_MEMBER));
 
+
+        TeamType teamType;
+        try {
+            teamType = TeamType.valueOf(request.getTeamType());
+        } catch (IllegalArgumentException e) {
+            throw new TeamHandler(ErrorStatus.INVALID_TEAM);
+        }
+
         if (request.getTeamTechStack().size() > 5) {
             throw new TeamHandler(ErrorStatus.INVALID_TECH_STACK_COUNT);
         }
@@ -53,7 +61,7 @@ public class TeamServiceImpl implements TeamService {
                         .orElseGet(() -> teamTagRepository.save(TeamTag.builder().name(tagName).build())))
                 .collect(Collectors.toList());
 
-        Team team = TeamConverter.toTeam(request, member, tags);
+        Team team = TeamConverter.toTeam(request, member, tags, teamType);
 
         teamRepository.save(team);
 

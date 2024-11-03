@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TeamConverter {
-    public static Team toTeam(TeamRequest.TeamCreateRequest request, Member member, List<TeamTag> tags) {
+    public static Team toTeam(TeamRequest.TeamCreateRequest request, Member member, List<TeamTag> tags, TeamType teamType) {
         // 기본 팀 정보 설정
         Team team = Team.builder()
                 .teamTitle(request.getTeamTitle())
                 .teamContent(request.getTeamContent())
-                .teamType(TeamType.valueOf(String.valueOf(request.getTeamType())))
+                .teamType(teamType)
                 .teamPosition(request.getTeamPosition())
                 .teamRecruitmentNum(String.valueOf(request.getTeamRecruitmentNum()))
                 .teamIsActive(1L) // 기본 값 설정

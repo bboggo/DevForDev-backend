@@ -40,35 +40,42 @@ public class CommunityServiceImpl implements CommunityService{
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.INVALID_MEMBER));
 
 
-        Community community = CommunityConverter.toCommunity(request, member);
-        String category = request.getCommunityCategory();
-        // 필요없나,,?
-        if(!"CAREER".equals(category) && !"OTHER".equals(category) && !"SKILL".equals(category)) {
+        // communityCategory 예외 처리
+        CommunityCategory category;
+        try {
+            category = CommunityCategory.valueOf(request.getCommunityCategory().toUpperCase());
+        } catch (IllegalArgumentException e) {
             throw new CommunityHandler(ErrorStatus.INVALID_CATEGORY);
         }
+
+        // Community 생성 (category를 직접 전달)
+        Community community = CommunityConverter.toCommunity(request, member, category);
+
+
         communityRepository.save(community);
         // communityAI 필드가 1인 경우 OpenAI API로 댓글 생성
-        try {
-            // OpenAI API 호출
-            String aiCommentContent = openAIService.generateAIComment(community.getCommunityTitle(), community.getCommunityContent());
+        if (Boolean.TRUE.equals(request.getCommunityAI())) {
+            try {
+                // OpenAI API 호출
+                String aiCommentContent = openAIService.generateAIComment(community.getCommunityTitle(), community.getCommunityContent());
 
-            // 생성된 AI 댓글을 community_comment 테이블에 저장
-            CommunityComment aiComment = CommunityComment.builder()
-                    .community(community)
-                    .commentContent(aiCommentContent)
-                    .isAiComment(1L)  // AI 댓글임을 표시
-                    .build();
+                // 생성된 AI 댓글을 community_comment 테이블에 저장
+                CommunityComment aiComment = CommunityComment.builder()
+                        .community(community)
+                        .commentContent(aiCommentContent)
+                        .isAiComment(true)  // AI 댓글임을 표시
+                        .build();
 
-            communityCommentRepository.save(aiComment);
+                communityCommentRepository.save(aiComment);
 
-        } catch (HttpClientErrorException e) {
-            // OpenAI API에서 잘못된 요청이나 401 Unauthorized 등의 에러 처리
-            throw new CommunityHandler(ErrorStatus.OPENAI_API_ERROR);
-        } catch (RestClientException e) {
-            // API 요청 중 네트워크 오류 등의 일반적인 예외 처리
-            throw new CommunityHandler(ErrorStatus.OPENAI_API_ERROR);
+            } catch (HttpClientErrorException e) {
+                // OpenAI API에서 잘못된 요청이나 401 Unauthorized 등의 에러 처리
+                throw new CommunityHandler(ErrorStatus.OPENAI_API_ERROR);
+            } catch (RestClientException e) {
+                // API 요청 중 네트워크 오류 등의 일반적인 예외 처리
+                throw new CommunityHandler(ErrorStatus.OPENAI_API_ERROR);
+            }
         }
-
 
         return CommunityConverter.toCommunityResponse(community);
      }

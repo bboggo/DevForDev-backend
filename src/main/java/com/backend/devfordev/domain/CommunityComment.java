@@ -29,6 +29,6 @@ public class CommunityComment extends BaseEntity{
     private String commentContent;
 
     @Column(name = "is_ai_comment")
-    private Long isAiComment;
+    private Boolean isAiComment;
 
 }

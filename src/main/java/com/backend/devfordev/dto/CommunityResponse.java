@@ -17,7 +17,7 @@ public class CommunityResponse {
         String communityTitle;
         String communityContent;
         Long member;
-        Long communityAI;
+        Boolean communityAI;
         LocalDateTime createdAt;
     }
 
@@ -91,7 +91,7 @@ public class CommunityResponse {
         String communityTitle;
         String communityContent;
         Long member;
-        Long communityAI;
+        Boolean communityAI;
         LocalDateTime createdAt;
         LocalDateTime updatedAt;
     }

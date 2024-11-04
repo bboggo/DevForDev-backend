@@ -160,7 +160,7 @@ public class TeamController {
     @Operation(summary = "팀 멤버 전체 조회")
     @GetMapping("v1/team/{teamId}/members")
     public ResponseEntity<ApiResponse> getTeamMembers(@PathVariable Long teamId) {
-        List<TeamResponse.TeamMemberListResponse> members = teamService.getTeamMemberList(teamId);
+        TeamResponse.TeamMemberListWithIdResponse members = teamService.getTeamMemberList(teamId);
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(members)
                 .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())

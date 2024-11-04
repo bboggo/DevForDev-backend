@@ -77,14 +77,19 @@ public class TeamResponse {
         Long memberId;
     }
 
+    @Getter
+    @AllArgsConstructor
+    public static class TeamMemberListWithIdResponse {
+        private Long teamId; // 팀 ID 한 번만 포함
+        private List<TeamMemberListResponse> members; // 팀 멤버 리스트
+    }
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class TeamMemberListResponse {
-        Long id;
-        Long teamId;
-        CommunityResponse.MemberInfo member;
+        private Long id;
+        private CommunityResponse.MemberInfo member; // 팀원의 정보 (MemberInfo를 사용)
     }
 }

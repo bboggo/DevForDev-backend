@@ -269,4 +269,55 @@ public class TeamServiceImpl implements TeamService {
         return TeamConverter.toTeamMemberResponse(teamMember, team, memberToInvite);
     }
 
+    public TeamResponse.TeamMemberListWithIdResponse getTeamMemberList(Long teamId) {
+        // 팀 조회
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new TeamHandler(ErrorStatus.TEAM_NOT_FOUND));
+
+        // 팀에 속한 모든 팀 멤버 조회
+        List<TeamMember> teamMembers = teamMemberRepository.findByTeamId(teamId);
+
+        // 각 팀원의 MemberInfo 및 TeamMemberListResponse 생성
+        List<TeamResponse.TeamMemberListResponse> memberResponses = teamMembers.stream()
+                .map(teamMember -> {
+                    Member member = memberRepository.findById(teamMember.getMember().getId())
+                            .orElseThrow(() -> new TeamHandler(ErrorStatus.MEMBER_NOT_FOUND));
+
+                    MemberInfo memberInfoEntity = memberInfoRepository.findByMember(member);
+                    CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
+                            member.getId(),
+                            memberInfoEntity.getImageUrl(),
+                            memberInfoEntity.getNickname()
+                    );
+
+                    return TeamResponse.TeamMemberListResponse.builder()
+                            .id(teamMember.getId())
+                            .member(memberInfo)
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        // 컨버터 호출 (팀 ID와 멤버 리스트 전달)
+        return TeamConverter.toTeamMemberListResponse(team.getId(), memberResponses);
+    }
+
+
+    @Override
+    @Transactional
+    public void deleteTeamMember(Long teamId, Long memberId, Long userId) {
+        // 팀 조회 및 작성자인지 확인
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new TeamHandler(ErrorStatus.TEAM_NOT_FOUND));
+
+        if (!team.getMember().getId().equals(userId)) {
+            throw new TeamHandler(ErrorStatus.UNAUTHORIZED_USER); // 작성자가 아닌 경우 예외 발생
+        }
+
+        // 삭제할 팀 멤버 조회
+        TeamMember teamMember = teamMemberRepository.findByTeamIdAndMemberId(teamId, memberId)
+                .orElseThrow(() -> new TeamHandler(ErrorStatus.MEMBER_NOT_FOUND));
+
+        // 팀 멤버 삭제
+        teamMemberRepository.delete(teamMember);
+    }
 }

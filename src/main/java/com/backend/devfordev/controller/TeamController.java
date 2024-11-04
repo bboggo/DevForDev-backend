@@ -157,4 +157,32 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
+    @Operation(summary = "팀 멤버 전체 조회")
+    @GetMapping("v1/team/{teamId}/members")
+    public ResponseEntity<ApiResponse> getTeamMembers(@PathVariable Long teamId) {
+        TeamResponse.TeamMemberListWithIdResponse members = teamService.getTeamMemberList(teamId);
+        ApiResponse apiResponse = ApiResponse.builder()
+                .result(members)
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message(SuccessStatus._OK.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @Operation(summary = "팀 멤버 삭제")
+    @DeleteMapping("v1/team/{teamId}/members/{memberId}")
+    public ResponseEntity<ApiResponse> deleteTeamMember(@PathVariable Long teamId,
+                                                        @PathVariable Long memberId,
+                                                        @AuthenticationPrincipal User user) {
+        teamService.deleteTeamMember(teamId, memberId, Long.parseLong(user.getUsername()));
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message("팀 멤버가 성공적으로 삭제되었습니다.")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 }

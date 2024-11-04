@@ -301,4 +301,23 @@ public class TeamServiceImpl implements TeamService {
         return TeamConverter.toTeamMemberListResponse(team.getId(), memberResponses);
     }
 
+
+    @Override
+    @Transactional
+    public void deleteTeamMember(Long teamId, Long memberId, Long userId) {
+        // 팀 조회 및 작성자인지 확인
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new TeamHandler(ErrorStatus.TEAM_NOT_FOUND));
+
+        if (!team.getMember().getId().equals(userId)) {
+            throw new TeamHandler(ErrorStatus.UNAUTHORIZED_USER); // 작성자가 아닌 경우 예외 발생
+        }
+
+        // 삭제할 팀 멤버 조회
+        TeamMember teamMember = teamMemberRepository.findByTeamIdAndMemberId(teamId, memberId)
+                .orElseThrow(() -> new TeamHandler(ErrorStatus.MEMBER_NOT_FOUND));
+
+        // 팀 멤버 삭제
+        teamMemberRepository.delete(teamMember);
+    }
 }

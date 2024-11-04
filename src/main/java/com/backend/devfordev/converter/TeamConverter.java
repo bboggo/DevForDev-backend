@@ -149,4 +149,12 @@ public class TeamConverter {
     }
 
 
+    public static TeamResponse.TeamMemberListResponse toTeamMemberListResponse(TeamMember teamMember, Team team, CommunityResponse.MemberInfo member) {
+        return new TeamResponse.TeamMemberListResponse(
+                teamMember.getId(),
+                team.getId(),
+                member
+        );
+    }
+
 }

@@ -76,4 +76,15 @@ public class TeamResponse {
         Long teamId;
         Long memberId;
     }
+
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TeamMemberListResponse {
+        Long id;
+        Long teamId;
+        CommunityResponse.MemberInfo member;
+    }
 }

@@ -269,4 +269,31 @@ public class TeamServiceImpl implements TeamService {
         return TeamConverter.toTeamMemberResponse(teamMember, team, memberToInvite);
     }
 
+    public List<TeamResponse.TeamMemberListResponse> getTeamMemberList(Long teamId) {
+        // 팀 조회
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new TeamHandler(ErrorStatus.TEAM_NOT_FOUND));
+
+        // 팀에 속한 모든 팀 멤버 조회
+        List<TeamMember> teamMembers = teamMemberRepository.findByTeamId(teamId);
+
+        // 팀 멤버 정보 변환
+        return teamMembers.stream()
+                .map(teamMember -> {
+                    Member member = memberRepository.findById(teamMember.getMember().getId())
+                            .orElseThrow(() -> new TeamHandler(ErrorStatus.MEMBER_NOT_FOUND));
+
+                    // 각 멤버의 MemberInfo 조회
+                    MemberInfo memberInfoEntity = memberInfoRepository.findByMember(member);
+                    CommunityResponse.MemberInfo memberInfo = new CommunityResponse.MemberInfo(
+                            member.getId(),
+                            memberInfoEntity.getImageUrl(),
+                            memberInfoEntity.getNickname()
+                    );
+
+                    return TeamConverter.toTeamMemberListResponse(teamMember, team, memberInfo);
+                })
+                .collect(Collectors.toList());
+    }
+
 }

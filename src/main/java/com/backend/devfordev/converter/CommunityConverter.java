@@ -15,7 +15,7 @@ public class CommunityConverter {
                 .communityCategory(category)
                 .communityTitle(request.getCommunityTitle())
                 .communityContent(request.getCommunityContent())
-                .communityAI(request.getCommunityAI())
+                .isComment(request.getIsComment())
                 .member(member)
                 .communityViews(0L)
                 .build();
@@ -29,7 +29,7 @@ public class CommunityConverter {
                 community.getCommunityTitle(),
                 community.getCommunityContent(),
                 community.getMember().getId(),
-                community.getCommunityAI(),
+                community.getIsComment(),
                 community.getCreatedAt()
         );
     }
@@ -55,7 +55,7 @@ public class CommunityConverter {
                 community.getCommunityCategory(),
                 community.getCommunityTitle(),
                 community.getCommunityContent(),
-                community.getCommunityAI(),
+                community.getIsComment(),
                 member,
                 community.getCreatedAt(),
                 0L,
@@ -88,7 +88,7 @@ public class CommunityConverter {
                 community.getCommunityTitle(),
                 community.getCommunityContent(),
                 community.getMember().getId(),
-                community.getCommunityAI(),
+                community.getIsComment(),
                 community.getCreatedAt(),
                 community.getModifiedAt()
         );

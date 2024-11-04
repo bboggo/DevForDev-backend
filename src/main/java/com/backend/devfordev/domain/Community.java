@@ -29,7 +29,7 @@ public class Community extends BaseEntity{
     private String communityContent;
 
     @Column(name = "com_ai")
-    private Boolean communityAI;
+    private Boolean isComment;
 
     @Column(name = "com_views", nullable = false)
     private Long communityViews;  // 기본값 설정

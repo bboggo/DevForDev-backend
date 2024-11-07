@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -22,6 +24,21 @@ public class PortfolioRequest {
 
         @Schema(description = "포트폴리오 이미지 url", example = "이미지url")
         String portImageUrl;
+
+
+        private List<LinkRequest> links; // 링크 리스트 추가
+
+        @Getter
+        @Setter
+        public static class LinkRequest {
+
+            @Schema(description = "링크 타입", example = "github")
+            private String type;
+            @Schema(description = "url", example = "https://github.com/bboggo")
+            private String url;
+            @Schema(description = "순서", example = "1")
+            private Integer order;
+        }
     }
 
 

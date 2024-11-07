@@ -2,12 +2,10 @@ package com.backend.devfordev.dto;
 
 
 import com.backend.devfordev.domain.enums.CommunityCategory;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PortfolioResponse {
 
@@ -22,5 +20,20 @@ public class PortfolioResponse {
         String portContent;
         String portImageUrl;
         LocalDateTime createdAt;
+        private List<LinkResponse> links; // 링크 리스트 추가
+
+        @Getter
+        @Setter
+        public static class LinkResponse {
+            private String type;
+            private String url;
+            private Integer order;
+
+            public LinkResponse(String type, String url, Integer order) {
+                this.type = type;
+                this.url = url;
+                this.order = order;
+            }
+        }
     }
 }

@@ -10,10 +10,12 @@ import com.backend.devfordev.converter.PortfolioConverter;
 import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.domain.Portfolio;
 
+import com.backend.devfordev.domain.PortfolioEducation;
 import com.backend.devfordev.domain.PortfolioLink;
 import com.backend.devfordev.dto.PortfolioRequest;
 import com.backend.devfordev.dto.PortfolioResponse;
 import com.backend.devfordev.repository.MemberRepository;
+import com.backend.devfordev.repository.PortfolioEducationRepository;
 import com.backend.devfordev.repository.PortfolioLinkRepository;
 import com.backend.devfordev.repository.PortfolioRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ public class PortfolioServiceImpl implements PortfolioService{
     private final PortfolioRepository portfolioRepository;
     private final PortfolioLinkRepository portfolioLinkRepository;
     private final MemberRepository memberRepository;
+    private final PortfolioEducationRepository portfolioEducationRepository;
 
     @Override
     @Transactional
@@ -38,29 +41,26 @@ public class PortfolioServiceImpl implements PortfolioService{
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.INVALID_MEMBER));
 
-
-
+        // 포트폴리오 생성
         Portfolio portfolio = PortfolioConverter.toPortfolio(request, member);
-
-
-        // 링크 리스트 순서 자동 설정 후 저장
-        List<PortfolioLink> links = new ArrayList<>();
-        for (int i = 0; i < request.getLinks().size(); i++) {
-            PortfolioRequest.PortfolioCreateRequest.LinkRequest linkRequest = request.getLinks().get(i);
-            PortfolioLink link = PortfolioLink.builder()
-                    .type(linkRequest.getType())
-                    .url(linkRequest.getUrl())
-                    .orderIndex(i + 1)  // 리스트의 인덱스를 기반으로 순서 설정
-                    .portfolio(portfolio)
-                    .build();
-            links.add(link);
-        }
-
-
         portfolioRepository.save(portfolio);
+
+        // 링크 리스트 순서 자동 설정 후 변환 및 저장
+        List<PortfolioLink> links = PortfolioConverter.toPortfolioLinks(request.getLinks(), portfolio);
+        for (int i = 0; i < links.size(); i++) {
+            links.get(i).setOrderIndex(i + 1); // 자동 순서 설정
+        }
         portfolioLinkRepository.saveAll(links);
 
-        return PortfolioConverter.toPortfolioResponse(portfolio, links);
+        // 학력 리스트 순서 자동 설정 후 변환 및 저장
+        List<PortfolioEducation> educations = PortfolioConverter.toEducationList(request.getEducations(), portfolio);
+        for (int i = 0; i < educations.size(); i++) {
+            educations.get(i).setOrderIndex(i + 1); // 자동 순서 설정
+        }
+        portfolioEducationRepository.saveAll(educations);
+
+        // 포트폴리오 응답 변환
+        return PortfolioConverter.toPortfolioResponse(portfolio, links, educations);
     }
 
 

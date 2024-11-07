@@ -4,6 +4,7 @@ package com.backend.devfordev.dto;
 import com.backend.devfordev.domain.enums.CommunityCategory;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class PortfolioResponse {
         String portImageUrl;
         LocalDateTime createdAt;
         private List<LinkResponse> links; // 링크 리스트 추가
-
+        private List<EducationResponse> educations;
         @Getter
         @Setter
         public static class LinkResponse {
@@ -29,11 +30,29 @@ public class PortfolioResponse {
             private String url;
             private Integer order;
 
+
             public LinkResponse(String type, String url, Integer order) {
                 this.type = type;
                 this.url = url;
                 this.order = order;
             }
+        }
+
+        @Getter
+        @Setter
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class EducationResponse {
+            private Long id;
+            private String level;
+            private String institutionName;
+            private String major;
+            private LocalDate admissionDate;
+            private LocalDate graduationDate;
+            private String graduationStatus;
+            private Double grade;
+            private Double gradeScale;
+            private Integer orderIndex; // 순서
         }
     }
 }

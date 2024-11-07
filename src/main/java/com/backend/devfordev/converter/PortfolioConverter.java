@@ -26,7 +26,6 @@ public class PortfolioConverter {
                 .map(linkRequest -> PortfolioLink.builder()
                         .type(linkRequest.getType())
                         .url(linkRequest.getUrl())
-                        .orderIndex(linkRequest.getOrder())
                         .portfolio(portfolio)
                         .build())
                 .collect(Collectors.toList());

@@ -36,8 +36,7 @@ public class PortfolioRequest {
             private String type;
             @Schema(description = "url", example = "https://github.com/bboggo")
             private String url;
-            @Schema(description = "순서", example = "1")
-            private Integer order;
+
         }
     }
 

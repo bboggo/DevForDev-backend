@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -38,29 +39,25 @@ public class PortfolioServiceImpl implements PortfolioService{
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.INVALID_MEMBER));
 
 
-        // order 값 예외 처리
-        List<Integer> orderList = request.getLinks().stream()
-                .map(PortfolioRequest.PortfolioCreateRequest.LinkRequest::getOrder)
-                .filter(Objects::nonNull) // null 값 필터링
-                .sorted()
-                .collect(Collectors.toList());
-
-        // 1. 모든 `order` 값이 존재하고 음수가 아니어야 함
-        if (orderList.size() != request.getLinks().size() || orderList.get(0) <= 0) {
-            throw new PortfolioHandler(ErrorStatus.INVALID_ORDER_ERROR);
-        }
-
-        // 2. `order` 값이 연속적이어야 함 (1, 2, 3,... 형식)
-        for (int i = 0; i < orderList.size(); i++) {
-            if (orderList.get(i) != i + 1) {
-                throw new PortfolioHandler(ErrorStatus.INVALID_ORDER_ERROR);
-            }
-        }
 
         Portfolio portfolio = PortfolioConverter.toPortfolio(request, member);
 
+
+        // 링크 리스트 순서 자동 설정 후 저장
+        List<PortfolioLink> links = new ArrayList<>();
+        for (int i = 0; i < request.getLinks().size(); i++) {
+            PortfolioRequest.PortfolioCreateRequest.LinkRequest linkRequest = request.getLinks().get(i);
+            PortfolioLink link = PortfolioLink.builder()
+                    .type(linkRequest.getType())
+                    .url(linkRequest.getUrl())
+                    .orderIndex(i + 1)  // 리스트의 인덱스를 기반으로 순서 설정
+                    .portfolio(portfolio)
+                    .build();
+            links.add(link);
+        }
+
+
         portfolioRepository.save(portfolio);
-        List<PortfolioLink> links = PortfolioConverter.toPortfolioLinks(request.getLinks(), portfolio);
         portfolioLinkRepository.saveAll(links);
 
         return PortfolioConverter.toPortfolioResponse(portfolio, links);

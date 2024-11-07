@@ -3,14 +3,15 @@ package com.backend.devfordev.domain;
 
 import com.backend.devfordev.domain.enums.CommunityCategory;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 @Entity
 @Table(name = "portfolio")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 public class Portfolio extends BaseEntity{
 
     @Id

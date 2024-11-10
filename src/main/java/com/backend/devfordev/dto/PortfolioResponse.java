@@ -2,6 +2,7 @@ package com.backend.devfordev.dto;
 
 
 import com.backend.devfordev.domain.enums.CommunityCategory;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -19,6 +20,9 @@ public class PortfolioResponse {
         Long member;
         String portTitle;
         String portContent;
+        String portPosition;
+
+        List<String> techStacks;
         String portImageUrl;
         LocalDateTime createdAt;
         private List<LinkResponse> links; // 링크 리스트 추가

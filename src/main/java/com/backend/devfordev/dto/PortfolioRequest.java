@@ -23,6 +23,12 @@ public class PortfolioRequest {
         @Schema(description = "포트폴리오 내용", example = "마크다운 텍스트 부분")
         String portContent;
 
+        @Schema(description = "백엔드", example = "포지션")
+        String portPosition;
+
+        @Schema(description = "기술 스택", example = "[\"Spring\", \"Java\", \"MySQL\", \"Docker\"]")
+        private List<String> techStacks;
+
         @Schema(description = "포트폴리오 이미지 url", example = "이미지url")
         String portImageUrl;
 

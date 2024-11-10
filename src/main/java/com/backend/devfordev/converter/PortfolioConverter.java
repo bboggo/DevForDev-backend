@@ -7,19 +7,30 @@ import com.backend.devfordev.domain.PortfolioLink;
 import com.backend.devfordev.dto.PortfolioRequest;
 import com.backend.devfordev.dto.PortfolioResponse;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class PortfolioConverter {
 
     public static Portfolio toPortfolio(PortfolioRequest.PortfolioCreateRequest request, Member member) {
-        return Portfolio.builder()
+
+        Portfolio portfolio = Portfolio.builder()
                 .portTitle(request.getPortTitle())
                 .portContent(request.getPortContent())
+                .portPosition(request.getPortPosition())
                 .portImageUrl(request.getPortImageUrl())
                 .member(member)
                 .build();
+
+        // techStacks 리스트를 쉼표로 구분된 문자열로 변환하여 저장
+        portfolio.setTechStacks(Collections.singletonList(String.join(",", request.getTechStacks())));
+
+        return portfolio;
     }
+
 
     public static List<PortfolioLink> toPortfolioLinks(List<PortfolioRequest.PortfolioCreateRequest.LinkRequest> linkRequests, Portfolio portfolio) {
         return linkRequests.stream()
@@ -68,11 +79,16 @@ public class PortfolioConverter {
                 ))
                 .collect(Collectors.toList());
 
+        // techStacks 문자열을 리스트로 변환하여 설정
+        List<String> techStacks = portfolio.getTechStacks() != null ? portfolio.getTechStacks() : new ArrayList<>();
+
         return new PortfolioResponse.PortCreateResponse(
                 portfolio.getId(),
                 portfolio.getMember().getId(),
                 portfolio.getPortTitle(),
                 portfolio.getPortContent(),
+                portfolio.getPortPosition(),
+                techStacks,
                 portfolio.getPortImageUrl(),
                 portfolio.getCreatedAt(),
                 linkResponses,

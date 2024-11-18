@@ -2,6 +2,7 @@ package com.backend.devfordev.converter;
 
 import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.domain.MemberInfo;
+import com.backend.devfordev.dto.MemberResponse;
 import com.backend.devfordev.dto.SignInResponse;
 import com.backend.devfordev.dto.SignUpRequest;
 import com.backend.devfordev.dto.SignUpResponse;
@@ -53,6 +54,16 @@ public class MemberConverter {
                 memberInfo.getImageUrl(),
                 accessToken,
                 refreshToken
+        );
+    }
+
+    public static MemberResponse toGetMemberResponse(Member member, MemberInfo memberInfo) {
+        return new MemberResponse(
+                member.getId(),
+                member.getEmail(),
+                member.getName(),
+                memberInfo.getNickname(),
+                memberInfo.getImageUrl()
         );
     }
 }

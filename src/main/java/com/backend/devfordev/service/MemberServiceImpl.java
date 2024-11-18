@@ -2,16 +2,16 @@ package com.backend.devfordev.service;
 
 import com.backend.devfordev.apiPayload.ExceptionHandler;
 import com.backend.devfordev.apiPayload.code.status.ErrorStatus;
+import com.backend.devfordev.apiPayload.exception.handler.CommunityHandler;
 import com.backend.devfordev.apiPayload.exception.handler.GeneralException;
 import com.backend.devfordev.apiPayload.exception.handler.MemberHandler;
+import com.backend.devfordev.apiPayload.exception.handler.TeamHandler;
 import com.backend.devfordev.converter.MemberConverter;
 import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.domain.MemberInfo;
 import com.backend.devfordev.domain.MemberRefreshToken;
-import com.backend.devfordev.dto.SignInRequest;
-import com.backend.devfordev.dto.SignInResponse;
-import com.backend.devfordev.dto.SignUpRequest;
-import com.backend.devfordev.dto.SignUpResponse;
+import com.backend.devfordev.domain.Team;
+import com.backend.devfordev.dto.*;
 import com.backend.devfordev.repository.MemberInfoRepository;
 import com.backend.devfordev.repository.MemberRefreshTokenRepository;
 import com.backend.devfordev.repository.MemberRepository;
@@ -80,6 +80,15 @@ public class MemberServiceImpl implements MemberService{
         return MemberConverter.toSignInResponse(member, memberInfo, accessToken, refreshToken);
     }
 
+    @Transactional
+    public MemberResponse getMember(Long userId) {
+        // Member 및 MemberInfo 조회
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
 
+        MemberInfo memberInfo = memberInfoRepository.findByMember(member);
 
+        // 컨버터를 통해 DTO 변환
+        return MemberConverter.toGetMemberResponse(member, memberInfo);
+    }
 }

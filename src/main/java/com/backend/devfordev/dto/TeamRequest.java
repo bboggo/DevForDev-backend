@@ -23,13 +23,13 @@ public class TeamRequest {
         @NotBlank(message = "This field must not be null.")
         @Schema(description = "팀 내용", example = "팀 모집공고 내용1")
         String teamContent;
-        @NotBlank(message = "This field must not be null.")
+        @NotNull(message = "This field must not be null.")
         @Schema(description = "팀 모집 유형", example = "STUDY")
         TeamType teamType;
         @NotBlank(message = "This field must not be null.")
         @Schema(description = "팀 모집 포지션", example = "BACKEND")
         String teamPosition;
-        @NotBlank(message = "This field must not be null.")
+        @NotNull(message = "This field must not be null.")
         @Schema(description = "팀 모집 인원", example = "1")
         Long teamRecruitmentNum;
 
@@ -38,13 +38,13 @@ public class TeamRequest {
         @Schema(description = "기술 스택", example = "[\"Java\", \"Spring\", \"AWS\"]")
         List<String> teamTechStack;
 
-        @Schema(description = "태그", example = "[\"Remote\", \"Full-Time\", \"Flexible\"]")
+        @Schema(description = "태그", example = "[\"태그1\", \"태그2\", \"태그3\"]")
         List<String> teamTags;
     }
 
     @Getter
     public static class TeamAddMemberRequest {
-        @NotBlank(message = "This field must not be null.")
+        @NotNull(message = "This field must not be null.")
         @Schema(description = "추가할 멤버 id", example = "1")
         private Long memberId;
     }

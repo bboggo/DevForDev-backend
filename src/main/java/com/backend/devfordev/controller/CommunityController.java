@@ -5,7 +5,6 @@ import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
 import com.backend.devfordev.domain.enums.CommunityCategory;
 import com.backend.devfordev.dto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityResponse;
-import com.backend.devfordev.dto.SignUpRequest;
 import com.backend.devfordev.service.CommunityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,27 +27,19 @@ import java.util.Optional;
 @Slf4j
 public class CommunityController {
     private final CommunityService communityService;
-
     @Operation(summary = "커뮤니티 글 등록")
     @PostMapping(value = "/v1/community")
-    public ResponseEntity<ApiResponse> createCommunity(@Valid @RequestBody CommunityRequest.CommunityCreateRequest request,  @AuthenticationPrincipal User user){
+    public ResponseEntity<ApiResponse<CommunityResponse.CommunityCreateResponse>> createCommunity(@Valid @RequestBody CommunityRequest.CommunityCreateRequest request, @AuthenticationPrincipal User user){
 
-        ApiResponse apiResponse = ApiResponse.builder()
-                .result(communityService.createCommunity(request, Long.parseLong(user.getUsername())))
-                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
-                .code(SuccessStatus._OK.getCode())
-                .message(SuccessStatus._OK.getMessage())
-                .build();
+        CommunityResponse.CommunityCreateResponse communityCreateResponse = communityService.createCommunity(request, Long.parseLong(user.getUsername()));
+        ApiResponse<CommunityResponse.CommunityCreateResponse> apiResponse = ApiResponse.onSuccess(communityCreateResponse);
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
-
-//        SignUpResponse member = memberService.registerMember(request);
-//        return ApiResponse.onSuccess(MemberConverter.toSignUpResponse(member));
     }
 
 
     @Operation(summary = "커뮤니티 글 전체 조회")
     @GetMapping(value = "/v1/community")
-    public ResponseEntity<ApiResponse> getCommunityList(
+    public ResponseEntity<ApiResponse<List<CommunityResponse.CommunityListResponse>>> getCommunityList(
             @RequestParam(required = false) CommunityCategory category,
             @RequestParam(required = false) String searchTerm,
             @RequestParam(required = false, defaultValue = "recent") String sortBy
@@ -59,30 +50,19 @@ public class CommunityController {
                 Optional.ofNullable(searchTerm),
                 sortBy);
 
-        ApiResponse apiResponse = ApiResponse.builder()
-                .result(communityList)
-                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
-                .code(SuccessStatus._OK.getCode())
-                .message(SuccessStatus._OK.getMessage())
-                .build();
+        ApiResponse<List<CommunityResponse.CommunityListResponse>> apiResponse = ApiResponse.onSuccess(communityList);
+
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
 
-//        SignUpResponse member = memberService.registerMember(request);
-//        return ApiResponse.onSuccess(MemberConverter.toSignUpResponse(member));
     }
 
 
     @Operation(summary = "커뮤니티 글 상세 조회")
     @GetMapping(value = "/v1/community/{id}")
-    public ResponseEntity<ApiResponse> getCommunityDetail(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<CommunityResponse.CommunityDetailResponse>> getCommunityDetail(@PathVariable Long id) {
         CommunityResponse.CommunityDetailResponse communityDetail = communityService.getCommunityDetail(id);
+        ApiResponse<CommunityResponse.CommunityDetailResponse> apiResponse = ApiResponse.onSuccess(communityDetail);
 
-        ApiResponse apiResponse = ApiResponse.builder()
-                .result(communityDetail)
-                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
-                .code(SuccessStatus._OK.getCode())
-                .message(SuccessStatus._OK.getMessage())
-                .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
@@ -90,30 +70,23 @@ public class CommunityController {
 
     @Operation(summary = "인기 커뮤니티 Top 5 유저 조회 (좋아요 수 기준)")
     @GetMapping(value = "/v1/community/top5")
-    public ResponseEntity<ApiResponse> getTop5UsersByTotalLikes() {
+    public ResponseEntity<ApiResponse<List<CommunityResponse.CommunityTop5Response>>> getTop5UsersByTotalLikes() {
         // 인기 Top 5 유저 조회
         List<CommunityResponse.CommunityTop5Response> top5Users = communityService.getTop5UsersByTotalLikes();
 
 
-        ApiResponse apiResponse = ApiResponse.builder()
-                .result(top5Users)
-                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
-                .code(SuccessStatus._OK.getCode())
-                .message(SuccessStatus._OK.getMessage())
-                .build();
+        ApiResponse<List<CommunityResponse.CommunityTop5Response>> apiResponse = ApiResponse.onSuccess(top5Users);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
     @Operation(summary = "커뮤니티 글 수정")
     @PatchMapping(value = "/v1/community/{id}")
-    public ResponseEntity<ApiResponse> updateCommunity(@Valid @RequestBody CommunityRequest.CommunityUpdateRequest request, @PathVariable Long id, @AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse<CommunityResponse.CommunityUpdateResponse>> updateCommunity(@Valid @RequestBody CommunityRequest.CommunityUpdateRequest request, @PathVariable Long id, @AuthenticationPrincipal User user) {
 
-        ApiResponse apiResponse = ApiResponse.builder()
-                .result(communityService.updateCommunity(id, request, Long.parseLong(user.getUsername())))
-                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
-                .code(SuccessStatus._OK.getCode())
-                .message(SuccessStatus._OK.getMessage())
-                .build();
+        CommunityResponse.CommunityUpdateResponse communityUpdateResponse = communityService.updateCommunity(id, request, Long.parseLong(user.getUsername()));
+
+        ApiResponse<CommunityResponse.CommunityUpdateResponse> apiResponse = ApiResponse.onSuccess(communityUpdateResponse);
+
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
@@ -121,13 +94,12 @@ public class CommunityController {
     @DeleteMapping(value = "/v1/community/{id}")
     public ResponseEntity<ApiResponse> deleteCommunity(@PathVariable Long id, @AuthenticationPrincipal User user) {
         communityService.deleteCommunity(id, Long.parseLong(user.getUsername()));
-
         ApiResponse apiResponse = ApiResponse.builder()
                 .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
                 .code(SuccessStatus._OK.getCode())
-                .message(SuccessStatus._OK.getMessage())
+                .message("팀 모집글이 성공적으로 삭제되었습니다.")
                 .build();
-
+        // HTTP 상태 코드 204로 응답
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 }

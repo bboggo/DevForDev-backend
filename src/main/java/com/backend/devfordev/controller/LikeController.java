@@ -32,24 +32,13 @@ public class LikeController {
         // 좋아요 추가
         @Operation(summary = "좋아요")
         @PostMapping(value = "/v1/likes")
-        public ResponseEntity<ApiResponse> addLike(@Valid @RequestBody LikeRequest request, @AuthenticationPrincipal User user) {
-
-            System.out.println("!!!!!!!!!!!!!!!!!!!");
-            System.out.println(request.getLikeId());
-            System.out.println(request.getLikeType());
-            log.info("LikeRequest: {}", request);
-            log.info("likeId: {}", request.getLikeId());
-            log.info("Authenticated User ID: {}", user.getUsername());
+        public ResponseEntity<ApiResponse<LikeResponse>> addLike(@Valid @RequestBody LikeRequest request, @AuthenticationPrincipal User user) {
 
             // 좋아요 생성
             LikeResponse likeResponse = likeService.createLike(request, Long.parseLong(user.getUsername()));  // LikeResponse로 수정
 
-            ApiResponse apiResponse = ApiResponse.builder()
-                    .result(likeResponse)  // LikeResponse로 수정
-                    .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
-                    .code(SuccessStatus._OK.getCode())
-                    .message(SuccessStatus._OK.getMessage())
-                    .build();
+            ApiResponse<LikeResponse> apiResponse = ApiResponse.onSuccess(likeResponse);
+
             return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
         }
 

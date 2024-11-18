@@ -1,6 +1,7 @@
 package com.backend.devfordev.apiPayload.exception.handler;
 
 import com.backend.devfordev.apiPayload.ApiResponse;
+import com.backend.devfordev.apiPayload.code.BaseErrorCode;
 import com.backend.devfordev.apiPayload.code.ErrorReasonDTO;
 import com.backend.devfordev.apiPayload.code.status.ErrorStatus;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -38,6 +39,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 @RestControllerAdvice(annotations = {RestController.class})
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
+
 
     /**
      * [Exception] 유효성 검사 실패
@@ -163,4 +165,32 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         return ResponseEntity.internalServerError()
                 .body(ApiResponse.onFailure(ErrorStatus._INTERNAL_SERVER_ERROR.getCode(), ex.getMessage(), null));
     }
+
+
+
+
+
+    @ExceptionHandler(value = GeneralException.class)
+    public ResponseEntity onThrowException(GeneralException generalException, HttpServletRequest request) {
+        ErrorReasonDTO errorReasonHttpStatus = generalException.getErrorReasonHttpStatus();
+        return handleExceptionInternal(generalException,errorReasonHttpStatus,null,request);
+    }
+
+    private ResponseEntity<Object> handleExceptionInternal(Exception e, ErrorReasonDTO reason,
+                                                           HttpHeaders headers, HttpServletRequest request) {
+
+        ApiResponse<Object> body = ApiResponse.onFailure(reason.getCode(),reason.getMessage(),null);
+//        e.printStackTrace();
+
+        WebRequest webRequest = new ServletWebRequest(request);
+        return super.handleExceptionInternal(
+                e,
+                body,
+                headers,
+                reason.getHttpStatus(),
+                webRequest
+        );
+    }
+
+
 }

@@ -36,7 +36,7 @@ public class LikeServiceImpl implements LikeService {
         LikeType likeType;
         try {
             // String 값을 ENUM으로 변환
-            likeType = LikeType.valueOf(request.getLikeType().toUpperCase());
+            likeType = request.getLikeType();
         } catch (IllegalArgumentException ex) {
 
             throw new LikeHandler(ErrorStatus.INVALID_LIKE_TYPE);

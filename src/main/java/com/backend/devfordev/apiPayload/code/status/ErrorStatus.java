@@ -28,6 +28,14 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_JWT_TOKEN(UNAUTHORIZED, "AUTH4012", "토큰 유효성 검사 실패 또는 거부된 토큰입니다."),
     LOGIN_FAILED_PASSWORD_INCORRECT(UNAUTHORIZED,"AUTH4013", "Your email and password are incorrect.."),
 
+    // 유효성 검사 관련
+    VALIDATION_ERROR(BAD_REQUEST, "COMMON4001", "유효성 검사에 실패했습니다."),
+    INVALID_ENUM_VALUE(BAD_REQUEST, "COMMON4002", "유효하지 않은 Enum 값입니다."),
+    INVALID_TYPE(BAD_REQUEST, "COMMON4003", "파라미터 타입이 올바르지 않습니다."),
+    CONSTRAINT_VIOLATION(BAD_REQUEST, "COMMON4004", "제약 조건을 위반했습니다."),
+    INVALID_REQUEST(BAD_REQUEST, "COMMON4005", "요청이 유효하지 않습니다."),
+
+
     // 전체
     UNAUTHORIZED_USER(BAD_REQUEST, "ETC001","Only the author can do this."),
     OPENAI_API_ERROR(BAD_REQUEST, "ETC002", "An error occurred while calling the OpenAI API"),

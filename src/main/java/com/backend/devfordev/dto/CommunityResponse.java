@@ -12,12 +12,19 @@ public class CommunityResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CommunityCreateResponse {
+        @Schema(description = "커뮤니티 ID", example = "1")
         Long id;
+        @Schema(description = "커뮤니티 카테고리", example = "SKILL")
         CommunityCategory communityCategory;
+        @Schema(description = "커뮤니티 제목", example = "커뮤니티 제목 부분입니다.")
         String communityTitle;
+        @Schema(description = "커뮤니티 내용", example = "커뮤니티 내용 부분입니다.")
         String communityContent;
+        @Schema(description = "작성자 ID", example = "1")
         Long member;
+        @Schema(description = "커뮤니티 답변 동의 여부", example = "true")
         Boolean isComment;
+        @Schema(description = "작성시간", example = "2024-11-19T00:52:47.534061")
         LocalDateTime createdAt;
     }
 
@@ -42,15 +49,23 @@ public class CommunityResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CommunityListResponse {
-
+        @Schema(description = "커뮤니티 ID", example = "1")
         Long id;
+        @Schema(description = "커뮤니티 카테고리", example = "SKILL")
         CommunityCategory communityCategory;
+        @Schema(description = "커뮤니티 제목", example = "커뮤니티 제목 부분입니다.")
         String communityTitle;
+        @Schema(description = "커뮤니티 내용", example = "커뮤니티 내용 부분입니다.")
         String communityContent;
+
         MemberInfo member;
+        @Schema(description = "작성시간", example = "2024-11-19T00:52:47.534061")
         LocalDateTime createdAt;
+        @Schema(description = "답변수", example = "0")
         Long answers;
+        @Schema(description = "조회수", example = "0")
         Long views;
+        @Schema(description = "좋아요수", example = "0")
         Long likes;
     }
 
@@ -60,16 +75,24 @@ public class CommunityResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CommunityDetailResponse {
-
+        @Schema(description = "커뮤니티 ID", example = "1")
         Long id;
+        @Schema(description = "커뮤니티 카테고리", example = "SKILL")
         CommunityCategory communityCategory;
+        @Schema(description = "커뮤니티 제목", example = "커뮤니티 제목 부분입니다.")
         String communityTitle;
+        @Schema(description = "커뮤니티 내용", example = "커뮤니티 내용 부분입니다.")
         String communityContent;
+        @Schema(description = "커뮤니티 답변 동의 여부", example = "true")
         Boolean isComment;
         MemberInfo member;
+        @Schema(description = "작성시간", example = "2024-11-19T00:52:47.534061")
         LocalDateTime createdAt;
+        @Schema(description = "답변수", example = "0")
         Long answers;
+        @Schema(description = "조회수", example = "0")
         Long views;
+        @Schema(description = "좋아요수", example = "0")
         Long likes;
     }
 
@@ -79,6 +102,7 @@ public class CommunityResponse {
     @AllArgsConstructor
     public static class CommunityTop5Response {
         MemberInfo member;
+        @Schema(description = "해당 유저가 받은 전체 좋아요수", example = "22")
         Long totalLikes;
     }
 
@@ -87,13 +111,21 @@ public class CommunityResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CommunityUpdateResponse {
+        @Schema(description = "커뮤니티 ID", example = "1")
         Long id;
+        @Schema(description = "커뮤니티 카테고리", example = "SKILL")
         CommunityCategory communityCategory;
+        @Schema(description = "커뮤니티 제목", example = "커뮤니티 제목 부분입니다.")
         String communityTitle;
+        @Schema(description = "커뮤니티 내용", example = "커뮤니티 내용 부분입니다.")
         String communityContent;
+        @Schema(description = "작성자 ID", example = "1")
         Long member;
+        @Schema(description = "커뮤니티 답변 동의 여부", example = "true")
         Boolean isComment;
+        @Schema(description = "작성시간", example = "2024-11-19T00:52:47.534061")
         LocalDateTime createdAt;
+        @Schema(description = "수정시간", example = "2024-11-19T00:52:47.534061")
         LocalDateTime updatedAt;
     }
 

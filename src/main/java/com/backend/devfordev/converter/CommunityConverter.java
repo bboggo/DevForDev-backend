@@ -74,7 +74,7 @@ public class CommunityConverter {
 
     public static Community toUpdateCommunity(CommunityRequest.CommunityUpdateRequest request) {
         return Community.builder()
-                .communityCategory(CommunityCategory.valueOf(request.getCommunityCategory()))
+                .communityCategory(CommunityCategory.valueOf(request.getCommunityCategory().name()))
                 .communityTitle(request.getCommunityTitle())
                 .communityContent(request.getCommunityContent())
                 .build();

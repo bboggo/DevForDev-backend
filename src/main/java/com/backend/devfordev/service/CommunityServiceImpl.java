@@ -30,7 +30,7 @@ public class CommunityServiceImpl implements CommunityService{
     private final CommunityRepository communityRepository;
     private final MemberRepository memberRepository;
     private final LikeRepository likeRepository;
-    private final OpenAIService openAIService;
+
     private final CommunityCommentRepository communityCommentRepository;
     private final MemberInfoRepository memberInfoRepository;
     @Override
@@ -43,7 +43,7 @@ public class CommunityServiceImpl implements CommunityService{
         // communityCategory 예외 처리
         CommunityCategory category;
         try {
-            category = CommunityCategory.valueOf(request.getCommunityCategory().toUpperCase());
+            category = request.getCommunityCategory();
         } catch (IllegalArgumentException e) {
             throw new CommunityHandler(ErrorStatus.INVALID_CATEGORY);
         }
@@ -241,7 +241,7 @@ public class CommunityServiceImpl implements CommunityService{
         // communityCategory 예외 처리
         CommunityCategory category;
         try {
-            category = CommunityCategory.valueOf(request.getCommunityCategory().toUpperCase());
+            category = request.getCommunityCategory();
         } catch (IllegalArgumentException e) {
             throw new CommunityHandler(ErrorStatus.INVALID_CATEGORY);
         }

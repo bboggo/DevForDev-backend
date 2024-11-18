@@ -30,7 +30,7 @@ public class CommunityServiceImpl implements CommunityService{
     private final CommunityRepository communityRepository;
     private final MemberRepository memberRepository;
     private final LikeRepository likeRepository;
-    private final OpenAIService openAIService;
+
     private final CommunityCommentRepository communityCommentRepository;
     private final MemberInfoRepository memberInfoRepository;
     @Override

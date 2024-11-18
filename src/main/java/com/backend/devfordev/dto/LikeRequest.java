@@ -15,12 +15,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class LikeRequest {
 
-    @NotBlank(message = "This field must not be null.")
+    @NotNull(message = "This field must not be null.")
     @Schema(description = "좋아요하는 게시글의 id", example = "1")
     private Long likeId;
 
-    @NotBlank(message = "This field must not be null.")
+    @NotNull(message = "This field must not be null.")
     @Schema(description = "타입", example = "COMMUNITY")
-    private String likeType;
+    private LikeType likeType;
 
 }

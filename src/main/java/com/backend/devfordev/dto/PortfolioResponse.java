@@ -27,6 +27,8 @@ public class PortfolioResponse {
         LocalDateTime createdAt;
         private List<LinkResponse> links; // 링크 리스트 추가
         private List<EducationResponse> educations;
+        private List<AwardResponse> awards; // 수상 및 기타 정보 리스트
+
         @Getter
         @Setter
         public static class LinkResponse {
@@ -57,6 +59,75 @@ public class PortfolioResponse {
             private Double grade;
             private Double gradeScale;
             private Integer orderIndex; // 순서
+        }
+
+
+        @Getter
+        @Setter
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class AwardResponse {
+            private Long id;
+            private String awardType;
+            private Integer orderIndex;
+
+            // CompetitionAward 관련 필드
+            private String competitionName;
+            private String hostingInstitution;
+            private LocalDate competitionDate;
+
+            // CertificateAward 관련 필드
+            private String certificateName;
+            private String issuer;
+            private Integer passingYear;
+
+            // LanguageAward 관련 필드
+            private String language;
+            private String level;
+            private String testName;
+            private String score;
+            private LocalDate obtainedDate;
+
+            // ActivityAward 관련 필드
+            private String activityName;
+            private LocalDate startDate;
+            private LocalDate endDate;
+            private String description;
+
+            public AwardResponse(String awardType, Integer orderIndex, String competitionName, String hostingInstitution, LocalDate competitionDate) {
+                this.awardType = awardType;
+                this.orderIndex = orderIndex;
+                this.competitionName = competitionName;
+                this.hostingInstitution = hostingInstitution;
+                this.competitionDate = competitionDate;
+            }
+
+            public AwardResponse(String awardType, Integer orderIndex, String certificateName, String issuer, Integer passingYear) {
+                this.awardType = awardType;
+                this.orderIndex = orderIndex;
+                this.certificateName = certificateName;
+                this.issuer = issuer;
+                this.passingYear = passingYear;
+            }
+
+            public AwardResponse(String awardType, Integer orderIndex, String language, String level, String testName, String score, LocalDate obtainedDate) {
+                this.awardType = awardType;
+                this.orderIndex = orderIndex;
+                this.language = language;
+                this.level = level;
+                this.testName = testName;
+                this.score = score;
+                this.obtainedDate = obtainedDate;
+            }
+
+            public AwardResponse(String awardType, Integer orderIndex, String activityName, LocalDate startDate, LocalDate endDate, String description) {
+                this.awardType = awardType;
+                this.orderIndex = orderIndex;
+                this.activityName = activityName;
+                this.startDate = startDate;
+                this.endDate = endDate;
+                this.description = description;
+            }
         }
     }
 }

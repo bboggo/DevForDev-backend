@@ -77,52 +77,53 @@ public class PortfolioRequest {
             @Schema(description = "기준학점", example = "4.5")
             private Double gradeScale;
         }
-    }
 
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class AwardRequest {
-        @Schema(description = "수상/자격증/어학/대외활동 유형", example = "COMPETITION")
-        private String awardType;
 
-        // CompetitionAward 관련 필드
-        @Schema(description = "수상 및 공모전명", example = "정보통신공학과 학술제")
-        private String competitionName;
-        @Schema(description = "주최기관", example = "명지전문대학 정보통신공학과")
-        private String hostingInstitution;
-        @Schema(description = "공모일", example = "2023-11-01")
-        private LocalDate competitionDate;
+        @Getter
+        @Setter
+        @AllArgsConstructor
+        public static class AwardRequest {
+            @Schema(description = "수상/자격증/어학/대외활동 유형", example = "COMPETITION")
+            private String awardType;
 
-        // CertificateAward 관련 필드
-        @Schema(description = "자격증명", example = "정보처리기사")
-        private String certificateName;
-        @Schema(description = "발행처", example = "한국산업인력공단")
-        private String issuer;
-        @Schema(description = "합격년월", example = "합격")
-        private Integer passingYear;
+            // CompetitionAward 관련 필드
+            @Schema(description = "수상 및 공모전명", example = "정보통신공학과 학술제")
+            private String competitionName;
+            @Schema(description = "주최기관", example = "명지전문대학 정보통신공학과")
+            private String hostingInstitution;
+            @Schema(description = "공모일", example = "2023-11-01")
+            private LocalDate competitionDate;
 
-        // LanguageAward 관련 필드
-        @Schema(description = "언어", example = "영어")
-        private String language;
-        @Schema(description = "수준", example = "고급")
-        private String level;
-        @Schema(description = "시험명", example = "TOEIC")
-        private String testName;
-        @Schema(description = "점수", example = "900")
-        private String score;
-        @Schema(description = "취득일", example = "2022-08-15")
-        private LocalDate obtainedDate;
+            // CertificateAward 관련 필드
+            @Schema(description = "자격증명", example = "정보처리기사")
+            private String certificateName;
+            @Schema(description = "발행처", example = "한국산업인력공단")
+            private String issuer;
+            @Schema(description = "합격년월", example = "합격")
+            private Integer passingYear;
 
-        // ActivityAward 관련 필드
-        @Schema(description = "활동명", example = "글로벌 리더십 프로그램")
-        private String activityName;
-        @Schema(description = "활동 시작일", example = "2024-08-01")
-        private LocalDate startDate;
-        @Schema(description = "활동 종료일", example = "2024-11-30")
-        private LocalDate endDate;
-        @Schema(description = "활동 세부사항", example = "다양한 리더십 훈련 참여")
-        private String description;
+            // LanguageAward 관련 필드
+            @Schema(description = "언어", example = "영어")
+            private String language;
+            @Schema(description = "수준", example = "고급")
+            private String level;
+            @Schema(description = "시험명", example = "TOEIC")
+            private String testName;
+            @Schema(description = "점수", example = "900")
+            private String score;
+            @Schema(description = "취득일", example = "2022-08-15")
+            private LocalDate obtainedDate;
+
+            // ActivityAward 관련 필드
+            @Schema(description = "활동명", example = "글로벌 리더십 프로그램")
+            private String activityName;
+            @Schema(description = "활동 시작일", example = "2024-08-01")
+            private LocalDate startDate;
+            @Schema(description = "활동 종료일", example = "2024-11-30")
+            private LocalDate endDate;
+            @Schema(description = "활동 세부사항", example = "다양한 리더십 훈련 참여")
+            private String description;
+        }
     }
 
 }

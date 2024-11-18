@@ -1,9 +1,6 @@
 package com.backend.devfordev.converter;
-import com.backend.devfordev.domain.Member;
-import com.backend.devfordev.domain.Portfolio;
+import com.backend.devfordev.domain.*;
 
-import com.backend.devfordev.domain.PortfolioEducation;
-import com.backend.devfordev.domain.PortfolioLink;
 import com.backend.devfordev.dto.PortfolioRequest;
 import com.backend.devfordev.dto.PortfolioResponse;
 
@@ -59,7 +56,59 @@ public class PortfolioConverter {
                 .collect(Collectors.toList());
     }
 
-    public static PortfolioResponse.PortCreateResponse toPortfolioResponse(Portfolio portfolio, List<PortfolioLink> links, List<PortfolioEducation> educations) {
+    public static List<PortfolioAward> toAwardList(List<PortfolioRequest.PortfolioCreateRequest.AwardRequest> awardRequests, Portfolio portfolio) {
+        return awardRequests.stream().map(awardRequest -> {
+            switch (awardRequest.getAwardType()) {
+                case "COMPETITION":
+                    return new CompetitionAward(
+                            null,
+                            awardRequests.indexOf(awardRequest) + 1,
+                            awardRequest.getAwardType(),
+                            portfolio,
+                            awardRequest.getCompetitionName(),
+                            awardRequest.getHostingInstitution(),
+                            awardRequest.getCompetitionDate()
+                    );
+                case "CERTIFICATE":
+                    return new CertificationAward(
+                            null,
+                            awardRequests.indexOf(awardRequest) + 1,
+                            awardRequest.getAwardType(),
+                            portfolio,
+                            awardRequest.getCertificateName(),
+                            awardRequest.getIssuer(),
+                            awardRequest.getPassingYear()
+                    );
+                case "LANGUAGE":
+                    return new LanguageAward(
+                            null,
+                            awardRequests.indexOf(awardRequest) + 1,
+                            awardRequest.getAwardType(),
+                            portfolio,
+                            awardRequest.getLanguage(),
+                            awardRequest.getLevel(),
+                            awardRequest.getTestName(),
+                            awardRequest.getScore(),
+                            awardRequest.getObtainedDate()
+                    );
+                case "ACTIVITY":
+                    return new ActivityAward(
+                            null,
+                            awardRequests.indexOf(awardRequest) + 1,
+                            awardRequest.getAwardType(),
+                            portfolio,
+                            awardRequest.getActivityName(),
+                            awardRequest.getStartDate(),
+                            awardRequest.getEndDate(),
+                            awardRequest.getDescription()
+                    );
+                default:
+                    throw new IllegalArgumentException("Invalid award type: " + awardRequest.getAwardType());
+            }
+        }).collect(Collectors.toList());
+    }
+
+    public static PortfolioResponse.PortCreateResponse toPortfolioResponse(Portfolio portfolio, List<PortfolioLink> links, List<PortfolioEducation> educations, List<PortfolioAward> awards) {
         List<PortfolioResponse.PortCreateResponse.LinkResponse> linkResponses = links.stream()
                 .map(link -> new PortfolioResponse.PortCreateResponse.LinkResponse(link.getType(), link.getUrl(), link.getOrderIndex()))
                 .collect(Collectors.toList());
@@ -79,6 +128,40 @@ public class PortfolioConverter {
                 ))
                 .collect(Collectors.toList());
 
+        List<PortfolioResponse.PortCreateResponse.AwardResponse> awardResponses = awards.stream()
+                .map(award -> {
+                    if (award instanceof CompetitionAward) {
+                        CompetitionAward compAward = (CompetitionAward) award;
+                        return new PortfolioResponse.PortCreateResponse.AwardResponse(
+                                award.getAwardType(), award.getOrderIndex(),
+                                compAward.getCompetitionName(), compAward.getHostingInstitution(),
+                                compAward.getCompetitionDate()
+                        );
+                    } else if (award instanceof CertificationAward) {
+                        CertificationAward certAward = (CertificationAward) award;
+                        return new PortfolioResponse.PortCreateResponse.AwardResponse(
+                                award.getAwardType(), award.getOrderIndex(),
+                                certAward.getCertificationName(), certAward.getIssuingInstitution(), certAward.getPassingYear()
+                        );
+                    } else if (award instanceof LanguageAward) {
+                        LanguageAward langAward = (LanguageAward) award;
+                        return new PortfolioResponse.PortCreateResponse.AwardResponse(
+                                award.getAwardType(), award.getOrderIndex(),
+                                langAward.getLanguage(), langAward.getLevel(), langAward.getTestName(),
+                                langAward.getScore(), langAward.getAcquisitionDate()
+                        );
+                    } else if (award instanceof ActivityAward) {
+                        ActivityAward actAward = (ActivityAward) award;
+                        return new PortfolioResponse.PortCreateResponse.AwardResponse(
+                                award.getAwardType(), award.getOrderIndex(),
+                                actAward.getActivityName(), actAward.getStartDate(),
+                                actAward.getEndDate(), actAward.getDescription()
+                        );
+                    }
+                    return null;
+                })
+                .collect(Collectors.toList());
+
         // techStacks 문자열을 리스트로 변환하여 설정
         List<String> techStacks = portfolio.getTechStacks() != null ? portfolio.getTechStacks() : new ArrayList<>();
 
@@ -92,7 +175,8 @@ public class PortfolioConverter {
                 portfolio.getPortImageUrl(),
                 portfolio.getCreatedAt(),
                 linkResponses,
-                educationResponses
+                educationResponses,
+                awardResponses
         );
     }
 }

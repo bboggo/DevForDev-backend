@@ -28,6 +28,7 @@ public record SignUpRequest(
         String name,
 
         @Schema(description = "깃허브", example = "bboggo")
+        @NotNull
         String gitHub
 
 ) {

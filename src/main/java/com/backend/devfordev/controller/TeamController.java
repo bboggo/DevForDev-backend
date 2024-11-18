@@ -11,6 +11,7 @@ import com.backend.devfordev.dto.TeamResponse;
 import com.backend.devfordev.service.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class TeamController {
 
     @Operation(summary = "팀 모집글 등록")
     @PostMapping(value = "/v1/team")
-    public ResponseEntity<ApiResponse> createTeam(@RequestBody TeamRequest.TeamCreateRequest request, @AuthenticationPrincipal User user){
+    public ResponseEntity<ApiResponse> createTeam(@Valid @RequestBody TeamRequest.TeamCreateRequest request, @AuthenticationPrincipal User user){
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(teamService.createTeam(request, Long.parseLong(user.getUsername())))
@@ -143,7 +144,7 @@ public class TeamController {
     @Operation(summary = "팀 멤버 추가")
     @PostMapping("/v1/team/{teamId}/add")
     public ResponseEntity<ApiResponse> addMemberToTeam(
-            @RequestBody TeamRequest.TeamAddMemberRequest request,
+            @Valid @RequestBody TeamRequest.TeamAddMemberRequest request,
             @PathVariable Long teamId,
             @AuthenticationPrincipal User user) {
 

@@ -51,7 +51,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
             String fieldName = fieldError.getField();
             String errorMessage = Optional.ofNullable(fieldError.getDefaultMessage()).orElse("Invalid value");
-            errors.merge(fieldName, errorMessage, (existingErrorMessage, newErrorMessage) -> existingErrorMessage + ", " + newErrorMessage);
+            errors.put(fieldName, errorMessage);
         });
 
         return ResponseEntity.badRequest()

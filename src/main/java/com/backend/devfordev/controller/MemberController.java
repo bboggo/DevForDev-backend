@@ -40,7 +40,7 @@ public class MemberController {
 
     @Operation(summary = "로그인")
     @PostMapping(value = "/v1/auth/sign-in")
-    public ResponseEntity<ApiResponse> signIn(@RequestBody SignInRequest request) {
+    public ResponseEntity<ApiResponse> signIn(@Valid @RequestBody SignInRequest request) {
         ApiResponse ar = ApiResponse.builder()
                 .result(memberService.signIn(request))
                 .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())

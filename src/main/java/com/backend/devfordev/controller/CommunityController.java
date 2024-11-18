@@ -31,7 +31,7 @@ public class CommunityController {
 
     @Operation(summary = "커뮤니티 글 등록")
     @PostMapping(value = "/v1/community")
-    public ResponseEntity<ApiResponse> createCommunity(@RequestBody CommunityRequest.CommunityCreateRequest request,  @AuthenticationPrincipal User user){
+    public ResponseEntity<ApiResponse> createCommunity(@Valid @RequestBody CommunityRequest.CommunityCreateRequest request,  @AuthenticationPrincipal User user){
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(communityService.createCommunity(request, Long.parseLong(user.getUsername())))
@@ -106,7 +106,7 @@ public class CommunityController {
 
     @Operation(summary = "커뮤니티 글 수정")
     @PatchMapping(value = "/v1/community/{id}")
-    public ResponseEntity<ApiResponse> updateCommunity(@RequestBody CommunityRequest.CommunityUpdateRequest request, @PathVariable Long id, @AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> updateCommunity(@Valid @RequestBody CommunityRequest.CommunityUpdateRequest request, @PathVariable Long id, @AuthenticationPrincipal User user) {
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(communityService.updateCommunity(id, request, Long.parseLong(user.getUsername())))

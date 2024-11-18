@@ -92,10 +92,14 @@ public class CommunityController {
 
     @Operation(summary = "커뮤니티 글 삭제")
     @DeleteMapping(value = "/v1/community/{id}")
-    public ResponseEntity<Void> deleteCommunity(@PathVariable Long id, @AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> deleteCommunity(@PathVariable Long id, @AuthenticationPrincipal User user) {
         communityService.deleteCommunity(id, Long.parseLong(user.getUsername()));
-
+        ApiResponse apiResponse = ApiResponse.builder()
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message("팀 모집글이 성공적으로 삭제되었습니다.")
+                .build();
         // HTTP 상태 코드 204로 응답
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 }

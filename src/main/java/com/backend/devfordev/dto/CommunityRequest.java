@@ -21,7 +21,7 @@ public class CommunityRequest {
 
     @Getter
     public static class CommunityCreateRequest {
-        @NotBlank(message = "This field must not be null.")
+        @NotNull(message = "This field must not be null.")
         @Schema(description = "커뮤니티 카테고리", example = "SKILL")
         CommunityCategory communityCategory;
         @NotBlank(message = "This field must not be null.")
@@ -38,9 +38,8 @@ public class CommunityRequest {
 
     @Getter
     public static class CommunityUpdateRequest {
-        @NotBlank(message = "This field must not be null.")
-        @Schema(description = "커뮤니티 카테고리", example = "CAREER")
-        @Pattern(regexp = "SKILL|CAREER|OTHER", message = "유효하지 않은 카테고리 값입니다.")
+        @NotNull(message = "This field must not be null.")
+        @Schema(description = "커뮤니티 카테고리", example = "SKILL")
         CommunityCategory communityCategory;
 
         @NotBlank(message = "This field must not be null.")

@@ -23,7 +23,7 @@ public class TeamRequest {
         @NotBlank(message = "This field must not be null.")
         @Schema(description = "팀 내용", example = "팀 모집공고 내용1")
         String teamContent;
-        @NotBlank(message = "This field must not be null.")
+        @NotNull(message = "This field must not be null.")
         @Schema(description = "팀 모집 유형", example = "STUDY")
         TeamType teamType;
         @NotBlank(message = "This field must not be null.")

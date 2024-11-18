@@ -9,6 +9,7 @@ import com.backend.devfordev.service.LikeService;
 import io.swagger.v3.oas.annotations.Operation;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class LikeController {
         // 좋아요 추가
         @Operation(summary = "좋아요")
         @PostMapping(value = "/v1/likes")
-        public ResponseEntity<ApiResponse> addLike(@RequestBody LikeRequest request, @AuthenticationPrincipal User user) {
+        public ResponseEntity<ApiResponse> addLike(@Valid @RequestBody LikeRequest request, @AuthenticationPrincipal User user) {
 
             System.out.println("!!!!!!!!!!!!!!!!!!!");
             System.out.println(request.getLikeId());

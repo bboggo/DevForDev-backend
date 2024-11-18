@@ -40,7 +40,7 @@ public class TeamServiceImpl implements TeamService {
 
         TeamType teamType;
         try {
-            teamType = TeamType.valueOf(request.getTeamType());
+            teamType = request.getTeamType();
         } catch (IllegalArgumentException e) {
             throw new TeamHandler(ErrorStatus.INVALID_TEAM);
         }

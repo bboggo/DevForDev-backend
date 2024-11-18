@@ -61,7 +61,7 @@ public class TeamConverter {
                 .id(team.getId())
                 .teamTitle(team.getTeamTitle())
                 .teamContent(team.getTeamContent())
-                .teamType(String.valueOf(team.getTeamType()))
+                .teamType(team.getTeamType())
                 .teamPosition(team.getTeamPosition())
                 .teamRecruitmentNum(Long.valueOf(team.getTeamRecruitmentNum()))
                 .teamTechStack(techStackNames)
@@ -86,7 +86,7 @@ public class TeamConverter {
                 member,
                 team.getTeamTitle(),
                 shortenedContent,
-                String.valueOf(team.getTeamType()),
+                team.getTeamType(),
                 team.getTeamPosition(),
                 Long.valueOf(team.getTeamRecruitmentNum()),
                 techStackNames,
@@ -118,7 +118,7 @@ public class TeamConverter {
                 member,
                 team.getTeamTitle(),
                 team.getTeamContent(),
-                String.valueOf(team.getTeamType()),
+                team.getTeamType(),
                 team.getTeamPosition(),
                 Long.valueOf(team.getTeamRecruitmentNum()),
                 techStackNames,

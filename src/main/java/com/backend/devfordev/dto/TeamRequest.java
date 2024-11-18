@@ -22,7 +22,7 @@ public class TeamRequest {
         String teamContent;
 
         @Schema(description = "팀 모집 유형", example = "STUDY")
-        String teamType;
+        TeamType teamType;
 
         @Schema(description = "팀 모집 포지션", example = "BACKEND")
         String teamPosition;

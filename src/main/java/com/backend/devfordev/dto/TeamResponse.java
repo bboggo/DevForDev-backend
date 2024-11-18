@@ -1,5 +1,6 @@
 package com.backend.devfordev.dto;
 
+import com.backend.devfordev.domain.enums.TeamType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class TeamResponse {
         Long id;
         String teamTitle;
         String teamContent;
-        String teamType;
+        TeamType teamType;
         String teamPosition;
         Long teamRecruitmentNum;
         List<String> teamTechStack;
@@ -34,7 +35,7 @@ public class TeamResponse {
         CommunityResponse.MemberInfo member;
         String teamTitle;
         String teamContent;
-        String teamType;
+        TeamType teamType;
         String teamPosition;
         Long teamRecruitmentNum;
         List<String> teamTechStack;
@@ -55,7 +56,7 @@ public class TeamResponse {
         CommunityResponse.MemberInfo member;
         String teamTitle;
         String teamContent;
-        String teamType;
+        TeamType teamType;
         String teamPosition;
         Long teamRecruitmentNum;
         List<String> teamTechStack;

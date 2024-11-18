@@ -4,6 +4,8 @@ import com.backend.devfordev.domain.Community;
 import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.domain.enums.CommunityCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +33,7 @@ public class CommunityRequest {
     @Getter
     public static class CommunityUpdateRequest {
         @Schema(description = "커뮤니티 카테고리", example = "CAREER")
+        @Pattern(regexp = "SKILL|CAREER|OTHER", message = "유효하지 않은 카테고리 값입니다.")
         CommunityCategory communityCategory;
         @Schema(description = "커뮤니티 제목", example = "커뮤니티 제목1")
         String communityTitle;

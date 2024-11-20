@@ -23,6 +23,7 @@ public class PortfolioResponse {
         String portPosition;
 
         List<String> techStacks;
+        List<String> tags;
         String portImageUrl;
         LocalDateTime createdAt;
         private List<LinkResponse> links; // 링크 리스트 추가

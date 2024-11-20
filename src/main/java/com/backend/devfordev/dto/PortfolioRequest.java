@@ -29,6 +29,9 @@ public class PortfolioRequest {
         @Schema(description = "기술 스택", example = "[\"Spring\", \"Java\", \"MySQL\", \"Docker\"]")
         private List<String> techStacks;
 
+        @Schema(description = "태그", example = "[\"태그1\", \"태그2\", \"태그3\", \"태그4\"]")
+        private List<String> tags;
+
         @Schema(description = "포트폴리오 이미지 url", example = "이미지url")
         String portImageUrl;
 

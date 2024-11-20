@@ -24,7 +24,7 @@ public class PortfolioConverter {
 
         // techStacks 리스트를 쉼표로 구분된 문자열로 변환하여 저장
         portfolio.setTechStacks(Collections.singletonList(String.join(",", request.getTechStacks())));
-
+        portfolio.setTags(Collections.singletonList(String.join(",", request.getTags())));
         return portfolio;
     }
 
@@ -164,6 +164,7 @@ public class PortfolioConverter {
 
         // techStacks 문자열을 리스트로 변환하여 설정
         List<String> techStacks = portfolio.getTechStacks() != null ? portfolio.getTechStacks() : new ArrayList<>();
+        List<String> tags = portfolio.getTags() != null ? portfolio.getTags() : new ArrayList<>();
 
         return new PortfolioResponse.PortCreateResponse(
                 portfolio.getId(),
@@ -172,6 +173,7 @@ public class PortfolioConverter {
                 portfolio.getPortContent(),
                 portfolio.getPortPosition(),
                 techStacks,
+                tags,
                 portfolio.getPortImageUrl(),
                 portfolio.getCreatedAt(),
                 linkResponses,

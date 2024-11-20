@@ -5,6 +5,7 @@ import com.backend.devfordev.apiPayload.ApiResponse;
 import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
 import com.backend.devfordev.dto.CommunityRequest;
 import com.backend.devfordev.dto.PortfolioRequest;
+import com.backend.devfordev.dto.PortfolioResponse;
 import com.backend.devfordev.service.PortfolioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,16 +31,11 @@ public class PortfolioController {
 
     @Operation(summary = "포트폴리오 글 등록")
     @PostMapping(value = "/v1/portfolio")
-    public ResponseEntity<ApiResponse> createPortfolio(@RequestBody PortfolioRequest.PortfolioCreateRequest request, @AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse<PortfolioResponse.PortCreateResponse>> createPortfolio(@RequestBody PortfolioRequest.PortfolioCreateRequest request, @AuthenticationPrincipal User user) {
 
-        ApiResponse apiResponse = ApiResponse.builder()
-                .result(portfolioService.createPortfolio(request, Long.parseLong(user.getUsername())))
-                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
-                .code(SuccessStatus._OK.getCode())
-                .message(SuccessStatus._OK.getMessage())
-                .build();
+        PortfolioResponse.PortCreateResponse portCreateResponse = portfolioService.createPortfolio(request, Long.parseLong(user.getUsername()));
+        ApiResponse<PortfolioResponse.PortCreateResponse> apiResponse = ApiResponse.onSuccess(portCreateResponse);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
-
     }
-
 }

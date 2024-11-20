@@ -35,6 +35,9 @@ public class Portfolio extends BaseEntity{
     @Column(name = "tech_stacks")
     private String techStacks;
 
+    @Column(name = "port_tags")
+    private String tags;
+
     @Column(name = "port_image", nullable = false)
     private String portImageUrl;
 
@@ -48,9 +51,16 @@ public class Portfolio extends BaseEntity{
     public void setTechStacks(List<String> techStacks) {
         this.techStacks = String.join(",", techStacks);
     }
+    public void setTags(List<String> tags) {
+        this.tags = String.join(",", tags);
+    }
 
     // techStacks 반환 메서드 - 응답 시 리스트 형식으로 변환
     public List<String> getTechStacks() {
         return techStacks != null ? Arrays.asList(techStacks.split(",")) : new ArrayList<>();
+    }
+
+    public List<String> getTags() {
+        return tags != null ? Arrays.asList(tags.split(",")) : new ArrayList<>();
     }
 }

@@ -1,6 +1,7 @@
 package com.backend.devfordev.dto;
 
 import com.backend.devfordev.domain.Member;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,8 +29,10 @@ public class PortfolioRequest {
 
         @Schema(description = "기술 스택", example = "[\"Spring\", \"Java\", \"MySQL\", \"Docker\"]")
         private List<String> techStacks;
-
-        @Schema(description = "태그", example = "[\"태그1\", \"태그2\", \"태그3\", \"태그4\"]")
+        @ArraySchema(
+                schema = @Schema(description = "태그", example = "태그1"),
+                arraySchema = @Schema(example = "[\"태그1\", \"태그2\", \"태그3\", \"태그4\"]")
+        )
         private List<String> tags;
 
         @Schema(description = "포트폴리오 이미지 url", example = "이미지url")

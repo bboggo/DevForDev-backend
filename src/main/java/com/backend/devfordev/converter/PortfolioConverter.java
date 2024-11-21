@@ -184,6 +184,7 @@ public class PortfolioConverter {
                 educationResponses,
                 awardResponses
         );
+
     }
 
 
@@ -194,7 +195,7 @@ public class PortfolioConverter {
                 portfolio.getId(),
                 portfolio.getPortTitle(),
                 portfolio.getPortPosition(),
-                tags,
+                portfolio.getTags(),
                 portfolio.getPortImageUrl(),
                 member,
                 portfolio.getCreatedAt(),

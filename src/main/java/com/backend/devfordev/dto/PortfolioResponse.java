@@ -2,6 +2,7 @@ package com.backend.devfordev.dto;
 
 
 import com.backend.devfordev.domain.enums.CommunityCategory;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -16,16 +17,31 @@ public class PortfolioResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class PortCreateResponse {
+        @Schema(description = "커뮤니티 ID", example = "1")
         Long id;
+        @Schema(description = "작성자 ID", example = "1")
         Long member;
+        @Schema(description = "포트폴리오 제목", example = "김민지의 포트폴리오~~")
         String portTitle;
+        @Schema(description = "포트폴리오 내용", example = "포트폴리오 내용~~")
         String portContent;
+        @Schema(description = "포지션", example = "포지션")
         String portPosition;
-
+        @ArraySchema(
+                schema = @Schema(description = "기술 스택", example = "스택1"),
+                arraySchema = @Schema(example = "[\"스택1\", \"스택2\", \"스택3\", \"스택4\"]")
+        )
         List<String> techStacks;
+        @ArraySchema(
+                schema = @Schema(description = "태그", example = "태그1"),
+                arraySchema = @Schema(example = "[\"태그1\", \"태그2\", \"태그3\", \"태그4\"]")
+        )
         List<String> tags;
+        @Schema(description = "포트폴리오 이미지 url", example = "이미지url")
         String portImageUrl;
+        @Schema(description = "작성시간", example = "2024-11-19T00:52:47.534061")
         LocalDateTime createdAt;
+
         private List<LinkResponse> links; // 링크 리스트 추가
         private List<EducationResponse> educations;
         private List<AwardResponse> awards; // 수상 및 기타 정보 리스트
@@ -144,7 +160,10 @@ public class PortfolioResponse {
         String portTitle;
         @Schema(description = "포지션", example = "포지션")
         String portPosition;
-        @Schema(description = "태그", example = "[\"태그1\", \"태그2\", \"태그3\", \"태그4\"]")
+        @ArraySchema(
+                schema = @Schema(description = "태그", example = "태그1"),
+                arraySchema = @Schema(example = "[\"태그1\", \"태그2\", \"태그3\", \"태그4\"]")
+        )
         private List<String> tags;
         @Schema(description = "포트폴리오 이미지 url", example = "이미지url")
         String portImageUrl;

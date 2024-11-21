@@ -131,4 +131,31 @@ public class PortfolioResponse {
             }
         }
     }
+
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PortfolioListResponse {
+        @Schema(description = "커뮤니티 ID", example = "1")
+        Long id;
+        @Schema(description = "포트폴리오 제목", example = "김민지의 포트폴리오~~")
+        String portTitle;
+        @Schema(description = "포지션", example = "포지션")
+        String portPosition;
+        @Schema(description = "태그", example = "[\"태그1\", \"태그2\", \"태그3\", \"태그4\"]")
+        private List<String> tags;
+        @Schema(description = "포트폴리오 이미지 url", example = "이미지url")
+        String portImageUrl;
+        CommunityResponse.MemberInfo member;
+        @Schema(description = "작성시간", example = "2024-11-19T00:52:47.534061")
+        LocalDateTime createdAt;
+        @Schema(description = "답변수", example = "0")
+        Long answers;
+        @Schema(description = "조회수", example = "0")
+        Long views;
+        @Schema(description = "좋아요수", example = "0")
+        Long likes;
+    }
 }

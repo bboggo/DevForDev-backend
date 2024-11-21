@@ -41,6 +41,8 @@ public class Portfolio extends BaseEntity{
     @Column(name = "port_image", nullable = false)
     private String portImageUrl;
 
+    @Column(name = "port_views", nullable = false)
+    private Long portViews;  // 기본값 설정
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

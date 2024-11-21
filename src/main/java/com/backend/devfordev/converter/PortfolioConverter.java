@@ -1,9 +1,12 @@
 package com.backend.devfordev.converter;
 import com.backend.devfordev.domain.*;
 
+import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.PortfolioRequest;
 import com.backend.devfordev.dto.PortfolioResponse;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,6 +23,7 @@ public class PortfolioConverter {
                 .portPosition(request.getPortPosition())
                 .portImageUrl(request.getPortImageUrl())
                 .member(member)
+                .portViews(0L)
                 .build();
 
         // techStacks 리스트를 쉼표로 구분된 문자열로 변환하여 저장
@@ -180,5 +184,24 @@ public class PortfolioConverter {
                 educationResponses,
                 awardResponses
         );
+    }
+
+
+    public static PortfolioResponse.PortfolioListResponse toPorListResponse(Portfolio portfolio, CommunityResponse.MemberInfo member, Long likeCount) {
+        List<String> tags = portfolio.getTags() != null ? portfolio.getTags() : new ArrayList<>();
+
+        return new PortfolioResponse.PortfolioListResponse(
+                portfolio.getId(),
+                portfolio.getPortTitle(),
+                portfolio.getPortPosition(),
+                tags,
+                portfolio.getPortImageUrl(),
+                member,
+                portfolio.getCreatedAt(),
+                0L,
+                portfolio.getPortViews(),
+                likeCount
+        );
+
     }
 }

@@ -15,10 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Tag(name = "포트폴리오 API")
 @RequiredArgsConstructor
@@ -37,5 +37,26 @@ public class PortfolioController {
         ApiResponse<PortfolioResponse.PortCreateResponse> apiResponse = ApiResponse.onSuccess(portCreateResponse);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+    }
+
+
+    @Operation(summary = "포트폴리오 전체 리스트 조회")
+    @GetMapping(value="/v1/portfolio")
+    public ResponseEntity<ApiResponse<List<PortfolioResponse.PortfolioListResponse>>> getPortfolioList(
+            @RequestParam(required = false) String position,
+            @RequestParam(required = false) String searchTerm,
+            @RequestParam(required = false, defaultValue = "recent") String sortBy
+    ) {
+        // 서비스 호출
+        List<PortfolioResponse.PortfolioListResponse> portfolioList = portfolioService.getPortList(
+                position,
+                Optional.ofNullable(searchTerm),
+                sortBy
+        );
+
+        // 응답 생성
+        ApiResponse<List<PortfolioResponse.PortfolioListResponse>> apiResponse = ApiResponse.onSuccess(portfolioList);
+
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 }

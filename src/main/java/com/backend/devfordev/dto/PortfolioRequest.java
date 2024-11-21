@@ -38,10 +38,14 @@ public class PortfolioRequest {
         @Schema(description = "포트폴리오 이미지 url", example = "이미지url")
         String portImageUrl;
 
-
+        @Schema(description = "포트폴리오 링크 리스트")
         private List<LinkRequest> links; // 링크 리스트 추가
+        @Schema(description = "포트폴리오 학력 리스트")
         private List<EducationRequest> educations;
+        @Schema(description = "포트폴리오 수상 및 기타 정보 리스트")
         private List<AwardRequest> awards; // 수상 및 기타 정보 추가
+        @Schema(description = "포트폴리오 경력 리스트")
+        private List<CareerRequest> careers; // 경력
 
         @Getter
         @Setter
@@ -129,6 +133,34 @@ public class PortfolioRequest {
             private LocalDate endDate;
             @Schema(description = "활동 세부사항", example = "다양한 리더십 훈련 참여")
             private String description;
+        }
+
+
+        @Getter
+        @Setter
+        public static class CareerRequest {
+
+            @Schema(description = "회사명", example = "oo회사")
+            private String companyName;
+
+            @Schema(description = "포지션", example = "백엔드")
+            private String position;
+
+            @Schema(description = "시작일", example = "2024-08-01")
+            private LocalDate startDate;
+
+            @Schema(description = "종료일", example = "2024-08-01")
+            private LocalDate endDate;
+
+            @Schema(description = "재직여부", example = "true")
+            private Boolean isCurrent;
+
+            @Schema(description = "직급(직위)", example = "과장")
+            private String level;
+
+            @Schema(description = "업무 설명", example = "업무 설명 내용")
+            private String description;
+
         }
     }
 

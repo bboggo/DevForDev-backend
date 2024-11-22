@@ -1,5 +1,6 @@
 package com.backend.devfordev.domain;
 
+import com.backend.devfordev.domain.enums.AwardType;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class LanguageAward extends PortfolioAward {
         super();
     }
 
-    public LanguageAward(Long id, Integer orderIndex, String awardType, Portfolio portfolio,
+    public LanguageAward(Long id, Integer orderIndex, AwardType awardType, Portfolio portfolio,
                          String language, String level, String testName, String score, LocalDate obtainedDate) {
         super(id, orderIndex, awardType, portfolio);
         this.language = language;

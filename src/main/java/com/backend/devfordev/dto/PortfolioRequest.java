@@ -1,9 +1,11 @@
 package com.backend.devfordev.dto;
 
 import com.backend.devfordev.domain.Member;
+import com.backend.devfordev.domain.enums.AwardType;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,15 +20,16 @@ public class PortfolioRequest {
 
     @Getter
     public static class PortfolioCreateRequest {
+        @NotNull(message = "This field must not be null.")
         @Schema(description = "포트폴리오 제목", example = "김민지의 포트폴리오~~")
         String portTitle;
-
+        @NotNull(message = "This field must not be null.")
         @Schema(description = "포트폴리오 내용", example = "마크다운 텍스트 부분")
         String portContent;
-
+        @NotNull(message = "This field must not be null.")
         @Schema(description = "백엔드", example = "포지션")
         String portPosition;
-
+        @NotNull(message = "This field must not be null.")
         @Schema(description = "기술 스택", example = "[\"Spring\", \"Java\", \"MySQL\", \"Docker\"]")
         private List<String> techStacks;
         @ArraySchema(
@@ -94,7 +97,7 @@ public class PortfolioRequest {
         @AllArgsConstructor
         public static class AwardRequest {
             @Schema(description = "수상/자격증/어학/대외활동 유형", example = "COMPETITION")
-            private String awardType;
+            private AwardType awardType;
 
             // CompetitionAward 관련 필드
             @Schema(description = "수상 및 공모전명", example = "정보통신공학과 학술제")

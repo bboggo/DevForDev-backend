@@ -1,5 +1,6 @@
 package com.backend.devfordev.domain;
 
+import com.backend.devfordev.domain.enums.AwardType;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.Getter;
@@ -16,8 +17,8 @@ public class CertificationAward extends PortfolioAward {
     protected CertificationAward() {
         super();
     }
-    public CertificationAward(Long id, Integer orderIndex, String awardType, Portfolio portfolio,
-                            String certificateName, String issuer, Integer passingYear) {
+    public CertificationAward(Long id, Integer orderIndex, AwardType awardType, Portfolio portfolio,
+                              String certificateName, String issuer, Integer passingYear) {
         super(id, orderIndex, awardType, portfolio);
         this.certificationName = certificateName;
         this.issuingInstitution = issuer;

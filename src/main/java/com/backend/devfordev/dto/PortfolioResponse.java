@@ -1,6 +1,7 @@
 package com.backend.devfordev.dto;
 
 
+import com.backend.devfordev.domain.enums.AwardType;
 import com.backend.devfordev.domain.enums.CommunityCategory;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -104,7 +105,7 @@ public class PortfolioResponse {
             @Schema(description = "포트폴리오-수상 및 기타 활동 id", example = "1")
             private Long id;
             @Schema(description = "수상/자격증/어학/대외활동 유형", example = "COMPETITION")
-            private String awardType;
+            private AwardType awardType;
             @Schema(description = "정렬 순서", example = "1")
             private Integer orderIndex;
 
@@ -126,7 +127,7 @@ public class PortfolioResponse {
                 }
                 public CompetitionAwardResponse(
                         Long id,
-                        String awardType,
+                        AwardType awardType,
                         Integer orderIndex,
                         String competitionName,
                         String hostingInstitution,
@@ -157,7 +158,7 @@ public class PortfolioResponse {
                 }
                 public CertificateAwardResponse(
                         Long id,
-                        String awardType,
+                        AwardType awardType,
                         Integer orderIndex,
                         String certificateName,
                         String issuer,
@@ -189,7 +190,7 @@ public class PortfolioResponse {
                 }
                 public LanguageAwardResponse(
                         Long id,
-                        String awardType,
+                        AwardType awardType,
                         Integer orderIndex,
                         String language,
                         String level,
@@ -224,7 +225,7 @@ public class PortfolioResponse {
                 }
                 public ActivityAwardResponse(
                         Long id,
-                        String awardType,
+                        AwardType awardType,
                         Integer orderIndex,
                         String activityName,
                         LocalDate startDate,

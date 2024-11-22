@@ -1,5 +1,6 @@
 package com.backend.devfordev.domain;
 
+import com.backend.devfordev.domain.enums.AwardType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,9 +24,9 @@ public class PortfolioAward {
     @Column(name = "orderIndex", nullable = false)
     private Integer orderIndex;
 
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "award_type", insertable = false, updatable = false)
-    private String awardType;
+    private AwardType awardType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "port_id")

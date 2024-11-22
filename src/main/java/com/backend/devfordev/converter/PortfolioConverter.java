@@ -1,6 +1,7 @@
 package com.backend.devfordev.converter;
 import com.backend.devfordev.domain.*;
 
+import com.backend.devfordev.domain.enums.AwardType;
 import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.PortfolioRequest;
 import com.backend.devfordev.dto.PortfolioResponse;
@@ -64,7 +65,7 @@ public class PortfolioConverter {
     public static List<PortfolioAward> toAwardList(List<PortfolioRequest.PortfolioCreateRequest.AwardRequest> awardRequests, Portfolio portfolio) {
         return awardRequests.stream().map(awardRequest -> {
             switch (awardRequest.getAwardType()) {
-                case "COMPETITION":
+                case COMPETITION:
                     return new CompetitionAward(
                             null,
                             awardRequests.indexOf(awardRequest) + 1,
@@ -74,7 +75,7 @@ public class PortfolioConverter {
                             awardRequest.getHostingInstitution(),
                             awardRequest.getCompetitionDate()
                     );
-                case "CERTIFICATE":
+                case CERTIFICATE:
                     return new CertificationAward(
                             null,
                             awardRequests.indexOf(awardRequest) + 1,
@@ -84,7 +85,7 @@ public class PortfolioConverter {
                             awardRequest.getIssuer(),
                             awardRequest.getPassingYear()
                     );
-                case "LANGUAGE":
+                case LANGUAGE:
                     return new LanguageAward(
                             null,
                             awardRequests.indexOf(awardRequest) + 1,
@@ -96,7 +97,7 @@ public class PortfolioConverter {
                             awardRequest.getScore(),
                             awardRequest.getObtainedDate()
                     );
-                case "ACTIVITY":
+                case ACTIVITY:
                     return new ActivityAward(
                             null,
                             awardRequests.indexOf(awardRequest) + 1,
@@ -216,11 +217,12 @@ public class PortfolioConverter {
         // Award Responses - 각 Award Type별로 구체적인 Response 생성
         List<PortfolioResponse.PortCreateResponse.AwardResponse> awardResponses = awards.stream()
                 .map(award -> {
+
                     if (award instanceof CompetitionAward) {
                         CompetitionAward compAward = (CompetitionAward) award;
                         return new PortfolioResponse.PortCreateResponse.AwardResponse.CompetitionAwardResponse(
                                 compAward.getId(),
-                                "COMPETITION",
+                                AwardType.COMPETITION,
                                 compAward.getOrderIndex(),
                                 compAward.getCompetitionName(),
                                 compAward.getHostingInstitution(),
@@ -230,7 +232,7 @@ public class PortfolioConverter {
                         CertificationAward certAward = (CertificationAward) award;
                         return new PortfolioResponse.PortCreateResponse.AwardResponse.CertificateAwardResponse(
                                 certAward.getId(),
-                                "CERTIFICATE",
+                                AwardType.CERTIFICATE,
                                 certAward.getOrderIndex(),
                                 certAward.getCertificationName(),
                                 certAward.getIssuingInstitution(),
@@ -240,7 +242,7 @@ public class PortfolioConverter {
                         LanguageAward langAward = (LanguageAward) award;
                         return new PortfolioResponse.PortCreateResponse.AwardResponse.LanguageAwardResponse(
                                 langAward.getId(),
-                                "LANGUAGE",
+                                AwardType.LANGUAGE,
                                 langAward.getOrderIndex(),
                                 langAward.getLanguage(),
                                 langAward.getLevel(),
@@ -252,7 +254,7 @@ public class PortfolioConverter {
                         ActivityAward actAward = (ActivityAward) award;
                         return new PortfolioResponse.PortCreateResponse.AwardResponse.ActivityAwardResponse(
                                 actAward.getId(),
-                                "ACTIVITY",
+                                AwardType.ACTIVITY,
                                 actAward.getOrderIndex(),
                                 actAward.getActivityName(),
                                 actAward.getStartDate(),

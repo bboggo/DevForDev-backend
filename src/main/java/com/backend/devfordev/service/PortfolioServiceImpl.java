@@ -82,7 +82,7 @@ public class PortfolioServiceImpl implements PortfolioService{
     @Override
     @Transactional
     public List<PortfolioResponse.PortfolioListResponse> getPortList(String position, Optional<String> searchTermOpt, String sortBy) {
-        // 커뮤니티와 좋아요 수를 한 번의 쿼리로 가져옴
+
         List<Object[]> results = portfolioRepository.findAllWithLikesAndMember();
 
         // 필터링 및 DTO 변환

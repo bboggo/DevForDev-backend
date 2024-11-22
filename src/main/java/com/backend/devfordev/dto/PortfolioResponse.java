@@ -108,79 +108,166 @@ public class PortfolioResponse {
             @Schema(description = "정렬 순서", example = "1")
             private Integer orderIndex;
 
-            // CompetitionAward 관련 필드
-            @Schema(description = "수상 및 공모전명", example = "정보통신공학과 학술제")
-            private String competitionName;
-            @Schema(description = "주최기관", example = "명지전문대학 정보통신공학과")
-            private String hostingInstitution;
-            @Schema(description = "공모일", example = "2023-11-01")
-            private LocalDate competitionDate;
 
 
-            // CertificateAward 관련 필드
-            @Schema(description = "자격증명", example = "정보처리기사")
-            private String certificateName;
-            @Schema(description = "발행처", example = "한국산업인력공단")
-            private String issuer;
-            @Schema(description = "합격년월", example = "합격")
-            private Integer passingYear;
-
-            // LanguageAward 관련 필드
-            @Schema(description = "언어", example = "영어")
-            private String language;
-            @Schema(description = "수준", example = "고급")
-            private String level;
-            @Schema(description = "시험명", example = "TOEIC")
-            private String testName;
-            @Schema(description = "점수", example = "900")
-            private String score;
-            @Schema(description = "취득일", example = "2022-08-15")
-            private LocalDate obtainedDate;
-
-            // ActivityAward 관련 필드
-            @Schema(description = "활동명", example = "글로벌 리더십 프로그램")
-            private String activityName;
-            @Schema(description = "활동 시작일", example = "2024-08-01")
-            private LocalDate startDate;
-            @Schema(description = "활동 종료일", example = "2024-11-30")
-            private LocalDate endDate;
-            @Schema(description = "활동 세부사항", example = "다양한 리더십 훈련 참여")
-            private String description;
-
-            public AwardResponse(String awardType, Integer orderIndex, String competitionName, String hostingInstitution, LocalDate competitionDate) {
-                this.awardType = awardType;
-                this.orderIndex = orderIndex;
-                this.competitionName = competitionName;
-                this.hostingInstitution = hostingInstitution;
-                this.competitionDate = competitionDate;
+            @Getter
+            @Setter
+            public static class CompetitionAwardResponse extends AwardResponse {
+                // CompetitionAward 관련 필드
+                @Schema(description = "수상 및 공모전명", example = "정보통신공학과 학술제")
+                private String competitionName;
+                @Schema(description = "주최기관", example = "명지전문대학 정보통신공학과")
+                private String hostingInstitution;
+                @Schema(description = "공모일", example = "2023-11-01")
+                private LocalDate competitionDate;
+                // 기본 생성자
+                public CompetitionAwardResponse() {
+                    super(); // 부모 클래스의 기본 생성자 호출
+                }
+                public CompetitionAwardResponse(
+                        Long id,
+                        String awardType,
+                        Integer orderIndex,
+                        String competitionName,
+                        String hostingInstitution,
+                        LocalDate competitionDate
+                ) {
+                    super(id, awardType, orderIndex); // 부모 클래스의 생성자 호출
+                    this.competitionName = competitionName;
+                    this.hostingInstitution = hostingInstitution;
+                    this.competitionDate = competitionDate;
+                }
             }
 
-            public AwardResponse(String awardType, Integer orderIndex, String certificateName, String issuer, Integer passingYear) {
-                this.awardType = awardType;
-                this.orderIndex = orderIndex;
-                this.certificateName = certificateName;
-                this.issuer = issuer;
-                this.passingYear = passingYear;
+
+            @Getter
+            @Setter
+            public static class CertificateAwardResponse extends AwardResponse {
+                // CertificateAward 관련 필드
+                @Schema(description = "자격증명", example = "정보처리기사")
+                private String certificateName;
+                @Schema(description = "발행처", example = "한국산업인력공단")
+                private String issuer;
+                @Schema(description = "합격년월", example = "합격")
+                private Integer passingYear;
+
+                // 기본 생성자
+                public CertificateAwardResponse() {
+                    super(); // 부모 클래스의 기본 생성자 호출
+                }
+                public CertificateAwardResponse(
+                        Long id,
+                        String awardType,
+                        Integer orderIndex,
+                        String certificateName,
+                        String issuer,
+                        Integer passingYear
+                ) {
+                    super(id, awardType, orderIndex);
+                    this.certificateName = certificateName;
+                    this.issuer = issuer;
+                    this.passingYear = passingYear;
+                }
             }
 
-            public AwardResponse(String awardType, Integer orderIndex, String language, String level, String testName, String score, LocalDate obtainedDate) {
-                this.awardType = awardType;
-                this.orderIndex = orderIndex;
-                this.language = language;
-                this.level = level;
-                this.testName = testName;
-                this.score = score;
-                this.obtainedDate = obtainedDate;
+            @Getter
+            @Setter
+            public static class LanguageAwardResponse extends AwardResponse {
+                // LanguageAward 관련 필드
+                @Schema(description = "언어", example = "영어")
+                private String language;
+                @Schema(description = "수준", example = "고급")
+                private String level;
+                @Schema(description = "시험명", example = "TOEIC")
+                private String testName;
+                @Schema(description = "점수", example = "900")
+                private String score;
+                @Schema(description = "취득일", example = "2022-08-15")
+                private LocalDate obtainedDate;
+                public LanguageAwardResponse() {
+                    super(); // 부모 클래스의 기본 생성자 호출
+                }
+                public LanguageAwardResponse(
+                        Long id,
+                        String awardType,
+                        Integer orderIndex,
+                        String language,
+                        String level,
+                        String testName,
+                        String score,
+                        LocalDate obtainedDate
+                ) {
+                    super(id, awardType, orderIndex);
+                    this.language = language;
+                    this.level = level;
+                    this.testName = testName;
+                    this.score = score;
+                    this.obtainedDate = obtainedDate;
+                }
             }
 
-            public AwardResponse(String awardType, Integer orderIndex, String activityName, LocalDate startDate, LocalDate endDate, String description) {
-                this.awardType = awardType;
-                this.orderIndex = orderIndex;
-                this.activityName = activityName;
-                this.startDate = startDate;
-                this.endDate = endDate;
-                this.description = description;
+
+            @Getter
+            @Setter
+            public static class ActivityAwardResponse extends AwardResponse {
+                // ActivityAward 관련 필드
+                @Schema(description = "활동명", example = "글로벌 리더십 프로그램")
+                private String activityName;
+                @Schema(description = "활동 시작일", example = "2024-08-01")
+                private LocalDate startDate;
+                @Schema(description = "활동 종료일", example = "2024-11-30")
+                private LocalDate endDate;
+                @Schema(description = "활동 세부사항", example = "다양한 리더십 훈련 참여")
+                private String description;
+                public ActivityAwardResponse() {
+                    super(); // 부모 클래스의 기본 생성자 호출
+                }
+                public ActivityAwardResponse(
+                        Long id,
+                        String awardType,
+                        Integer orderIndex,
+                        String activityName,
+                        LocalDate startDate,
+                        LocalDate endDate,
+                        String description
+                ) {
+                    super(id, awardType, orderIndex);
+                    this.activityName = activityName;
+                    this.startDate = startDate;
+                    this.endDate = endDate;
+                    this.description = description;
+                }
             }
+
+
+
+
+//            public AwardResponse(String awardType, Integer orderIndex, String certificateName, String issuer, Integer passingYear) {
+//                this.awardType = awardType;
+//                this.orderIndex = orderIndex;
+//                this.certificateName = certificateName;
+//                this.issuer = issuer;
+//                this.passingYear = passingYear;
+//            }
+//
+//            public AwardResponse(String awardType, Integer orderIndex, String language, String level, String testName, String score, LocalDate obtainedDate) {
+//                this.awardType = awardType;
+//                this.orderIndex = orderIndex;
+//                this.language = language;
+//                this.level = level;
+//                this.testName = testName;
+//                this.score = score;
+//                this.obtainedDate = obtainedDate;
+//            }
+//
+//            public AwardResponse(String awardType, Integer orderIndex, String activityName, LocalDate startDate, LocalDate endDate, String description) {
+//                this.awardType = awardType;
+//                this.orderIndex = orderIndex;
+//                this.activityName = activityName;
+//                this.startDate = startDate;
+//                this.endDate = endDate;
+//                this.description = description;
+//            }
         }
 
         @Getter
@@ -193,6 +280,9 @@ public class PortfolioResponse {
 
             @Schema(description = "회사명", example = "Google")
             private String companyName;
+
+            @Schema(description = "정렬 순서", example = "1")
+            private Integer orderIndex;
 
             @Schema(description = "직위", example = "백엔")
             private String position;

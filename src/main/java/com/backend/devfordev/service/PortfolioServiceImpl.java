@@ -32,15 +32,26 @@ public class PortfolioServiceImpl implements PortfolioService{
     private final PortfolioEducationRepository portfolioEducationRepository;
     private final PortfolioAwardRepository portfolioAwardRepository;
     private final MemberInfoRepository memberInfoRepository;
+    private final PortfolioCareerRepository portfolioCareerRepository;
     @Override
     @Transactional
     public PortfolioResponse.PortCreateResponse createPortfolio(PortfolioRequest.PortfolioCreateRequest request, Long userId) {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.INVALID_MEMBER));
 
+        if (request.getPortImageUrl() == null || request.getPortImageUrl().isEmpty()) {
+            request.setPortImageUrl("default_image_url"); // 기본값
+        }
+
+
         // 포트폴리오 생성
         Portfolio portfolio = PortfolioConverter.toPortfolio(request, member);
         portfolioRepository.save(portfolio);
+
+
+
+        System.out.println(request.getAwards());
+        System.out.println(request.getCareers());
 
         // 링크 리스트 순서 자동 설정 후 변환 및 저장
         List<PortfolioLink> links = PortfolioConverter.toPortfolioLinks(request.getLinks(), portfolio);
@@ -63,15 +74,22 @@ public class PortfolioServiceImpl implements PortfolioService{
         }
         portfolioAwardRepository.saveAll(awards);
 
+        System.out.println(awards);
+        List<PortfolioCareer> careers = PortfolioConverter.toCareerList(request.getCareers(), portfolio);
+        for (int i = 0; i < careers.size(); i++) {
+            careers.get(i).setOrderIndex(i + 1); // 자동 순서 설정
+        }
+        portfolioCareerRepository.saveAll(careers);
+
 
         // 포트폴리오 응답 변환
-        return PortfolioConverter.toPortfolioResponse(portfolio, links, educations, awards);
+        return PortfolioConverter.toPortfolioResponse(portfolio, links, educations, awards, careers);
     }
 
     @Override
     @Transactional
     public List<PortfolioResponse.PortfolioListResponse> getPortList(String position, Optional<String> searchTermOpt, String sortBy) {
-        // 커뮤니티와 좋아요 수를 한 번의 쿼리로 가져옴
+
         List<Object[]> results = portfolioRepository.findAllWithLikesAndMember();
 
         // 필터링 및 DTO 변환

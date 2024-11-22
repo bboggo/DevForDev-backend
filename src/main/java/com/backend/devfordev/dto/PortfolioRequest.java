@@ -1,9 +1,11 @@
 package com.backend.devfordev.dto;
 
 import com.backend.devfordev.domain.Member;
+import com.backend.devfordev.domain.enums.AwardType;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,16 +19,18 @@ import java.util.List;
 public class PortfolioRequest {
 
     @Getter
+    @Setter
     public static class PortfolioCreateRequest {
+        @NotNull(message = "This field must not be null.")
         @Schema(description = "포트폴리오 제목", example = "김민지의 포트폴리오~~")
         String portTitle;
-
+        @NotNull(message = "This field must not be null.")
         @Schema(description = "포트폴리오 내용", example = "마크다운 텍스트 부분")
         String portContent;
-
+        @NotNull(message = "This field must not be null.")
         @Schema(description = "백엔드", example = "포지션")
         String portPosition;
-
+        @NotNull(message = "This field must not be null.")
         @Schema(description = "기술 스택", example = "[\"Spring\", \"Java\", \"MySQL\", \"Docker\"]")
         private List<String> techStacks;
         @ArraySchema(
@@ -35,13 +39,17 @@ public class PortfolioRequest {
         )
         private List<String> tags;
 
-        @Schema(description = "포트폴리오 이미지 url", example = "이미지url")
-        String portImageUrl;
+        @Schema(description = "포트폴리오 이미지 url", example = "이미지url", defaultValue = "default_image_url")
+        private String portImageUrl = "default_image_url"; // 기본값 설정
 
-
+        @Schema(description = "포트폴리오 링크 리스트")
         private List<LinkRequest> links; // 링크 리스트 추가
+        @Schema(description = "포트폴리오 학력 리스트")
         private List<EducationRequest> educations;
+        @Schema(description = "포트폴리오 수상 및 기타 정보 리스트")
         private List<AwardRequest> awards; // 수상 및 기타 정보 추가
+        @Schema(description = "포트폴리오 경력 리스트")
+        private List<CareerRequest> careers; // 경력
 
         @Getter
         @Setter
@@ -90,7 +98,7 @@ public class PortfolioRequest {
         @AllArgsConstructor
         public static class AwardRequest {
             @Schema(description = "수상/자격증/어학/대외활동 유형", example = "COMPETITION")
-            private String awardType;
+            private AwardType awardType;
 
             // CompetitionAward 관련 필드
             @Schema(description = "수상 및 공모전명", example = "정보통신공학과 학술제")
@@ -129,6 +137,34 @@ public class PortfolioRequest {
             private LocalDate endDate;
             @Schema(description = "활동 세부사항", example = "다양한 리더십 훈련 참여")
             private String description;
+        }
+
+
+        @Getter
+        @Setter
+        public static class CareerRequest {
+
+            @Schema(description = "회사명", example = "oo회사")
+            private String companyName;
+
+            @Schema(description = "포지션", example = "백엔드")
+            private String position;
+
+            @Schema(description = "입사일", example = "2024-08-01")
+            private LocalDate startDate;
+
+            @Schema(description = "퇴사일", example = "2024-08-01")
+            private LocalDate endDate;
+
+            @Schema(description = "재직여부", example = "true")
+            private Boolean isCurrent;
+
+            @Schema(description = "직급(직위)", example = "과장")
+            private String level;
+
+            @Schema(description = "업무 설명", example = "업무 설명 내용")
+            private String description;
+
         }
     }
 

@@ -1,5 +1,6 @@
 package com.backend.devfordev.domain;
 
+import com.backend.devfordev.domain.enums.AwardType;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class ActivityAward extends PortfolioAward {
         super();
     }
 
-    public ActivityAward(Long id, Integer orderIndex, String awardType, Portfolio portfolio,
+    public ActivityAward(Long id, Integer orderIndex, AwardType awardType, Portfolio portfolio,
                          String activityName, LocalDate startDate, LocalDate endDate, String description) {
         super(id, orderIndex, awardType, portfolio);
         this.activityName = activityName;

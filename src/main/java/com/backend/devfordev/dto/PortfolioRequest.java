@@ -146,10 +146,10 @@ public class PortfolioRequest {
             @Schema(description = "포지션", example = "백엔드")
             private String position;
 
-            @Schema(description = "시작일", example = "2024-08-01")
+            @Schema(description = "입사일", example = "2024-08-01")
             private LocalDate startDate;
 
-            @Schema(description = "종료일", example = "2024-08-01")
+            @Schema(description = "퇴사일", example = "2024-08-01")
             private LocalDate endDate;
 
             @Schema(description = "재직여부", example = "true")

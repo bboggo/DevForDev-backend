@@ -45,6 +45,7 @@ public class PortfolioResponse {
         private List<LinkResponse> links; // 링크 리스트 추가
         private List<EducationResponse> educations;
         private List<AwardResponse> awards; // 수상 및 기타 정보 리스트
+        private List<CareerResponse> careers; // 수상 및 기타 정보 리스트
 
         @Getter
         @Setter
@@ -146,6 +147,34 @@ public class PortfolioResponse {
                 this.description = description;
             }
         }
+
+        @Getter
+        @Setter
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class CareerResponse {
+            @Schema(description = "경력 ID", example = "1")
+            private Long id;
+
+            @Schema(description = "회사명", example = "Google")
+            private String companyName;
+
+            @Schema(description = "직위", example = "백엔")
+            private String position;
+
+            @Schema(description = "입사일", example = "2024-08-01")
+            private LocalDate startDate;
+
+            @Schema(description = "퇴사일", example = "2024-08-01")
+            private LocalDate endDate;
+
+            @Schema(description = "재직 중 여부", example = "true")
+            private Boolean isCurrent;
+
+            @Schema(description = "주요 업무", example = "Backend 개발 및 데이터베이스 설계")
+            private String description;
+        }
+
     }
 
 

@@ -6,6 +6,7 @@ import com.backend.devfordev.dto.PortfolioRequest;
 import com.backend.devfordev.dto.PortfolioResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import javax.sound.sampled.Port;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -112,7 +113,24 @@ public class PortfolioConverter {
         }).collect(Collectors.toList());
     }
 
-    public static PortfolioResponse.PortCreateResponse toPortfolioResponse(Portfolio portfolio, List<PortfolioLink> links, List<PortfolioEducation> educations, List<PortfolioAward> awards) {
+    public static List<PortfolioCareer> toCareerList(List<PortfolioRequest.PortfolioCreateRequest.CareerRequest> careerRequests, Portfolio portfolio) {
+        return careerRequests.stream()
+                .map(careerRequest -> PortfolioCareer.builder()
+                        .companyName(careerRequest.getCompanyName())
+                        .position(careerRequest.getPosition())
+                        .startDate(careerRequest.getStartDate())
+                        .endDate(careerRequest.getEndDate())
+                        .isCurrent(careerRequest.getIsCurrent())
+                        .level(careerRequest.getLevel())
+                        .description(careerRequest.getDescription())
+                        .portfolio(portfolio)
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+
+
+    public static PortfolioResponse.PortCreateResponse toPortfolioResponse(Portfolio portfolio, List<PortfolioLink> links, List<PortfolioEducation> educations, List<PortfolioAward> awards, List<PortfolioCareer> careers) {
         List<PortfolioResponse.PortCreateResponse.LinkResponse> linkResponses = links.stream()
                 .map(link -> new PortfolioResponse.PortCreateResponse.LinkResponse(link.getType(), link.getUrl(), link.getOrderIndex()))
                 .collect(Collectors.toList());
@@ -166,6 +184,18 @@ public class PortfolioConverter {
                 })
                 .collect(Collectors.toList());
 
+        List<PortfolioResponse.PortCreateResponse.CareerResponse> careerResponses = careers.stream()
+                .map(career -> new PortfolioResponse.PortCreateResponse.CareerResponse(
+                        career.getId(),
+                        career.getCompanyName(),
+                        career.getPosition(),
+                        career.getStartDate(),
+                        career.getEndDate(),
+                        career.getIsCurrent(),
+                        career.getDescription()
+                ))
+                .collect(Collectors.toList());
+
         // techStacks 문자열을 리스트로 변환하여 설정
         List<String> techStacks = portfolio.getTechStacks() != null ? portfolio.getTechStacks() : new ArrayList<>();
         List<String> tags = portfolio.getTags() != null ? portfolio.getTags() : new ArrayList<>();
@@ -182,7 +212,8 @@ public class PortfolioConverter {
                 portfolio.getCreatedAt(),
                 linkResponses,
                 educationResponses,
-                awardResponses
+                awardResponses,
+                careerResponses
         );
 
     }

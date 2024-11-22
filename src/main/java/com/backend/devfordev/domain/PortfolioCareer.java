@@ -6,8 +6,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Table(name = "portfolio_award")
+@Table(name = "portfolio_career")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
@@ -16,7 +15,7 @@ import java.time.LocalDate;
 public class PortfolioCareer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "experience_id")
+    @Column(name = "port_career_id")
     private Long id;
 
     @Column(name = "company_name", nullable = false)

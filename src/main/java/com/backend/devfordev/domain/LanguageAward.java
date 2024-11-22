@@ -15,7 +15,7 @@ public class LanguageAward extends PortfolioAward {
     private String level;
     private String testName;
     private String score;
-    private LocalDate acquisitionDate;
+    private LocalDate obtainedDate;
     protected LanguageAward() {
         super();
     }
@@ -27,6 +27,6 @@ public class LanguageAward extends PortfolioAward {
         this.level = level;
         this.testName = testName;
         this.score = score;
-        this.acquisitionDate = acquisitionDate;
+        this.obtainedDate = obtainedDate;
     }
 }

@@ -248,7 +248,7 @@ public class PortfolioConverter {
                                 langAward.getLevel(),
                                 langAward.getTestName(),
                                 langAward.getScore(),
-                                langAward.getAcquisitionDate()
+                                langAward.getObtainedDate()
                         );
                     } else if (award instanceof ActivityAward) {
                         ActivityAward actAward = (ActivityAward) award;

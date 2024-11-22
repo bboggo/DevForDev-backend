@@ -39,9 +39,16 @@ public class PortfolioServiceImpl implements PortfolioService{
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.INVALID_MEMBER));
 
+        if (request.getPortImageUrl() == null || request.getPortImageUrl().isEmpty()) {
+            request.setPortImageUrl("default_image_url"); // 기본값
+        }
+
+
         // 포트폴리오 생성
         Portfolio portfolio = PortfolioConverter.toPortfolio(request, member);
         portfolioRepository.save(portfolio);
+
+
 
         System.out.println(request.getAwards());
         System.out.println(request.getCareers());

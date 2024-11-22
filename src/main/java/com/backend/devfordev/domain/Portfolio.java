@@ -38,7 +38,7 @@ public class Portfolio extends BaseEntity{
     @Column(name = "port_tags")
     private String tags;
 
-    @Column(name = "port_image", nullable = false)
+    @Column(name = "port_image")
     private String portImageUrl;
 
     @Column(name = "port_views", nullable = false)

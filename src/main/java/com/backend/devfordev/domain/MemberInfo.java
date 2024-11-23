@@ -9,6 +9,23 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Builder
+
+/*
+이름
+이메일
+
+(프로필)
+프로필 사진
+이름
+닉네임
+소개
+깃허브
+
+(커리어)
+포지션
+기술스택
+소속
+ */
 public class MemberInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +37,18 @@ public class MemberInfo {
 
     @Column(name="image_url")
     private String imageUrl;
+
+    @Column(name="Introduction")
+    private String introduction;
+
+    @Column(name="position")
+    private String position;
+
+    @Column(name="tech_stacks")
+    private String techStacks;
+
+    @Column(name="affiliation")
+    private String affiliation;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

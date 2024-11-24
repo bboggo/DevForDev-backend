@@ -7,5 +7,5 @@ public interface MemberService {
     public SignUpResponse signUp(SignUpRequest request);
     public SignInResponse signIn(SignInRequest request);
 
-    public MemberResponse getMember(Long userId);
+    public MemberResponse.MemberInfoResponse getMember(Long userId);
 }

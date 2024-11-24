@@ -81,7 +81,7 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Transactional
-    public MemberResponse getMember(Long userId) {
+    public MemberResponse.MemberInfoResponse getMember(Long userId) {
         // Member 및 MemberInfo 조회
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));

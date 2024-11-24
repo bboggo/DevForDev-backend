@@ -45,9 +45,9 @@ public class MemberController {
 
     @Operation(summary = "로그인한 유저 조회")
     @GetMapping("v1/auth")
-    public ResponseEntity<ApiResponse<MemberResponse>> getMemberInfo(@AuthenticationPrincipal User user) {
-        MemberResponse memberResponse = memberService.getMember(Long.parseLong(user.getUsername()));
-        ApiResponse<MemberResponse> apiResponse =ApiResponse.onSuccess(memberResponse);
+    public ResponseEntity<ApiResponse<MemberResponse.MemberInfoResponse>> getMemberInfo(@AuthenticationPrincipal User user) {
+        MemberResponse.MemberInfoResponse memberResponse = memberService.getMember(Long.parseLong(user.getUsername()));
+        ApiResponse<MemberResponse.MemberInfoResponse> apiResponse =ApiResponse.onSuccess(memberResponse);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 

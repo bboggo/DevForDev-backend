@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
+@Setter
 @Builder
 public class Member extends BaseEntity{
     @Id

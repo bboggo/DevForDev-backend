@@ -57,8 +57,8 @@ public class MemberConverter {
         );
     }
 
-    public static MemberResponse toGetMemberResponse(Member member, MemberInfo memberInfo) {
-        return new MemberResponse(
+    public static MemberResponse.MemberInfoResponse toGetMemberResponse(Member member, MemberInfo memberInfo) {
+        return new MemberResponse.MemberInfoResponse(
                 member.getId(),
                 member.getEmail(),
                 member.getName(),

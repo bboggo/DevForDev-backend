@@ -1,5 +1,6 @@
 package com.backend.devfordev.domain;
 
+import com.backend.devfordev.domain.enums.Affiliation;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +26,7 @@ import lombok.*;
 포지션
 기술스택
 소속
+프로필 완성률
  */
 public class MemberInfo {
     @Id
@@ -32,10 +34,10 @@ public class MemberInfo {
     @Column(name = "member_info_id")
     private Long id;
 
-    @Column(name="nickname")
+    @Column(name="nickname", nullable = false)
     private String nickname;
 
-    @Column(name="image_url")
+    @Column(name="image_url", nullable = false)
     private String imageUrl;
 
     @Column(name="Introduction")
@@ -48,7 +50,10 @@ public class MemberInfo {
     private String techStacks;
 
     @Column(name="affiliation")
-    private String affiliation;
+    private Affiliation affiliation;
+
+    @Column(name="completion_rate")
+    private Long completionRate;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

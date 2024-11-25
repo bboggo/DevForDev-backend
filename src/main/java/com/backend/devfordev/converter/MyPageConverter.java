@@ -21,7 +21,7 @@ public class MyPageConverter {
                 memberInfo.getImageUrl(),
                 memberInfo.getIntroduction(),
                 member.getGithub(),
-                memberInfo.getPosition(),
+                memberInfo.getPosition() != null ? Arrays.asList(memberInfo.getPosition().split(",")) : new ArrayList<>(),
                 memberInfo.getTechStacks() != null ? Arrays.asList(memberInfo.getTechStacks().split(",")) : new ArrayList<>(),
                 memberInfo.getAffiliation(),
                 memberInfo.getCompletionRate()
@@ -51,7 +51,7 @@ public class MyPageConverter {
         }
 
         if (request.getPosition() != null) {
-            memberInfo.setPosition(request.getPosition());
+            memberInfo.setPosition(String.join(",", request.getPosition()));
         }
 
         if (request.getTechStacks() != null && !request.getTechStacks().isEmpty()) {
@@ -134,7 +134,7 @@ public class MyPageConverter {
                 memberInfo.getImageUrl(),
                 memberInfo.getIntroduction(),
                 member.getGithub(),
-                memberInfo.getPosition(),
+                memberInfo.getPosition() != null ? Arrays.asList(memberInfo.getPosition().split(",")) : new ArrayList<>(),
                 memberInfo.getTechStacks() != null ? Arrays.asList(memberInfo.getTechStacks().split(",")) : new ArrayList<>(),
                 memberInfo.getAffiliation(),
                 memberInfo.getCompletionRate()

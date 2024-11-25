@@ -31,8 +31,8 @@ public class MyPageInfoResponse {
         String introduction;
         @Schema(description = "깃허브 링크", example = "http://github.com/bboggo")
         String gitHub;
-        @Schema(description = "포지션", example = "백엔드")
-        String position;
+        @Schema(description = "포지션", example = "[\"포지션1\", \"포지션2\", \"포지션3\"]")
+        List<String> position;
         @Schema(description = "기술스택", example = "[\"태그1\", \"태그2\", \"태그3\"]")
         List<String> techStacks;
         @Schema(description = "소속", example = "COMPANY_SCHOOL")
@@ -56,8 +56,8 @@ public class MyPageInfoResponse {
         String introduction;
         @Schema(description = "깃허브 링크", example = "http://github.com/bboggo")
         String gitHub;
-        @Schema(description = "포지션", example = "백엔드")
-        String position;
+        @Schema(description = "포지션", example = "[\"포지션1\", \"포지션2\", \"포지션3\"]")
+        List<String> position;
         @Schema(description = "기술스택", example = "[\"태그1\", \"태그2\", \"태그3\"]")
         List<String> techStacks;
         @Schema(description = "소속", example = "COMPANY_SCHOOL")

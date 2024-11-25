@@ -2,6 +2,8 @@ package com.backend.devfordev.dto;
 
 import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.domain.enums.AwardType;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -33,6 +35,7 @@ public class PortfolioRequest {
         @NotNull(message = "This field must not be null.")
         @Schema(description = "기술 스택", example = "[\"Spring\", \"Java\", \"MySQL\", \"Docker\"]")
         private List<String> techStacks;
+        @NotNull(message = "This field must not be null.")
         @ArraySchema(
                 schema = @Schema(description = "태그", example = "태그1"),
                 arraySchema = @Schema(example = "[\"태그1\", \"태그2\", \"태그3\", \"태그4\"]")
@@ -46,7 +49,40 @@ public class PortfolioRequest {
         private List<LinkRequest> links; // 링크 리스트 추가
         @Schema(description = "포트폴리오 학력 리스트")
         private List<EducationRequest> educations;
-        @Schema(description = "포트폴리오 수상 및 기타 정보 리스트")
+        @ArraySchema(
+                schema = @Schema(description = "포트폴리오 수상 및 기타 정보 리스트", implementation = AwardRequest.class),
+                arraySchema = @Schema(
+                        example = """
+            [
+              {
+                "awardType": "ACTIVITY",
+                "activityName": "글로벌 리더십 프로그램",
+                "startDate": "2024-08-01",
+                "endDate": "2024-11-30"
+              },
+              {
+                "awardType": "CERTIFICATE",
+                "certificateName": "정보처리기사",
+                "issuer": "한국산업인력공단",
+                "passingDate": "2024-11-25"
+              },
+              {
+                "awardType": "COMPETITION",
+                "competitionName": "정보통신공학과 학술제",
+                "hostingInstitution": "명지전문대학 정보통신공학과",
+                "competitionDate": "2023-11-01"
+              },
+              {
+                "awardType": "LANGUAGE",
+                "language": "영어",
+                "testName": "TOEIC",
+                "score": "900",
+                "obtainedDate": "2022-08-15"
+              }
+            ]
+            """
+                )
+        )
         private List<AwardRequest> awards; // 수상 및 기타 정보 추가
         @Schema(description = "포트폴리오 경력 리스트")
         private List<CareerRequest> careers; // 경력
@@ -85,6 +121,9 @@ public class PortfolioRequest {
             @Schema(description = "졸업여부선택", example = "졸업")
             private String graduationStatus;
 
+            @Schema(description = "편입여부", example = "false")
+            private String isTransfer;
+
             @Schema(description = "학점", example = "4.25")
             private Double grade;
 
@@ -95,48 +134,77 @@ public class PortfolioRequest {
 
         @Getter
         @Setter
-        @AllArgsConstructor
+        @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "awardType")
+        @JsonSubTypes({
+                @JsonSubTypes.Type(value = AwardRequest.CompetitionAwardRequest.class, name = "COMPETITION"),
+                @JsonSubTypes.Type(value = AwardRequest.CertificationAwardRequest.class, name = "CERTIFICATE"),
+                @JsonSubTypes.Type(value = AwardRequest.LanguageAwardRequest.class, name = "LANGUAGE"),
+                @JsonSubTypes.Type(value = AwardRequest.ActivityAwardRequest.class, name = "ACTIVITY")
+        })
+        @Schema(description = "수상/자격증/어학/대외활동 Request")
         public static class AwardRequest {
-            @Schema(description = "수상/자격증/어학/대외활동 유형", example = "COMPETITION")
+
             private AwardType awardType;
 
-            // CompetitionAward 관련 필드
-            @Schema(description = "수상 및 공모전명", example = "정보통신공학과 학술제")
-            private String competitionName;
-            @Schema(description = "주최기관", example = "명지전문대학 정보통신공학과")
-            private String hostingInstitution;
-            @Schema(description = "공모일", example = "2023-11-01")
-            private LocalDate competitionDate;
+            @Getter
+            @Setter
+            @Schema(description = "공모전 관련 정보")
+            public static class CompetitionAwardRequest extends AwardRequest {
+                @Schema(description = "수상 및 공모전명", example = "정보통신공학과 학술제")
+                private String competitionName;
 
-            // CertificateAward 관련 필드
-            @Schema(description = "자격증명", example = "정보처리기사")
-            private String certificateName;
-            @Schema(description = "발행처", example = "한국산업인력공단")
-            private String issuer;
-            @Schema(description = "합격년월", example = "합격")
-            private Integer passingYear;
+                @Schema(description = "주최기관", example = "명지전문대학 정보통신공학과")
+                private String hostingInstitution;
 
-            // LanguageAward 관련 필드
-            @Schema(description = "언어", example = "영어")
-            private String language;
-            @Schema(description = "수준", example = "고급")
-            private String level;
-            @Schema(description = "시험명", example = "TOEIC")
-            private String testName;
-            @Schema(description = "점수", example = "900")
-            private String score;
-            @Schema(description = "취득일", example = "2022-08-15")
-            private LocalDate obtainedDate;
+                @Schema(description = "공모일", example = "2023-11-01")
+                private LocalDate competitionDate;
+            }
 
-            // ActivityAward 관련 필드
-            @Schema(description = "활동명", example = "글로벌 리더십 프로그램")
-            private String activityName;
-            @Schema(description = "활동 시작일", example = "2024-08-01")
-            private LocalDate startDate;
-            @Schema(description = "활동 종료일", example = "2024-11-30")
-            private LocalDate endDate;
-            @Schema(description = "활동 세부사항", example = "다양한 리더십 훈련 참여")
-            private String description;
+            @Getter
+            @Setter
+            @Schema(description = "자격증 관련 정보")
+            public static class CertificationAwardRequest extends AwardRequest {
+                @Schema(description = "자격증명", example = "정보처리기사")
+                private String certificateName;
+
+                @Schema(description = "발행처", example = "한국산업인력공단")
+                private String issuer;
+
+                @Schema(description = "합격년월", example = "2024-11-25")
+                private LocalDate passingDate;
+            }
+
+            @Getter
+            @Setter
+            @Schema(description = "어학 관련 정보")
+            public static class LanguageAwardRequest extends AwardRequest {
+                @Schema(description = "언어", example = "영어")
+                private String language;
+
+                @Schema(description = "시험명", example = "TOEIC")
+                private String testName;
+
+                @Schema(description = "점수", example = "900")
+                private String score;
+
+                @Schema(description = "취득일", example = "2022-08-15")
+                private LocalDate obtainedDate;
+            }
+
+            @Getter
+            @Setter
+            @Schema(description = "대외활동 관련 정보")
+            public static class ActivityAwardRequest extends AwardRequest {
+                @Schema(description = "활동명", example = "글로벌 리더십 프로그램")
+                private String activityName;
+
+                @Schema(description = "활동 시작일", example = "2024-08-01")
+                private LocalDate startDate;
+
+                @Schema(description = "활동 종료일", example = "2024-11-30")
+                private LocalDate endDate;
+
+            }
         }
 
 

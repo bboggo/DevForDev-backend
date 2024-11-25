@@ -2,7 +2,6 @@ package com.backend.devfordev.dto;
 
 
 import com.backend.devfordev.domain.enums.AwardType;
-import com.backend.devfordev.domain.enums.CommunityCategory;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -88,6 +87,8 @@ public class PortfolioResponse {
             private LocalDate graduationDate;
             @Schema(description = "졸업여부선택", example = "졸업")
             private String graduationStatus;
+            @Schema(description = "편입여부", example = "false")
+            private Boolean isTransfer;
             @Schema(description = "학점", example = "4.25")
             private Double grade;
             @Schema(description = "기준학점", example = "4.5")
@@ -149,8 +150,8 @@ public class PortfolioResponse {
                 private String certificateName;
                 @Schema(description = "발행처", example = "한국산업인력공단")
                 private String issuer;
-                @Schema(description = "합격년월", example = "합격")
-                private Integer passingYear;
+                @Schema(description = "합격년월", example = "2023-00")
+                private LocalDate passingDate;
 
                 // 기본 생성자
                 public CertificateAwardResponse() {
@@ -162,12 +163,12 @@ public class PortfolioResponse {
                         Integer orderIndex,
                         String certificateName,
                         String issuer,
-                        Integer passingYear
+                        LocalDate passingDate
                 ) {
                     super(id, awardType, orderIndex);
                     this.certificateName = certificateName;
                     this.issuer = issuer;
-                    this.passingYear = passingYear;
+                    this.passingDate = passingDate;
                 }
             }
 
@@ -177,8 +178,6 @@ public class PortfolioResponse {
                 // LanguageAward 관련 필드
                 @Schema(description = "언어", example = "영어")
                 private String language;
-                @Schema(description = "수준", example = "고급")
-                private String level;
                 @Schema(description = "시험명", example = "TOEIC")
                 private String testName;
                 @Schema(description = "점수", example = "900")
@@ -193,14 +192,12 @@ public class PortfolioResponse {
                         AwardType awardType,
                         Integer orderIndex,
                         String language,
-                        String level,
                         String testName,
                         String score,
                         LocalDate obtainedDate
                 ) {
                     super(id, awardType, orderIndex);
                     this.language = language;
-                    this.level = level;
                     this.testName = testName;
                     this.score = score;
                     this.obtainedDate = obtainedDate;
@@ -218,8 +215,7 @@ public class PortfolioResponse {
                 private LocalDate startDate;
                 @Schema(description = "활동 종료일", example = "2024-11-30")
                 private LocalDate endDate;
-                @Schema(description = "활동 세부사항", example = "다양한 리더십 훈련 참여")
-                private String description;
+
                 public ActivityAwardResponse() {
                     super(); // 부모 클래스의 기본 생성자 호출
                 }
@@ -229,14 +225,12 @@ public class PortfolioResponse {
                         Integer orderIndex,
                         String activityName,
                         LocalDate startDate,
-                        LocalDate endDate,
-                        String description
+                        LocalDate endDate
                 ) {
                     super(id, awardType, orderIndex);
                     this.activityName = activityName;
                     this.startDate = startDate;
                     this.endDate = endDate;
-                    this.description = description;
                 }
             }
 

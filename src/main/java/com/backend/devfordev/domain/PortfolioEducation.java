@@ -27,19 +27,22 @@ public class PortfolioEducation {
     @Column(name = "major", nullable = false)
     private String major;  // 전공
 
-    @Column(name = "admission_date")
+    @Column(name = "admission_date", nullable = false)
     private LocalDate admissionDate;  // 입학 연월
 
-    @Column(name = "graduation_date")
+    @Column(name = "graduation_date", nullable = false)
     private LocalDate graduationDate;  // 졸업 연월
 
     @Column(name = "graduation_status", nullable = false)
     private String graduationStatus;  // 졸업 여부 ("졸업", "재학", "휴학" 등)
 
-    @Column(name = "grade", nullable = true)
+    @Column(name = "is_transfer", nullable = false)
+    private Boolean isTransfer;  // 졸업 여부 ("졸업", "재학", "휴학" 등)
+
+    @Column(name = "grade", nullable = false)
     private Double grade;  // 학점
 
-    @Column(name = "grade_scale", nullable = true)
+    @Column(name = "grade_scale", nullable = false)
     private Double gradeScale;  // 기준 학점 (예: 4.5, 5.0 등)
 
     @Column(name = "orderIndex", nullable = false)

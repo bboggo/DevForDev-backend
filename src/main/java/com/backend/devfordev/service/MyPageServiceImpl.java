@@ -5,6 +5,7 @@ import com.backend.devfordev.apiPayload.exception.handler.MemberHandler;
 import com.backend.devfordev.converter.MyPageConverter;
 import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.domain.MemberInfo;
+import com.backend.devfordev.dto.MyPageInfoRequest;
 import com.backend.devfordev.dto.MyPageInfoResponse;
 import com.backend.devfordev.repository.MemberInfoRepository;
 import com.backend.devfordev.repository.MemberRepository;
@@ -28,5 +29,22 @@ public class MyPageServiceImpl implements MyPageService{
 
         // 컨버터를 통해 DTO 변환
         return MyPageConverter.toGetProfileResponse(member, memberInfo);
+    }
+
+    @Transactional
+    public MyPageInfoResponse.ProfileUpdateResponse updateProfile(Long memberId, MyPageInfoRequest.ProfileUpdateRequest request) {
+        // Member와 MemberInfo 엔티티 조회
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+        MemberInfo memberInfo = memberInfoRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("MemberInfo not found"));
+
+        // 업데이트 수행
+        MyPageConverter.toUpdateProfileRequest(member, memberInfo, request);
+
+        // 변경된 엔티티 저장
+        memberRepository.save(member);
+        memberInfoRepository.save(memberInfo);
+        return MyPageConverter.ProfileUpdateResponse(member, memberInfo);
     }
 }

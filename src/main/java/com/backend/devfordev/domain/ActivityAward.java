@@ -14,18 +14,18 @@ public class ActivityAward extends PortfolioAward {
     private String activityName;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String description;
+
 
     protected ActivityAward() {
         super();
     }
 
     public ActivityAward(Long id, Integer orderIndex, AwardType awardType, Portfolio portfolio,
-                         String activityName, LocalDate startDate, LocalDate endDate, String description) {
+                         String activityName, LocalDate startDate, LocalDate endDate) {
         super(id, orderIndex, awardType, portfolio);
         this.activityName = activityName;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.description = description;
+
     }
 }

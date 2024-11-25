@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class PortfolioConverter {
@@ -54,6 +55,7 @@ public class PortfolioConverter {
                         .admissionDate(educationRequest.getAdmissionDate())
                         .graduationDate(educationRequest.getGraduationDate())
                         .graduationStatus(educationRequest.getGraduationStatus())
+                        .isTransfer(Boolean.valueOf(educationRequest.getIsTransfer()))
                         .grade(educationRequest.getGrade())
                         .gradeScale(educationRequest.getGradeScale())
                         .orderIndex(educationRequests.indexOf(educationRequest) + 1) // 자동 순서 설정
@@ -63,54 +65,55 @@ public class PortfolioConverter {
     }
 
     public static List<PortfolioAward> toAwardList(List<PortfolioRequest.PortfolioCreateRequest.AwardRequest> awardRequests, Portfolio portfolio) {
+        // 인덱스를 추적하며 처리
+        AtomicInteger index = new AtomicInteger(1);
+
         return awardRequests.stream().map(awardRequest -> {
-            switch (awardRequest.getAwardType()) {
-                case COMPETITION:
-                    return new CompetitionAward(
-                            null,
-                            awardRequests.indexOf(awardRequest) + 1,
-                            awardRequest.getAwardType(),
-                            portfolio,
-                            awardRequest.getCompetitionName(),
-                            awardRequest.getHostingInstitution(),
-                            awardRequest.getCompetitionDate()
-                    );
-                case CERTIFICATE:
-                    return new CertificationAward(
-                            null,
-                            awardRequests.indexOf(awardRequest) + 1,
-                            awardRequest.getAwardType(),
-                            portfolio,
-                            awardRequest.getCertificateName(),
-                            awardRequest.getIssuer(),
-                            awardRequest.getPassingYear()
-                    );
-                case LANGUAGE:
-                    return new LanguageAward(
-                            null,
-                            awardRequests.indexOf(awardRequest) + 1,
-                            awardRequest.getAwardType(),
-                            portfolio,
-                            awardRequest.getLanguage(),
-                            awardRequest.getLevel(),
-                            awardRequest.getTestName(),
-                            awardRequest.getScore(),
-                            awardRequest.getObtainedDate()
-                    );
-                case ACTIVITY:
-                    return new ActivityAward(
-                            null,
-                            awardRequests.indexOf(awardRequest) + 1,
-                            awardRequest.getAwardType(),
-                            portfolio,
-                            awardRequest.getActivityName(),
-                            awardRequest.getStartDate(),
-                            awardRequest.getEndDate(),
-                            awardRequest.getDescription()
-                    );
-                default:
-                    throw new IllegalArgumentException("Invalid award type: " + awardRequest.getAwardType());
+            int orderIndex = index.getAndIncrement(); // 인덱스 값을 추적
+
+            if (awardRequest instanceof PortfolioRequest.PortfolioCreateRequest.AwardRequest.CompetitionAwardRequest req) {
+                return new CompetitionAward(
+                        null,
+                        orderIndex,
+                        req.getAwardType(),
+                        portfolio,
+                        req.getCompetitionName(),
+                        req.getHostingInstitution(),
+                        req.getCompetitionDate()
+                );
+            } else if (awardRequest instanceof PortfolioRequest.PortfolioCreateRequest.AwardRequest.CertificationAwardRequest req) {
+                return new CertificationAward(
+                        null,
+                        orderIndex,
+                        req.getAwardType(),
+                        portfolio,
+                        req.getCertificateName(),
+                        req.getIssuer(),
+                        req.getPassingDate()
+                );
+            } else if (awardRequest instanceof PortfolioRequest.PortfolioCreateRequest.AwardRequest.LanguageAwardRequest req) {
+                return new LanguageAward(
+                        null,
+                        orderIndex,
+                        req.getAwardType(),
+                        portfolio,
+                        req.getLanguage(),
+                        req.getTestName(),
+                        req.getScore(),
+                        req.getObtainedDate()
+                );
+            } else if (awardRequest instanceof PortfolioRequest.PortfolioCreateRequest.AwardRequest.ActivityAwardRequest req) {
+                return new ActivityAward(
+                        null,
+                        orderIndex,
+                        req.getAwardType(),
+                        portfolio,
+                        req.getActivityName(),
+                        req.getStartDate(),
+                        req.getEndDate()
+                );
             }
+            throw new IllegalArgumentException("Invalid award type: " + awardRequest.getAwardType());
         }).collect(Collectors.toList());
     }
 
@@ -208,6 +211,7 @@ public class PortfolioConverter {
                         education.getAdmissionDate(),
                         education.getGraduationDate(),
                         education.getGraduationStatus(),
+                        education.getIsTransfer(),
                         education.getGrade(),
                         education.getGradeScale(),
                         education.getOrderIndex()
@@ -236,7 +240,7 @@ public class PortfolioConverter {
                                 certAward.getOrderIndex(),
                                 certAward.getCertificationName(),
                                 certAward.getIssuingInstitution(),
-                                certAward.getPassingYear()
+                                certAward.getPassingDate()
                         );
                     } else if (award instanceof LanguageAward) {
                         LanguageAward langAward = (LanguageAward) award;
@@ -245,7 +249,6 @@ public class PortfolioConverter {
                                 AwardType.LANGUAGE,
                                 langAward.getOrderIndex(),
                                 langAward.getLanguage(),
-                                langAward.getLevel(),
                                 langAward.getTestName(),
                                 langAward.getScore(),
                                 langAward.getObtainedDate()
@@ -258,8 +261,7 @@ public class PortfolioConverter {
                                 actAward.getOrderIndex(),
                                 actAward.getActivityName(),
                                 actAward.getStartDate(),
-                                actAward.getEndDate(),
-                                actAward.getDescription()
+                                actAward.getEndDate()
                         );
                     } else {
                         throw new IllegalArgumentException("Invalid award type: " + award.getAwardType());

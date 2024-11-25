@@ -54,7 +54,7 @@ public class MemberInfo {
     private Affiliation affiliation;
 
     @Column(name="completion_rate")
-    private Long completionRate;
+    private Long completionRate = 0L;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

@@ -64,24 +64,69 @@ public class MyPageConverter {
         }
 
         // 완성률은 자동 계산 (예: 프로필 필드 중 입력된 비율로 계산)
-        calculateCompletionRate(memberInfo);
+        calculateCompletionRate(memberInfo, member);
 
 
     }
-    private static void calculateCompletionRate(MemberInfo memberInfo) {
-        int totalFields = 6; // 업데이트 가능한 필드 수 (닉네임, 이미지, 소개, 포지션, 기술 스택, 소속)
-        int filledFields = 0;
+    private static void calculateCompletionRate(MemberInfo memberInfo, Member member) {
+        double completionRate = 0;
 
-        if (memberInfo.getNickname() != null && !memberInfo.getNickname().isEmpty()) filledFields++;
-        if (memberInfo.getImageUrl() != null && !memberInfo.getImageUrl().isEmpty()) filledFields++;
-        if (memberInfo.getIntroduction() != null && !memberInfo.getIntroduction().isEmpty()) filledFields++;
-        if (memberInfo.getPosition() != null && !memberInfo.getPosition().isEmpty()) filledFields++;
-        if (memberInfo.getTechStacks() != null && !memberInfo.getTechStacks().isEmpty()) filledFields++;
-        if (memberInfo.getAffiliation() != null) filledFields++;
+        // 각 필드의 비율을 설정
+        final double NICKNAME_WEIGHT = 16.0;
+        final double INTRODUCTION_WEIGHT = 16.0;
+        final double GITHUB_WEIGHT = 16.0;
+        final double POSITION_WEIGHT = 16.0;
+        final double TECH_STACKS_WEIGHT = 16.0;
+        final double IMAGE_URL_WEIGHT = 10.0;
+        final double AFFILIATION_WEIGHT = 10.0;
 
-        // 완성률 계산
-        memberInfo.setCompletionRate((long) ((filledFields / (double) totalFields) * 100));
+        // 기본값 정의
+        final String DEFAULT_IMAGE_URL = "https://default-imageUrl.com";
+        final String DEFAULT_NICKNAME = member.getName();
+
+        // 닉네임
+        if (memberInfo.getNickname() != null && !memberInfo.getNickname().isEmpty()
+                && !memberInfo.getNickname().equals(DEFAULT_NICKNAME)) {
+            completionRate += NICKNAME_WEIGHT;
+            System.out.println("아님아님");
+        }
+
+        // 소개
+        if (memberInfo.getIntroduction() != null && !memberInfo.getIntroduction().isEmpty()) {
+            completionRate += INTRODUCTION_WEIGHT;
+        }
+
+        // 깃허브
+        if (memberInfo.getMember() != null && memberInfo.getMember().getGithub() != null
+                && !memberInfo.getMember().getGithub().isEmpty()) {
+            completionRate += GITHUB_WEIGHT;
+        }
+
+        // 포지션
+        if (memberInfo.getPosition() != null && !memberInfo.getPosition().isEmpty()) {
+            completionRate += POSITION_WEIGHT;
+        }
+
+        // 기술 스택
+        if (memberInfo.getTechStacks() != null && !memberInfo.getTechStacks().isEmpty()) {
+            completionRate += TECH_STACKS_WEIGHT;
+        }
+
+        // 프로필 이미지
+        if (memberInfo.getImageUrl() != null && !memberInfo.getImageUrl().isEmpty()
+                && !memberInfo.getImageUrl().equals(DEFAULT_IMAGE_URL)) {
+            completionRate += IMAGE_URL_WEIGHT;
+        }
+
+        // 소속
+        if (memberInfo.getAffiliation() != null) {
+            completionRate += AFFILIATION_WEIGHT;
+        }
+
+        // 최종 완성률 설정
+        memberInfo.setCompletionRate((long) completionRate);
     }
+
 
     public static MyPageInfoResponse.ProfileUpdateResponse ProfileUpdateResponse(Member member, MemberInfo memberInfo) {
         return new MyPageInfoResponse.ProfileUpdateResponse(

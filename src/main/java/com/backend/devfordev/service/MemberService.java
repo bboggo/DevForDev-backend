@@ -9,4 +9,5 @@ public interface MemberService {
 
     public MemberResponse.MemberInfoResponse getMember(Long userId);
     public boolean checkEmailDuplicate(String email);
+    public String refreshAccessToken(String refreshToken, String oldAccessToken);
 }

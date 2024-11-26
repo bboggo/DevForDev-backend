@@ -48,6 +48,8 @@ public enum ErrorStatus implements BaseErrorCode {
     NO_MATCHING_MEMBER(BAD_REQUEST, "MEMBER003", "There is no matching member information."),
     INVALID_MEMBER(BAD_REQUEST, "MEMBER004", "User information is incorrect."),
     MEMBER_NOT_FOUND(BAD_REQUEST, "MEMBER005", "Member Not Found"),
+    SAME_PASSWORD_NOT_ALLOWED(BAD_REQUEST, "MEMBER006", "New password cannot be the same as the current password."),
+
 
     // 커뮤니티
     INVALID_CATEGORY(BAD_REQUEST, "COM001", "Only SKILL, CAREER, and OTHER are available."),

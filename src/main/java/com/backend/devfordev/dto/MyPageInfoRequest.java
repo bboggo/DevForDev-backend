@@ -45,4 +45,12 @@ public class MyPageInfoRequest {
 
     }
 
+    @Getter
+    @Setter
+    public static class PasswordUpdateRequest {
+        @NotNull(message = "This field must not be null.")
+        @Schema(description = "비밀번호", example = "new_password1234!")
+        String password;
+    }
+
 }

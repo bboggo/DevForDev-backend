@@ -1,6 +1,7 @@
 package com.backend.devfordev.controller;
 
 import com.backend.devfordev.apiPayload.ApiResponse;
+import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
 import com.backend.devfordev.dto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.MyPageInfoRequest;
@@ -44,5 +45,18 @@ public class MyPageController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
+    @Operation(summary = "마이페이지 비밀번호 수정")
+    @PatchMapping(value = "/v1/my-page/password")
+    public ResponseEntity<ApiResponse> updatePassword(@Valid @RequestBody MyPageInfoRequest.PasswordUpdateRequest request, @AuthenticationPrincipal User user) {
 
+        myPageService.updatePassword(Long.parseLong(user.getUsername()), request);
+        ApiResponse apiResponse = ApiResponse.builder()
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message("비밀번호 수정이 완료되었습니다.")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 }
+

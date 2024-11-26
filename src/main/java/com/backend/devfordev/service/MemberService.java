@@ -8,4 +8,5 @@ public interface MemberService {
     public SignInResponse signIn(SignInRequest request);
 
     public MemberResponse.MemberInfoResponse getMember(Long userId);
+    public boolean checkEmailDuplicate(String email);
 }

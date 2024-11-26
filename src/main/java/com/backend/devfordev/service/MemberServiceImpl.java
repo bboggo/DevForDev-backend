@@ -2,21 +2,16 @@ package com.backend.devfordev.service;
 
 import com.backend.devfordev.apiPayload.ExceptionHandler;
 import com.backend.devfordev.apiPayload.code.status.ErrorStatus;
-import com.backend.devfordev.apiPayload.exception.handler.CommunityHandler;
-import com.backend.devfordev.apiPayload.exception.handler.GeneralException;
 import com.backend.devfordev.apiPayload.exception.handler.MemberHandler;
-import com.backend.devfordev.apiPayload.exception.handler.TeamHandler;
 import com.backend.devfordev.converter.MemberConverter;
 import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.domain.MemberInfo;
 import com.backend.devfordev.domain.MemberRefreshToken;
-import com.backend.devfordev.domain.Team;
 import com.backend.devfordev.dto.*;
 import com.backend.devfordev.repository.MemberInfoRepository;
 import com.backend.devfordev.repository.MemberRefreshTokenRepository;
 import com.backend.devfordev.repository.MemberRepository;
 import com.backend.devfordev.security.TokenProvider;
-import io.jsonwebtoken.io.IOException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -43,9 +38,9 @@ public class MemberServiceImpl implements MemberService{
 //                throw new ExceptionHandler(ErrorStatus.DUPLICATED_NAME);
 //            }
 
-            if(memberRepository.findByEmail(member.getEmail()).isPresent()) {
-                throw new ExceptionHandler(ErrorStatus.DUPLICATED_EMAIL);
-            }
+//            if(memberRepository.findByEmail(member.getEmail()).isPresent()) {
+//                throw new ExceptionHandler(ErrorStatus.DUPLICATED_EMAIL);
+//            }
 
 
             member = memberRepository.save(member);
@@ -90,5 +85,13 @@ public class MemberServiceImpl implements MemberService{
 
         // 컨버터를 통해 DTO 변환
         return MemberConverter.toGetMemberResponse(member, memberInfo);
+    }
+    @Transactional
+    // 이메일 중복체크
+    public boolean checkEmailDuplicate(String email) {
+        if (memberRepository.existsByEmail(email)) {
+            throw new MemberHandler(ErrorStatus.EMAIL_DUPLICATED); // 커스텀 예외 처리
+        }
+        return false;
     }
 }

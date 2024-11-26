@@ -2,10 +2,7 @@ package com.backend.devfordev.converter;
 
 import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.domain.MemberInfo;
-import com.backend.devfordev.dto.MemberResponse;
-import com.backend.devfordev.dto.SignInResponse;
-import com.backend.devfordev.dto.SignUpRequest;
-import com.backend.devfordev.dto.SignUpResponse;
+import com.backend.devfordev.dto.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -66,5 +63,8 @@ public class MemberConverter {
                 memberInfo.getImageUrl()
         );
     }
+
+
+
 }
 

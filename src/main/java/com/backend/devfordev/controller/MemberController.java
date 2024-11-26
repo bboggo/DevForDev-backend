@@ -2,6 +2,7 @@ package com.backend.devfordev.controller;
 
 import com.backend.devfordev.apiPayload.ApiResponse;
 import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
+import com.backend.devfordev.apiPayload.exception.handler.MemberHandler;
 import com.backend.devfordev.dto.*;
 import com.backend.devfordev.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,11 +45,19 @@ public class MemberController {
     }
 
     @Operation(summary = "로그인한 유저 조회")
-    @GetMapping("v1/auth")
+    @GetMapping("/v1/auth")
     public ResponseEntity<ApiResponse<MemberResponse.MemberInfoResponse>> getMemberInfo(@AuthenticationPrincipal User user) {
         MemberResponse.MemberInfoResponse memberResponse = memberService.getMember(Long.parseLong(user.getUsername()));
         ApiResponse<MemberResponse.MemberInfoResponse> apiResponse =ApiResponse.onSuccess(memberResponse);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+    @Operation(summary = "이메일 중복 체크")
+    @PostMapping("/v1/auth/check-email")
+    public ResponseEntity<ApiResponse<Boolean>> checkEmailDuplicate(@RequestBody MemberRequest.checkEmailRequest request) {
+        boolean isDuplicate = memberService.checkEmailDuplicate(request.getEmail());
+        return ResponseEntity.ok(ApiResponse.onSuccess(!isDuplicate));
+    }
+
 
 }

@@ -12,6 +12,7 @@ import com.backend.devfordev.repository.MemberInfoRepository;
 import com.backend.devfordev.repository.MemberRefreshTokenRepository;
 import com.backend.devfordev.repository.MemberRepository;
 import com.backend.devfordev.security.TokenProvider;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -93,5 +94,37 @@ public class MemberServiceImpl implements MemberService{
             throw new MemberHandler(ErrorStatus.EMAIL_DUPLICATED); // 커스텀 예외 처리
         }
         return false;
+    }
+
+
+    @Transactional
+    public String refreshAccessToken(String refreshToken, String oldAccessToken) {
+        try {
+            // refreshToken 유효성 검사
+            tokenProvider.validateTokenAndGetSubject(refreshToken);
+
+            // 기존 accessToken의 사용자 정보 복호화
+            String subject = tokenProvider.validateTokenAndGetSubject(oldAccessToken);
+
+            // refreshToken이 유효한지 확인
+            String[] userInfo = subject.split(":");
+            Long memberId = Long.valueOf(userInfo[0]);
+
+            MemberRefreshToken savedRefreshToken = memberRefreshTokenRepository.findByMemberId(memberId)
+                    .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+
+            // 저장된 refreshToken과 요청 refreshToken 비교
+            if (!savedRefreshToken.getRefreshToken().equals(refreshToken)) {
+                throw new MemberHandler(ErrorStatus.INVALID_JWT_TOKEN);
+            }
+
+            // 새로운 accessToken 생성
+            return tokenProvider.createAccessToken(subject);
+
+        } catch (ExpiredJwtException ex) {
+            throw new MemberHandler(ErrorStatus.EXPIRED_JWT_ERROR);
+        } catch (IllegalArgumentException ex) {
+            throw new MemberHandler(ErrorStatus.INVALID_JWT_TOKEN);
+        }
     }
 }

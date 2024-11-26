@@ -16,6 +16,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Tag(name = "회원 가입 및 로그인 API")
 @RequiredArgsConstructor
 @RestController
@@ -57,6 +60,18 @@ public class MemberController {
     public ResponseEntity<ApiResponse<Boolean>> checkEmailDuplicate(@RequestBody MemberRequest.checkEmailRequest request) {
         boolean isDuplicate = memberService.checkEmailDuplicate(request.getEmail());
         return ResponseEntity.ok(ApiResponse.onSuccess(!isDuplicate));
+    }
+
+    @Operation(summary = "액세스 토큰 재발급")
+    @PostMapping("/v1/auth/new-token")
+    public ResponseEntity<ApiResponse<TokenResponse.AccessTokenResponse>> refreshAccessToken(
+            @RequestBody TokenRequest.RefreshTokenRequest request) {
+        String newAccessToken = memberService.refreshAccessToken(request.getRefreshToken(), request.getOldAccessToken());
+
+        // 응답 데이터를 DTO에 담아 반환
+        return ResponseEntity.ok(ApiResponse.onSuccess(
+                new TokenResponse.AccessTokenResponse(newAccessToken)
+        ));
     }
 
 

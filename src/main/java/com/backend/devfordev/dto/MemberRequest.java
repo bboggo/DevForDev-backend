@@ -15,4 +15,7 @@ public class MemberRequest {
         @Email(message = "올바른 형식의 이메일 주소여야 합니다.")
         String email;
     }
+
+
+
 }

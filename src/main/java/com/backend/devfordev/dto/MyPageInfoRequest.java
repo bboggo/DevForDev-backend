@@ -45,4 +45,11 @@ public class MyPageInfoRequest {
 
     }
 
+    @Getter
+    @Setter
+    public static class PasswordUpdateRequest {
+        @Schema(description = "비밀번호", example = "new_password1234!")
+        String password;
+    }
+
 }

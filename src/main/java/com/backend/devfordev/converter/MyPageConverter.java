@@ -5,8 +5,10 @@ import com.backend.devfordev.domain.MemberInfo;
 import com.backend.devfordev.domain.enums.Affiliation;
 import com.backend.devfordev.dto.MyPageInfoRequest;
 import com.backend.devfordev.dto.MyPageInfoResponse;
+import com.backend.devfordev.dto.SignUpRequest;
 import com.backend.devfordev.dto.SignUpResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -139,6 +141,10 @@ public class MyPageConverter {
                 memberInfo.getAffiliation(),
                 memberInfo.getCompletionRate()
         );
+    }
+
+    public static void PasswordUpdateRequest(Member member, MyPageInfoRequest.PasswordUpdateRequest passwordUpdateRequest, PasswordEncoder encoder) {
+        member.setPassword(encoder.encode(passwordUpdateRequest.getPassword()));
     }
 
 }

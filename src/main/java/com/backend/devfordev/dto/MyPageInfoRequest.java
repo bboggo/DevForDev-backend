@@ -29,8 +29,7 @@ public class MyPageInfoRequest {
          */
         @Schema(description = "회원 닉네임", example = "뽀꼬")
         String nickname;
-        @Schema(description = "프로필 사진 url", example = "aaa.com")
-        String imageUrl;
+
         @Schema(description = "소개문구", example = "간단한 소개글을 작성해보세요!")
         String introduction;
         @Schema(description = "깃허브 링크", example = "http://github.com/bboggo")

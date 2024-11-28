@@ -39,7 +39,7 @@ public class MyPageController {
     @Operation(summary = "마이페이지 프로필 저장")
     @PatchMapping(value = "/v1/my-page/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<MyPageInfoResponse.ProfileUpdateResponse>> updateProfileInfo(@Valid @RequestPart("request") MyPageInfoRequest.ProfileUpdateRequest request, @AuthenticationPrincipal User user,
-                                                                                                   @RequestPart("profileImage") MultipartFile profileImage) {
+                                                                                                   @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) {
 
         MyPageInfoResponse.ProfileUpdateResponse profileUpdateResponse = myPageService.updateProfile(Long.parseLong(user.getUsername()), request, profileImage);
 

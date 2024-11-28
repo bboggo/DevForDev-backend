@@ -41,7 +41,6 @@ public class MyPageServiceImpl implements MyPageService{
         return MyPageConverter.toGetProfileResponse(member, memberInfo);
     }
 
-    @Transactional
     public MyPageInfoResponse.ProfileUpdateResponse updateProfile(Long memberId, MyPageInfoRequest.ProfileUpdateRequest request, MultipartFile profileImage) {
         try {
             // Member와 MemberInfo 엔티티 조회
@@ -53,8 +52,8 @@ public class MyPageServiceImpl implements MyPageService{
             // 이미지 URL 처리
             String imageUrl;
             if (profileImage == null || profileImage.isEmpty()) {
-                // 기본 프로필 이미지 설정
-                imageUrl = s3Service.saveDefaultProfileImage();
+                // 새 이미지가 없을 경우 기존 이미지 URL 유지
+                imageUrl = memberInfo.getImageUrl() != null ? memberInfo.getImageUrl() : s3Service.saveDefaultProfileImage();
             } else {
                 // 새 프로필 이미지 업로드
                 imageUrl = s3Service.saveProfileImage(profileImage);

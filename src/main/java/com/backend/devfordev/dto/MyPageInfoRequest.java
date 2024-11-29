@@ -2,6 +2,7 @@ package com.backend.devfordev.dto;
 
 import com.backend.devfordev.domain.enums.Affiliation;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -50,6 +51,14 @@ public class MyPageInfoRequest {
         @NotNull(message = "This field must not be null.")
         @Schema(description = "비밀번호", example = "new_password1234!")
         String password;
+    }
+
+    @Getter
+    @Setter
+    public static class checkNicknameRequest{
+        @Schema(description = "회원 닉네임", example = "new_nickname")
+        @NotBlank(message = "This field must not be null.")
+        String nickname;
     }
 
 }

@@ -2,10 +2,7 @@ package com.backend.devfordev.controller;
 
 import com.backend.devfordev.apiPayload.ApiResponse;
 import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
-import com.backend.devfordev.dto.CommunityRequest;
-import com.backend.devfordev.dto.CommunityResponse;
-import com.backend.devfordev.dto.MyPageInfoRequest;
-import com.backend.devfordev.dto.MyPageInfoResponse;
+import com.backend.devfordev.dto.*;
 import com.backend.devfordev.service.MyPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -61,5 +58,13 @@ public class MyPageController {
 
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+    @Operation(summary = "닉네임 중복 체크")
+    @PostMapping("/v1/my-page/check-nickname")
+    public ResponseEntity<ApiResponse<Boolean>> checkNicknameDuplicate(@RequestBody MyPageInfoRequest.checkNicknameRequest request) {
+        boolean isDuplicate = myPageService.checkNicknameDuplicate(request.getNickname());
+        return ResponseEntity.ok(ApiResponse.onSuccess(!isDuplicate));
+    }
+
 }
 

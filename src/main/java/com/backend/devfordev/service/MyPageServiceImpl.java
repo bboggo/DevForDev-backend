@@ -94,4 +94,14 @@ public class MyPageServiceImpl implements MyPageService{
 
         MyPageConverter.PasswordUpdateRequest(member, passwordUpdateRequest, encoder);
     }
+
+
+    @Override
+    @Transactional
+    public boolean checkNicknameDuplicate(String nickname) {
+        if (memberInfoRepository.existsByNickname(nickname)) {
+            throw new MemberHandler(ErrorStatus.DUPLICATED_NICKNAME);
+        }
+        return false;
+    }
 }

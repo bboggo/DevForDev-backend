@@ -42,8 +42,6 @@ public class PortfolioRequest {
         )
         private List<String> tags;
 
-        @Schema(description = "포트폴리오 이미지 url", example = "이미지url", defaultValue = "default_image_url")
-        private String portImageUrl = "default_image_url"; // 기본값 설정
 
         @Schema(description = "포트폴리오 링크 리스트")
         private List<LinkRequest> links; // 링크 리스트 추가

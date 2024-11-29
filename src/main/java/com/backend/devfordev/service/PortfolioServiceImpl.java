@@ -18,8 +18,10 @@ import com.backend.devfordev.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.sound.sampled.Port;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,22 +35,33 @@ public class PortfolioServiceImpl implements PortfolioService{
     private final PortfolioAwardRepository portfolioAwardRepository;
     private final MemberInfoRepository memberInfoRepository;
     private final PortfolioCareerRepository portfolioCareerRepository;
+    private final S3Service s3Service;
     @Override
     @Transactional
-    public PortfolioResponse.PortCreateResponse createPortfolio(PortfolioRequest.PortfolioCreateRequest request, Long userId) {
+    public PortfolioResponse.PortCreateResponse createPortfolio(PortfolioRequest.PortfolioCreateRequest request, Long userId, MultipartFile portImage) {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.INVALID_MEMBER));
 
-        if (request.getPortImageUrl() == null || request.getPortImageUrl().isEmpty()) {
-            request.setPortImageUrl("default_image_url"); // 기본값
+        String imageUrl;
+        try {
+            // 이미지 파일이 비어 있는지 확인
+            if (portImage == null || portImage.isEmpty()) {
+                // 기본 이미지 URL을 설정
+                imageUrl = s3Service.saveDefaultProfileImage();
+            } else {
+                // 이미지 업로드 후 URL 반환
+                imageUrl = s3Service.saveProfileImage(portImage);
+            }
+        } catch (IOException e) {
+            throw new MemberHandler(ErrorStatus.IMAGE_UPLOAD_FAILED);
         }
 
+//        // 이미지 URL 설정
+//        request.setPortImageUrl(imageUrl);
 
         // 포트폴리오 생성
-        Portfolio portfolio = PortfolioConverter.toPortfolio(request, member);
+        Portfolio portfolio = PortfolioConverter.toPortfolio(request, member, imageUrl);
         portfolioRepository.save(portfolio);
-
-
 
         System.out.println(request.getAwards());
         System.out.println(request.getCareers());
@@ -75,12 +88,13 @@ public class PortfolioServiceImpl implements PortfolioService{
         portfolioAwardRepository.saveAll(awards);
 
         System.out.println(awards);
+
+        // 경력 리스트 순서 자동 설정 후 변환 및 저장
         List<PortfolioCareer> careers = PortfolioConverter.toCareerList(request.getCareers(), portfolio);
         for (int i = 0; i < careers.size(); i++) {
             careers.get(i).setOrderIndex(i + 1); // 자동 순서 설정
         }
         portfolioCareerRepository.saveAll(careers);
-
 
         // 포트폴리오 응답 변환
         return PortfolioConverter.toPortfolioResponse(portfolio, links, educations, awards, careers);

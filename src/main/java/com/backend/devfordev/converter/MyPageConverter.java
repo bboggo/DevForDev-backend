@@ -33,7 +33,8 @@ public class MyPageConverter {
     public static void toUpdateProfileRequest(
             Member member,
             MemberInfo memberInfo,
-            MyPageInfoRequest.ProfileUpdateRequest request) {
+            MyPageInfoRequest.ProfileUpdateRequest request,
+            String imageUrl) {
         // Member 업데이트
         if (request.getGitHub() != null) {
             member.setGithub(request.getGitHub());
@@ -44,9 +45,9 @@ public class MyPageConverter {
             memberInfo.setNickname(request.getNickname());
         }
 
-        if (request.getImageUrl() != null) {
-            memberInfo.setImageUrl(request.getImageUrl());
-        }
+
+        memberInfo.setImageUrl(imageUrl);
+
 
         if (request.getIntroduction() != null) {
             memberInfo.setIntroduction(request.getIntroduction());

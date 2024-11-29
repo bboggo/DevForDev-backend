@@ -40,6 +40,7 @@ public enum ErrorStatus implements BaseErrorCode {
     UNAUTHORIZED_USER(BAD_REQUEST, "ETC001","Only the author can do this."),
     OPENAI_API_ERROR(BAD_REQUEST, "ETC002", "An error occurred while calling the OpenAI API"),
     INVALID_ORDER_ERROR(BAD_REQUEST, "ETC003", "Order values must be sequential, non-negative, and not null."),
+    IMAGE_UPLOAD_FAILED(BAD_REQUEST, "ETC004", ""),
     // 좋아요
     INVALID_LIKE_TYPE(BAD_REQUEST, "LIKE001", "The LikeType value must be one of the following: COMMUNITY, TEAM, PORTFOLIO, PROJECT."),
     // 회원

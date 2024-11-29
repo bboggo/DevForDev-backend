@@ -6,6 +6,7 @@ import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.PortfolioRequest;
 import com.backend.devfordev.dto.PortfolioResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.sound.sampled.Port;
 import java.time.LocalDateTime;
@@ -18,13 +19,13 @@ import java.util.stream.Collectors;
 
 public class PortfolioConverter {
 
-    public static Portfolio toPortfolio(PortfolioRequest.PortfolioCreateRequest request, Member member) {
+    public static Portfolio toPortfolio(PortfolioRequest.PortfolioCreateRequest request, Member member, String imageUrl) {
 
         Portfolio portfolio = Portfolio.builder()
                 .portTitle(request.getPortTitle())
                 .portContent(request.getPortContent())
                 .portPosition(request.getPortPosition())
-                .portImageUrl(request.getPortImageUrl())
+                .portImageUrl(imageUrl)
                 .member(member)
                 .portViews(0L)
                 .build();

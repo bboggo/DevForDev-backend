@@ -70,7 +70,7 @@ public class MyPageServiceImpl implements MyPageService{
             return MyPageConverter.ProfileUpdateResponse(member, memberInfo);
         } catch (IOException e) {
             // 프로필 이미지 업로드 실패 예외 처리
-            throw new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND);
+            throw new MemberHandler(ErrorStatus.IMAGE_UPLOAD_FAILED);
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
         }

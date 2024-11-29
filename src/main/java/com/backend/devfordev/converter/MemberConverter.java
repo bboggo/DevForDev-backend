@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class MemberConverter {
     public static Member toMember(SignUpRequest signUpRequest, PasswordEncoder encoder) {
-        String imageUrl = "domain.com";
+        //String imageUrl = "domain.com";
         String githubUrl = "https://github.com/" + signUpRequest.gitHub();  // 깃허브 URL 생성
         return Member.builder()
                 .email(signUpRequest.email())
@@ -22,7 +22,7 @@ public class MemberConverter {
     }
 
     public static MemberInfo toMemberInfo(SignUpRequest signUpRequest, Member member) {
-        String defaultImageUrl = "https://default-imageUrl.com";
+        String defaultImageUrl = "https://dfdnew.s3.ap-northeast-2.amazonaws.com/pen%20%283%29.png";
         return MemberInfo.builder()
                 .nickname(signUpRequest.name()) // 기본 닉네임은 name 필드로 설정
                 .imageUrl(defaultImageUrl)

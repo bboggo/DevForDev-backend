@@ -46,7 +46,7 @@ public class MyPageConverter {
         }
 
 
-            memberInfo.setImageUrl(imageUrl);
+        memberInfo.setImageUrl(imageUrl);
 
 
         if (request.getIntroduction() != null) {

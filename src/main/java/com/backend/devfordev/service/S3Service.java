@@ -52,7 +52,7 @@ public class S3Service {
     }
 
     public String saveDefaultProfileImage() throws IOException {
-        String defaultImageUrl = "https://taskweaver-bucket.s3.ap-northeast-2.amazonaws.com/pen.png"; // 디폴트 이미지 URL
+        String defaultImageUrl = "https://dfdnew.s3.ap-northeast-2.amazonaws.com/pen%20%283%29.png"; // 디폴트 이미지 URL
         // URL 반환 (디폴트 이미지 URL을 직접 사용)
         return defaultImageUrl;
     }

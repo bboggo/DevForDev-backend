@@ -15,4 +15,7 @@ public interface MemberInfoRepository extends JpaRepository<MemberInfo, Long> {
     List<MemberInfo> findByNicknameContainingIgnoreCase(String nickname);
 
     Optional<MemberInfo> findByMemberId(Long memberId);
+
+   boolean existsByNickname(String nickname);
+
 }

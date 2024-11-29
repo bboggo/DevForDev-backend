@@ -44,7 +44,7 @@ public enum ErrorStatus implements BaseErrorCode {
     // 좋아요
     INVALID_LIKE_TYPE(BAD_REQUEST, "LIKE001", "The LikeType value must be one of the following: COMMUNITY, TEAM, PORTFOLIO, PROJECT."),
     // 회원
-    DUPLICATED_NAME(BAD_REQUEST, "MEMBER001", "Nickname is duplicated"),
+    DUPLICATED_NICKNAME(BAD_REQUEST, "MEMBER001", "Nickname is duplicated"),
     DUPLICATED_EMAIL(BAD_REQUEST, "MEMBER002", "Email is duplicated"),
     NO_MATCHING_MEMBER(BAD_REQUEST, "MEMBER003", "There is no matching member information."),
     INVALID_MEMBER(BAD_REQUEST, "MEMBER004", "User information is incorrect."),

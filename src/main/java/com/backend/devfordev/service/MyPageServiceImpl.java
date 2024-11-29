@@ -49,6 +49,12 @@ public class MyPageServiceImpl implements MyPageService{
             MemberInfo memberInfo = memberInfoRepository.findByMemberId(memberId)
                     .orElseThrow(() -> new IllegalArgumentException("MemberInfo not found"));
 
+            // 닉네임 중복 체크
+            if (!memberInfo.getNickname().equals(request.getNickname()) &&
+                    memberInfoRepository.existsByNickname(request.getNickname())) {
+                throw new MemberHandler(ErrorStatus.DUPLICATED_NICKNAME); // 중복된 닉네임 예외 발생
+            }
+
             // 이미지 URL 처리
             String imageUrl;
             if (profileImage == null || profileImage.isEmpty()) {

@@ -26,6 +26,7 @@ public class MemberConverter {
         return MemberInfo.builder()
                 .nickname(signUpRequest.name()) // 기본 닉네임은 name 필드로 설정
                 .imageUrl(defaultImageUrl)
+                .completionRate(0L)
                 .member(member)
                 .build();
     }

@@ -7,7 +7,6 @@ import com.backend.devfordev.apiPayload.exception.handler.TeamHandler;
 import com.backend.devfordev.converter.CommunityConverter;
 import com.backend.devfordev.converter.TeamConverter;
 import com.backend.devfordev.domain.*;
-import com.backend.devfordev.domain.enums.CommunityCategory;
 import com.backend.devfordev.domain.enums.TeamType;
 import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.TeamRequest;
@@ -30,6 +29,7 @@ public class TeamServiceImpl implements TeamService {
     private final TeamTechStackRepository teamTechStackRepository;
     private final TeamMemberRepository teamMemberRepository;
     private final MemberInfoRepository memberInfoRepository;
+    private final TeamTagMapRepository teamTagMapRepository;
     @Override
     @Transactional
     public TeamResponse.TeamCreateResponse createTeam(TeamRequest.TeamCreateRequest request, Long userId) {
@@ -320,4 +320,85 @@ public class TeamServiceImpl implements TeamService {
         // 팀 멤버 삭제
         teamMemberRepository.delete(teamMember);
     }
+
+
+    @Transactional
+    public TeamResponse.TeamUpdateResponse updateTeam(Long teamId, TeamRequest.TeamUpdateRequest request, Long userId) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new TeamHandler(ErrorStatus.TEAM_NOT_FOUND));
+
+
+        if (!team.getMember().getId().equals(userId)) {
+            throw new CommunityHandler(ErrorStatus.UNAUTHORIZED_USER);
+        }
+
+        // 태그 처리
+        List<TeamTag> tags = getTeamTagsByNamesOrCreate(request.getTeamTags());
+        List<TeamTagMap> tagMaps = tags.stream()
+                .map(tag -> TeamTagMap.builder()
+                        .team(team)
+                        .tag(tag)
+                        .build())
+                .toList();
+
+        // 기술 스택 처리
+        List<TeamTechStack> techStacks = request.getTeamTechStack().stream()
+                .map(stack -> TeamTechStack.builder()
+                        .name(stack)
+                        .team(team)
+                        .build())
+                .toList();
+
+        // 기존 컬렉션 초기화 후 새 값 설정
+        team.getTeamTagMaps().clear();
+        team.getTeamTagMaps().addAll(tagMaps);
+
+        team.getTeamTechStacks().clear();
+        team.getTeamTechStacks().addAll(techStacks);
+
+        // 팀 정보 업데이트
+        team.setTeamTitle(request.getTeamTitle());
+        team.setTeamContent(request.getTeamContent());
+        team.setTeamPosition(request.getTeamPosition());
+        team.setTeamRecruitmentNum(String.valueOf(request.getTeamRecruitmentNum()));
+
+        // 변경된 팀 저장
+        return TeamConverter.toTeamUpdateResponse(team);
+    }
+
+    public List<TeamTag> getTeamTagsByNames(List<String> tagNames) {
+        List<TeamTag> tags = teamTagRepository.findAllByNameIn(tagNames);
+
+        // 태그가 누락된 경우 예외 처리
+        if (tags.size() != tagNames.size()) {
+            throw new IllegalArgumentException("Some tags are missing or invalid: " + tagNames);
+        }
+        return tags;
+    }
+
+    @Transactional
+    public List<TeamTag> getTeamTagsByNamesOrCreate(List<String> tagNames) {
+        // 1. 데이터베이스에서 기존 태그를 조회
+        List<TeamTag> existingTags = teamTagRepository.findAllByNameIn(tagNames);
+
+        // 2. 요청된 태그 중 없는 태그를 찾음
+        List<String> missingTags = tagNames.stream()
+                .filter(name -> existingTags.stream().noneMatch(tag -> tag.getName().equals(name)))
+                .toList();
+
+        // 3. 누락된 태그를 생성
+        List<TeamTag> newTags = missingTags.stream()
+                .map(name -> TeamTag.builder().name(name).build())
+                .toList();
+
+        // 4. 새 태그를 데이터베이스에 저장
+        if (!newTags.isEmpty()) {
+            teamTagRepository.saveAll(newTags);
+        }
+
+        // 5. 기존 태그와 새 태그를 합쳐 반환
+        existingTags.addAll(newTags);
+        return existingTags;
+    }
+
 }

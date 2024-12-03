@@ -157,4 +157,16 @@ public class TeamController {
 
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+
+    @Operation(summary = "팀 모집 공고 업데이트", description = "팀 모집 공고를 업데이트합니다.")
+    @PatchMapping("/{teamId}")
+    public ResponseEntity<ApiResponse<TeamResponse.TeamUpdateResponse>> updateTeam(
+            @PathVariable Long teamId,
+            @RequestBody @Valid TeamRequest.TeamUpdateRequest request,
+            @AuthenticationPrincipal User user) {
+
+        TeamResponse.TeamUpdateResponse response = teamService.updateTeam(teamId, request, Long.parseLong(user.getUsername()));
+        return ResponseEntity.ok(ApiResponse.onSuccess(response));
+    }
 }

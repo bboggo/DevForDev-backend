@@ -19,4 +19,5 @@ public interface TeamService {
     public TeamResponse.TeamAddMemberResponse AddTeamMember(TeamRequest.TeamAddMemberRequest request, Long userId, Long teamId);
     public TeamResponse.TeamMemberListWithIdResponse getTeamMemberList(Long teamId);
     public void deleteTeamMember(Long teamId, Long memberId, Long userId);
+    public TeamResponse.TeamUpdateResponse updateTeam(Long teamId, TeamRequest.TeamUpdateRequest request, Long userId);
 }

@@ -20,7 +20,7 @@ public class PortfolioResponse {
         @Schema(description = "커뮤니티 ID", example = "1")
         Long id;
         @Schema(description = "작성자 ID", example = "1")
-        Long member;
+        Long writer;
         @Schema(description = "포트폴리오 제목", example = "김민지의 포트폴리오~~")
         String portTitle;
         @Schema(description = "포트폴리오 내용", example = "포트폴리오 내용~~")
@@ -316,7 +316,7 @@ public class PortfolioResponse {
         private List<String> tags;
         @Schema(description = "포트폴리오 이미지 url", example = "이미지url")
         String portImageUrl;
-        CommunityResponse.MemberInfo member;
+        CommunityResponse.MemberInfo writer;
         @Schema(description = "작성시간", example = "2024-11-19T00:52:47.534061")
         LocalDateTime createdAt;
         @Schema(description = "답변수", example = "0")

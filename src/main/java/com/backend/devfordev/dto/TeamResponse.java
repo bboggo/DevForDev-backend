@@ -43,7 +43,7 @@ public class TeamResponse {
     public static class TeamListResponse {
         @Schema(description = "팀 모집 id", example = "1")
         Long id;
-        CommunityResponse.MemberInfo member;
+        CommunityResponse.MemberInfo writer;
         @Schema(description = "팀 모집 제목", example = "팀 모집 제목입니다.")
         String teamTitle;
         @Schema(description = "팀 모집 내용", example = "팀 모집 내용입니다.")
@@ -78,7 +78,7 @@ public class TeamResponse {
     public static class TeamDetailResponse {
         @Schema(description = "팀 모집 id", example = "1")
         Long id;
-        CommunityResponse.MemberInfo member;
+        CommunityResponse.MemberInfo writer;
         @Schema(description = "팀 모집 제목", example = "팀 모집 제목입니다.")
         String teamTitle;
         @Schema(description = "팀 모집 내용", example = "팀 모집 내용입니다.")

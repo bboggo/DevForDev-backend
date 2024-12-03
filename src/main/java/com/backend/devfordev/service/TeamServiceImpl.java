@@ -215,23 +215,34 @@ public class TeamServiceImpl implements TeamService {
     @Override
     @Transactional
     public List<CommunityResponse.MemberInfo> searchMembersByNickname(String nickname, Long userId, Long teamId) {
+        // 팀 조회
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new TeamHandler(ErrorStatus.TEAM_NOT_FOUND));
-
 
         // 작성자인지 확인
         if (!team.getMember().getId().equals(userId)) {
             throw new TeamHandler(ErrorStatus.UNAUTHORIZED_USER); // 권한 없음 예외 발생
         }
 
+        List<MemberInfo> memberInfos;
 
-        // nickname을 기준으로 검색
-        List<MemberInfo> memberInfos = memberInfoRepository.findByNicknameContainingIgnoreCase(nickname);
+        // nickname이 null 또는 빈 문자열인 경우, 전체 리스트 조회
+        if (nickname == null || nickname.isBlank()) {
+            memberInfos = memberInfoRepository.findAll(); // 모든 멤버 정보 조회
+        } else {
+            // nickname이 있는 경우, 검색 조건으로 조회
+            memberInfos = memberInfoRepository.findByNicknameContainingIgnoreCase(nickname);
+        }
+
         return memberInfos.stream()
-                .map(memberInfo -> new CommunityResponse.MemberInfo(memberInfo.getMember().getId(), memberInfo.getImageUrl(), memberInfo.getNickname()))
+                .map(memberInfo -> new CommunityResponse.MemberInfo(
+                        memberInfo.getMember().getId(),
+                        memberInfo.getImageUrl(),
+                        memberInfo.getNickname()
+                ))
                 .collect(Collectors.toList());
-
     }
+
 
 
     @Override

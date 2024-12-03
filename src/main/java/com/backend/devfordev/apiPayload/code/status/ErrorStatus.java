@@ -65,7 +65,8 @@ public enum ErrorStatus implements BaseErrorCode {
     TEAM_DELETED(BAD_REQUEST, "TEAM004", "This is a deleted post."),
     ALREADY_TEAM_MEMBER(BAD_REQUEST, "TEAM005", "This member has already been added."),
     CANNOT_ADD_OWNER_AS_MEMBER(BAD_REQUEST, "TEAM006", "Authors cannot be added as team members."),
-    INVALID_TEAM(BAD_REQUEST, "TEAM007", "Only STUDY, PROJECT, and MENTORING are available.");
+    INVALID_TEAM(BAD_REQUEST, "TEAM007", "Only STUDY, PROJECT, and MENTORING are available."),
+    TEAM_RECRUITMENT_FULL(BAD_REQUEST, "TEAM008", "The recruitment limit has been reached."),;
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

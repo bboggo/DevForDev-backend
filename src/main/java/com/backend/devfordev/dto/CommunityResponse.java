@@ -21,7 +21,7 @@ public class CommunityResponse {
         @Schema(description = "커뮤니티 내용", example = "커뮤니티 내용 부분입니다.")
         String communityContent;
         @Schema(description = "작성자 ID", example = "1")
-        Long member;
+        Long writer;
         @Schema(description = "커뮤니티 답변 동의 여부", example = "true")
         Boolean isComment;
         @Schema(description = "작성시간", example = "2024-11-19T00:52:47.534061")
@@ -58,7 +58,7 @@ public class CommunityResponse {
         @Schema(description = "커뮤니티 내용", example = "커뮤니티 내용 부분입니다.")
         String communityContent;
 
-        MemberInfo member;
+        MemberInfo writer;
         @Schema(description = "작성시간", example = "2024-11-19T00:52:47.534061")
         LocalDateTime createdAt;
         @Schema(description = "답변수", example = "0")
@@ -85,7 +85,7 @@ public class CommunityResponse {
         String communityContent;
         @Schema(description = "커뮤니티 답변 동의 여부", example = "true")
         Boolean isComment;
-        MemberInfo member;
+        MemberInfo writer;
         @Schema(description = "작성시간", example = "2024-11-19T00:52:47.534061")
         LocalDateTime createdAt;
         @Schema(description = "답변수", example = "0")
@@ -120,7 +120,7 @@ public class CommunityResponse {
         @Schema(description = "커뮤니티 내용", example = "커뮤니티 내용 부분입니다.")
         String communityContent;
         @Schema(description = "작성자 ID", example = "1")
-        Long member;
+        Long writer;
         @Schema(description = "커뮤니티 답변 동의 여부", example = "true")
         Boolean isComment;
         @Schema(description = "작성시간", example = "2024-11-19T00:52:47.534061")

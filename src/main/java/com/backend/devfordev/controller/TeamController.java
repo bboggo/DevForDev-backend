@@ -70,7 +70,7 @@ public class TeamController {
 
 
     @Operation(summary = "팀 모집글 상세 조회")
-    @GetMapping(value = "/v1/team/{id}")
+    @GetMapping(value = "/v1/team/{teamId}")
     public ResponseEntity<ApiResponse<TeamResponse.TeamDetailResponse>> getTeamDetail(@PathVariable Long id) {
         TeamResponse.TeamDetailResponse teamDetail = teamService.getTeamDetail(id);
 
@@ -97,7 +97,7 @@ public class TeamController {
 
 
     @Operation(summary = "팀 모집글 삭제")
-    @DeleteMapping(value = "/v1/team/{id}")
+    @DeleteMapping(value = "/v1/team/{teamId}")
     public ResponseEntity<ApiResponse> deleteTeam(@PathVariable Long id, @AuthenticationPrincipal User user) {
         teamService.deleteTeam(id, Long.parseLong(user.getUsername()));
         ApiResponse apiResponse = ApiResponse.builder()
@@ -156,5 +156,17 @@ public class TeamController {
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+
+    @Operation(summary = "팀 모집 공고 업데이트", description = "팀 모집 공고를 업데이트합니다.")
+    @PatchMapping("v1/team/{teamId}")
+    public ResponseEntity<ApiResponse<TeamResponse.TeamUpdateResponse>> updateTeam(
+            @PathVariable Long teamId,
+            @RequestBody @Valid TeamRequest.TeamUpdateRequest request,
+            @AuthenticationPrincipal User user) {
+
+        TeamResponse.TeamUpdateResponse response = teamService.updateTeam(teamId, request, Long.parseLong(user.getUsername()));
+        return ResponseEntity.ok(ApiResponse.onSuccess(response));
     }
 }

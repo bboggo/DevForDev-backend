@@ -5,10 +5,13 @@ import com.backend.devfordev.domain.enums.TeamType;
 import com.backend.devfordev.dto.CommunityResponse;
 import com.backend.devfordev.dto.TeamRequest;
 import com.backend.devfordev.dto.TeamResponse;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 public class TeamConverter {
     public static Team toTeam(TeamRequest.TeamCreateRequest request, Member member, List<TeamTag> tags, TeamType teamType) {
@@ -22,6 +25,39 @@ public class TeamConverter {
                 .teamIsActive(true) // 기본 값 설정
                 .teamViews(0L) // 기본 값 설정
                 .member(member)
+                .build();
+
+        // 기술 스택 변환
+        List<TeamTechStack> techStacks = request.getTeamTechStack().stream()
+                .map(stack -> TeamTechStack.builder()
+                        .name(stack)
+                        .team(team)
+                        .build())
+                .collect(Collectors.toList());
+
+        team.setTeamTechStacks(techStacks); // 기술 스택 설정
+
+        // 태그 매핑 설정
+        List<TeamTagMap> tagMaps = tags.stream()
+                .map(tag -> TeamTagMap.builder()
+                        .team(team)
+                        .tag(tag) // 매핑된 태그 엔티티
+                        .build())
+                .collect(Collectors.toList());
+
+        team.setTeamTagMaps(tagMaps); // 태그 매핑 설정
+
+        return team;
+    }
+    public static Team toUpdateTeam(TeamRequest.TeamUpdateRequest request,  List<TeamTag> tags, TeamType teamType) {
+        // 기본 팀 정보 설정
+        Team team = Team.builder()
+                .teamTitle(request.getTeamTitle())
+                .teamContent(request.getTeamContent())
+                .teamType(teamType)
+                .teamPosition(request.getTeamPosition())
+                .teamRecruitmentNum(String.valueOf(request.getTeamRecruitmentNum()))
+                .teamIsActive(true) // 기본 값 설정
                 .build();
 
         // 기술 스택 변환
@@ -129,6 +165,33 @@ public class TeamConverter {
                 0L, // 필요한 경우 업데이트
                 likeCount
 
+        );
+    }
+
+
+    public static TeamResponse.TeamUpdateResponse toTeamUpdateResponse(
+            Team team) {
+
+        // 기술 스택과 태그를 문자열 리스트로 변환
+        List<String> techStackNames = team.getTeamTechStacks().stream()
+                .map(TeamTechStack::getName)
+                .collect(Collectors.toList());
+
+        List<String> tagNames = team.getTeamTagMaps().stream()
+                .map(teamTagMap -> teamTagMap.getTag().getName())
+                .collect(Collectors.toList());
+
+        // TeamDetailResponse 객체 반환
+        return new TeamResponse.TeamUpdateResponse(
+                team.getId(),
+                team.getTeamTitle(),
+                team.getTeamContent(),
+                team.getTeamType(),
+                team.getTeamPosition(),
+                Long.valueOf(team.getTeamRecruitmentNum()),
+                techStackNames,
+                tagNames,
+                team.getCreatedAt()
         );
     }
 

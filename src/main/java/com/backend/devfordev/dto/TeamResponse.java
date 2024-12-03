@@ -135,4 +135,30 @@ public class TeamResponse {
         private Long id;
         private CommunityResponse.MemberInfo member; // 팀원의 정보 (MemberInfo를 사용)
     }
+
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TeamUpdateResponse {
+        @Schema(description = "팀 모집 id", example = "1")
+        Long id;
+        @Schema(description = "팀 모집 제목", example = "팀 모집 제목입니다.")
+        String teamTitle;
+        @Schema(description = "팀 모집 내용", example = "팀 모집 내용입니다.")
+        String teamContent;
+        @Schema(description = "팀 모집 타입", example = "STUDY")
+        TeamType teamType;
+        @Schema(description = "팀 모집 포지션", example = "BACKEND")
+        String teamPosition;
+        @Schema(description = "팀 모집 인원", example = "1")
+        Long teamRecruitmentNum;
+        @Schema(description = "기술 스택", example = "[\"Java\", \"Spring\", \"AWS\"]")
+        List<String> teamTechStack;
+        @Schema(description = "태그", example = "[\"태그1\", \"태그2\", \"태그3\"]")
+        List<String> teamTags;
+        @Schema(description = "작성시간", example = "2024-11-19T00:52:47.534061")
+        LocalDateTime createdAt;
+    }
 }

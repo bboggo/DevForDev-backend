@@ -12,4 +12,6 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
     boolean existsByTeamAndMember(Team team, Member memberToInvite);
     List<TeamMember> findByTeamId(Long teamId);
     Optional<TeamMember> findByTeamIdAndMemberId(Long teamId, Long memberId);
+
+    long countByTeam(Team team); // 팀의 현재 멤버 수 조회
 }

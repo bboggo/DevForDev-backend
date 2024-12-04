@@ -257,24 +257,30 @@ public class TeamServiceImpl implements TeamService {
             throw new TeamHandler(ErrorStatus.UNAUTHORIZED_USER); // 권한 없음 예외 발생
         }
 
-
         Member memberToInvite = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
-
 
         // 작성자가 스스로를 추가하려는 경우 예외 처리
         if (team.getMember().getId().equals(request.getMemberId())) {
             throw new TeamHandler(ErrorStatus.CANNOT_ADD_OWNER_AS_MEMBER); // 작성자 추가 불가 예외 발생
         }
+
         // 이미 팀에 추가된 멤버인지 확인
         boolean isAlreadyMember = teamMemberRepository.existsByTeamAndMember(team, memberToInvite);
         if (isAlreadyMember) {
-            throw new TeamHandler(ErrorStatus.ALREADY_TEAM_MEMBER);
+            throw new TeamHandler(ErrorStatus.ALREADY_TEAM_MEMBER); // 이미 팀에 추가된 멤버 예외 발생
+        }
+
+        // 모집 인원을 초과하지 않았는지 확인
+        long currentMemberCount = teamMemberRepository.countByTeam(team);
+        int maxRecruitmentNum = Integer.parseInt(team.getTeamRecruitmentNum());
+
+        if (currentMemberCount >= maxRecruitmentNum+1) {
+            throw new TeamHandler(ErrorStatus.TEAM_RECRUITMENT_FULL); // 모집 인원 초과 예외 발생
         }
 
         // 팀에 멤버 추가
         TeamMember teamMember = TeamConverter.toTeamMember(team, memberToInvite);
-
         teamMemberRepository.save(teamMember);
 
         return TeamConverter.toTeamMemberResponse(teamMember, team, memberToInvite);

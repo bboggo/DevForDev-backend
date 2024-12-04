@@ -275,7 +275,7 @@ public class TeamServiceImpl implements TeamService {
         long currentMemberCount = teamMemberRepository.countByTeam(team);
         int maxRecruitmentNum = Integer.parseInt(team.getTeamRecruitmentNum());
 
-        if (currentMemberCount >= maxRecruitmentNum) {
+        if (currentMemberCount >= maxRecruitmentNum+1) {
             throw new TeamHandler(ErrorStatus.TEAM_RECRUITMENT_FULL); // 모집 인원 초과 예외 발생
         }
 

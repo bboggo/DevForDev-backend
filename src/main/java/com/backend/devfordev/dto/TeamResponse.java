@@ -132,7 +132,7 @@ public class TeamResponse {
     @AllArgsConstructor
     public static class TeamMemberListResponse {
         @Schema(description = "팀원 추가 id", example = "1")
-        private Long id;
+        //private Long id;
         private CommunityResponse.MemberInfo member; // 팀원의 정보 (MemberInfo를 사용)
     }
 

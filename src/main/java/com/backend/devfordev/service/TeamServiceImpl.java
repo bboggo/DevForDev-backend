@@ -60,6 +60,13 @@ public class TeamServiceImpl implements TeamService {
 
         Team team = TeamConverter.toTeam(request, member, tags, teamType);
 
+        // 작성자를 팀 멤버로 추가
+        TeamMember teamMember = TeamMember.builder()
+                .team(team)
+                .member(member)
+                .build();
+        teamMemberRepository.save(teamMember);
+
         teamRepository.save(team);
 
         return TeamConverter.toTeamCreateResponse(team);
@@ -308,7 +315,7 @@ public class TeamServiceImpl implements TeamService {
                     );
 
                     return TeamResponse.TeamMemberListResponse.builder()
-                            .id(teamMember.getId())
+                            //.id(teamMember.getId())
                             .member(memberInfo)
                             .build();
                 })

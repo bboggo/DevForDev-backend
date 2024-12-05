@@ -3,16 +3,20 @@ package com.backend.devfordev.converter;
 import com.backend.devfordev.domain.Member;
 import com.backend.devfordev.domain.MemberInfo;
 import com.backend.devfordev.dto.*;
+import com.backend.devfordev.repository.MemberInfoRepository;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Random;
+
 public class MemberConverter {
     public static Member toMember(SignUpRequest signUpRequest, PasswordEncoder encoder) {
         //String imageUrl = "domain.com";
         String githubUrl = "https://github.com/" + signUpRequest.gitHub();  // 깃허브 URL 생성
+
         return Member.builder()
                 .email(signUpRequest.email())
                 .password(encoder.encode(signUpRequest.password()))
@@ -21,10 +25,34 @@ public class MemberConverter {
                 .build();
     }
 
-    public static MemberInfo toMemberInfo(SignUpRequest signUpRequest, Member member) {
+    // 랜덤 닉네임 생성 메소드
+    private static String generateRandomNickname() {
+        int length = 10;
+        String alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        Random random = new Random();
+        StringBuilder nickname = new StringBuilder();
+
+        for (int i = 0; i < length; i++) {
+            nickname.append(alphanumeric.charAt(random.nextInt(alphanumeric.length())));
+        }
+
+        return nickname.toString();
+    }
+
+    // 닉네임 중복 검사와 유니크한 닉네임 생성
+    private static String generateUniqueNickname(MemberInfoRepository memberInfoRepository) {
+        String nickname;
+        do {
+            nickname = generateRandomNickname();
+        } while (memberInfoRepository.existsByNickname(nickname)); // 중복 닉네임 검사
+        return nickname;
+    }
+    public static MemberInfo toMemberInfo(SignUpRequest signUpRequest, Member member, MemberInfoRepository memberInfoRepository) {
         String defaultImageUrl = "https://dfdnew.s3.ap-northeast-2.amazonaws.com/pen%20%283%29.png";
+        String uniqueNickname = generateUniqueNickname(memberInfoRepository);
         return MemberInfo.builder()
-                .nickname(signUpRequest.name()) // 기본 닉네임은 name 필드로 설정
+                .nickname(uniqueNickname) // 기본 닉네임은 name 필드로 설정
                 .imageUrl(defaultImageUrl)
                 .completionRate(0L)
                 .member(member)

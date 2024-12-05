@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService{
 
             member = memberRepository.save(member);
 
-            MemberInfo memberInfo = MemberConverter.toMemberInfo(request, member);
+            MemberInfo memberInfo = MemberConverter.toMemberInfo(request, member, memberInfoRepository);
             memberInfo = memberInfoRepository.save(memberInfo); // memberInfoRepository는 MemberInfo의 Repository입니다.
 
         return MemberConverter.toSignUpResponse(member, memberInfo);

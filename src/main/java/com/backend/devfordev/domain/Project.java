@@ -37,6 +37,9 @@ public class Project {
     @Column(name = "pro_category", nullable = false)
     private ProjectCategory projectCategory;
 
+    @Column(name = "pro_image")
+    private String projectImageUrl;
+
     @Column(name = "pro_tags")
     private String projectTags;
 

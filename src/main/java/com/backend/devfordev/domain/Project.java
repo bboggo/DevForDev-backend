@@ -5,6 +5,8 @@ import com.backend.devfordev.domain.enums.ProjectCategory;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "project")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -43,8 +45,15 @@ public class Project {
     @Column(name = "pro_tags")
     private String projectTags;
 
+    @Column(name = "pro_views", nullable = false)
+    private Long projectViews = 0L;  // 기본값 설정
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
+
+    public void setTags(List<String> tags) {
+        this.projectTags = String.join(",", tags);
+    }
 }

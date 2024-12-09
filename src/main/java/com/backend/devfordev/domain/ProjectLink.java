@@ -10,7 +10,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class ProLink {
+public class ProjectLink {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

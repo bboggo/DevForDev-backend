@@ -1,8 +1,8 @@
 package com.backend.devfordev.converter;
 
 import com.backend.devfordev.domain.*;
-import com.backend.devfordev.dto.PortfolioRequest;
 import com.backend.devfordev.dto.ProjectRequest;
+import com.backend.devfordev.dto.ProjectResponse;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,5 +34,30 @@ public class ProjectConverter {
                         .project(project)
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public static ProjectResponse.ProjectCreateResponse toProjectResponse(
+            Project project,
+            List<ProjectLink> links
+    ) {
+        List<ProjectResponse.ProjectCreateResponse.LinkResponse> linkResponses = links.stream()
+                .map(link -> new ProjectResponse.ProjectCreateResponse.LinkResponse(
+                        link.getType(),
+                        link.getUrl(),
+                        link.getOrderIndex()
+                ))
+                .collect(Collectors.toList());
+
+        return new ProjectResponse.ProjectCreateResponse(
+                project.getId(),
+                project.getMember().getId(),
+                project.getProjectTitle(),
+                project.getProjectContent(),
+                project.getProjectCategory(),
+                project.getProjectTags(),
+                project.getProjectImageUrl(),
+                project.getCreatedAt(),
+                linkResponses
+        );
     }
 }

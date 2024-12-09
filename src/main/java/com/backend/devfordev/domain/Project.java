@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class Project {
+public class Project extends BaseEntity{
 
     /*
     제목

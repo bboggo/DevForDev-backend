@@ -27,7 +27,7 @@ import java.util.Optional;
 @Slf4j
 public class CommunityController {
     private final CommunityService communityService;
-    @Operation(summary = "커뮤니티 글 등록")
+    @Operation(summary = "커뮤니티 글 등록",  description = "커뮤니티 글 등록 api입니다.")
     @PostMapping(value = "/v1/community")
     public ResponseEntity<ApiResponse<CommunityResponse.CommunityCreateResponse>> createCommunity(@Valid @RequestBody CommunityRequest.CommunityCreateRequest request, @AuthenticationPrincipal User user){
 
@@ -37,7 +37,7 @@ public class CommunityController {
     }
 
 
-    @Operation(summary = "커뮤니티 글 전체 조회")
+    @Operation(summary = "커뮤니티 글 전체 조회", description = "커뮤니티 전체 글 조회 api입니다. 검색, 필터링, 정렬 적용.")
     @GetMapping(value = "/v1/community")
     public ResponseEntity<ApiResponse<List<CommunityResponse.CommunityListResponse>>> getCommunityList(
             @RequestParam(required = false) CommunityCategory category,
@@ -57,7 +57,7 @@ public class CommunityController {
     }
 
 
-    @Operation(summary = "커뮤니티 글 상세 조회")
+    @Operation(summary = "커뮤니티 글 상세 조회", description = "커뮤니티의 각 글을 상세 조회하는 api입니다.")
     @GetMapping(value = "/v1/community/{id}")
     public ResponseEntity<ApiResponse<CommunityResponse.CommunityDetailResponse>> getCommunityDetail(@PathVariable Long id) {
         CommunityResponse.CommunityDetailResponse communityDetail = communityService.getCommunityDetail(id);
@@ -68,7 +68,7 @@ public class CommunityController {
     }
 
 
-    @Operation(summary = "인기 커뮤니티 Top 5 유저 조회 (좋아요 수 기준)")
+    @Operation(summary = "인기 커뮤니티 Top 5 유저 조회 (좋아요 수 기준)", description = "커뮤니티 전체 글 중 누적 좋아요 수가 가장 많은 유저 5명에 대한 조회 api입니다.")
     @GetMapping(value = "/v1/community/top5")
     public ResponseEntity<ApiResponse<List<CommunityResponse.CommunityTop5Response>>> getTop5UsersByTotalLikes() {
         // 인기 Top 5 유저 조회
@@ -79,7 +79,7 @@ public class CommunityController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    @Operation(summary = "커뮤니티 글 수정")
+    @Operation(summary = "커뮤니티 글 수정", description = "커뮤니티 글을 수정하는 api입니다. 작성자만 해당 기능을 사용할 수 있습니다.")
     @PatchMapping(value = "/v1/community/{id}")
     public ResponseEntity<ApiResponse<CommunityResponse.CommunityUpdateResponse>> updateCommunity(@Valid @RequestBody CommunityRequest.CommunityUpdateRequest request, @PathVariable Long id, @AuthenticationPrincipal User user) {
 
@@ -90,7 +90,7 @@ public class CommunityController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    @Operation(summary = "커뮤니티 글 삭제")
+    @Operation(summary = "커뮤니티 글 삭제", description = "커뮤니티 글을 삭제하는 api입니다. 작성자만 해당 기능을 사용할 수 있습니다.")
     @DeleteMapping(value = "/v1/community/{id}")
     public ResponseEntity<ApiResponse> deleteCommunity(@PathVariable Long id, @AuthenticationPrincipal User user) {
         communityService.deleteCommunity(id, Long.parseLong(user.getUsername()));

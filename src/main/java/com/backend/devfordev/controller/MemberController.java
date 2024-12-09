@@ -27,7 +27,7 @@ import java.util.Map;
 public class MemberController {
     private final MemberService memberService;
 
-    @Operation(summary = "회원 가입")
+    @Operation(summary = "회원 가입", description = "회원가입 api입니다. 중복 이메일로는 회원가입 불가")
     @PostMapping(value = "/v1/auth/sign-up")
     public ResponseEntity<ApiResponse<SignUpResponse>> createMember(@RequestBody @Valid SignUpRequest request){
         SignUpResponse signUpResponse = memberService.signUp(request);
@@ -38,7 +38,7 @@ public class MemberController {
 //        return ApiResponse.onSuccess(MemberConverter.toSignUpResponse(member));
     }
 
-    @Operation(summary = "로그인")
+    @Operation(summary = "로그인", description = "로그인 api입니다.")
     @PostMapping(value = "/v1/auth/sign-in")
     public ResponseEntity<ApiResponse<SignInResponse>> signIn(@Valid @RequestBody SignInRequest request) {
         SignInResponse signInResponse = memberService.signIn(request);
@@ -47,7 +47,7 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    @Operation(summary = "로그인한 유저 조회")
+    @Operation(summary = "로그인한 유저 조회", description = "로그인한 유저의 id, 이메일, 이름, 닉네임, 이미지를 확인할 수 있는 api입니다.")
     @GetMapping("/v1/auth")
     public ResponseEntity<ApiResponse<MemberResponse.MemberInfoResponse>> getMemberInfo(@AuthenticationPrincipal User user) {
         MemberResponse.MemberInfoResponse memberResponse = memberService.getMember(Long.parseLong(user.getUsername()));
@@ -55,14 +55,14 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    @Operation(summary = "이메일 중복 체크")
+    @Operation(summary = "이메일 중복 체크", description = "입력된 이메일이 이미 존재하는 이메일인지 체크할 수 있는 api입니다.")
     @PostMapping("/v1/auth/check-email")
     public ResponseEntity<ApiResponse<Boolean>> checkEmailDuplicate(@RequestBody MemberRequest.checkEmailRequest request) {
         boolean isDuplicate = memberService.checkEmailDuplicate(request.getEmail());
         return ResponseEntity.ok(ApiResponse.onSuccess(!isDuplicate));
     }
 
-    @Operation(summary = "액세스 토큰 재발급")
+    @Operation(summary = "액세스 토큰 재발급", description = "액세스 토큰을 재발급하는 api입니다. access 토큰과 refresh 토큰을 요청합니다.")
     @PostMapping("/v1/auth/new-token")
     public ResponseEntity<ApiResponse<TokenResponse.AccessTokenResponse>> refreshAccessToken(
             @RequestBody TokenRequest.RefreshTokenRequest request) {

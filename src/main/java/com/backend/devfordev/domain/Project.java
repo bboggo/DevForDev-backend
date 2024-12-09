@@ -4,6 +4,7 @@ import com.backend.devfordev.domain.enums.CommunityCategory;
 import com.backend.devfordev.domain.enums.ProjectCategory;
 import jakarta.persistence.*;
 import lombok.*;
+import org.w3c.dom.Text;
 
 import java.util.List;
 

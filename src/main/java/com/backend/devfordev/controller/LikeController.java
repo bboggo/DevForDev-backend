@@ -1,11 +1,9 @@
 package com.backend.devfordev.controller;
 
 import com.backend.devfordev.apiPayload.ApiResponse;
-import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
-import com.backend.devfordev.domain.Heart;
-import com.backend.devfordev.dto.LikeRequest;
-import com.backend.devfordev.dto.LikeResponse;
-import com.backend.devfordev.service.LikeService;
+import com.backend.devfordev.dto.LikeDto.LikeRequest;
+import com.backend.devfordev.dto.LikeDto.LikeResponse;
+import com.backend.devfordev.service.LikeService.LikeService;
 import io.swagger.v3.oas.annotations.Operation;
 
 import io.swagger.v3.oas.annotations.tags.Tag;

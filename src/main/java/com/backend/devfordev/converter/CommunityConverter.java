@@ -1,12 +1,10 @@
 package com.backend.devfordev.converter;
 
-import com.backend.devfordev.domain.Community;
-import com.backend.devfordev.domain.Member;
+import com.backend.devfordev.domain.CommunityEntity.Community;
+import com.backend.devfordev.domain.MemberEntity.Member;
 import com.backend.devfordev.domain.enums.CommunityCategory;
-import com.backend.devfordev.dto.CommunityRequest;
-import com.backend.devfordev.dto.CommunityResponse;
-
-import java.time.LocalDateTime;
+import com.backend.devfordev.dto.CommunityDto.CommunityRequest;
+import com.backend.devfordev.dto.CommunityDto.CommunityResponse;
 
 public class CommunityConverter {
     public static Community toCommunity(CommunityRequest.CommunityCreateRequest request, Member member, CommunityCategory category) {

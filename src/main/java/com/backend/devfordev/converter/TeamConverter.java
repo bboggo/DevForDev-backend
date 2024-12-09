@@ -1,14 +1,12 @@
 package com.backend.devfordev.converter;
 
-import com.backend.devfordev.domain.*;
+import com.backend.devfordev.domain.MemberEntity.Member;
+import com.backend.devfordev.domain.TeamEntity.*;
 import com.backend.devfordev.domain.enums.TeamType;
-import com.backend.devfordev.dto.CommunityResponse;
-import com.backend.devfordev.dto.TeamRequest;
-import com.backend.devfordev.dto.TeamResponse;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
+import com.backend.devfordev.dto.CommunityDto.CommunityResponse;
+import com.backend.devfordev.dto.TeamDto.TeamRequest;
+import com.backend.devfordev.dto.TeamDto.TeamResponse;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

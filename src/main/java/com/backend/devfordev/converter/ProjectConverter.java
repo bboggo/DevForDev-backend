@@ -1,8 +1,10 @@
 package com.backend.devfordev.converter;
 
-import com.backend.devfordev.domain.*;
-import com.backend.devfordev.dto.ProjectRequest;
-import com.backend.devfordev.dto.ProjectResponse;
+import com.backend.devfordev.domain.MemberEntity.Member;
+import com.backend.devfordev.domain.ProjectEntity.Project;
+import com.backend.devfordev.domain.ProjectEntity.ProjectLink;
+import com.backend.devfordev.dto.ProjectDto.ProjectRequest;
+import com.backend.devfordev.dto.ProjectDto.ProjectResponse;
 
 import java.util.ArrayList;
 import java.util.Collections;

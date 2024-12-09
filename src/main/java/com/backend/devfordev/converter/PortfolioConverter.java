@@ -1,17 +1,13 @@
 package com.backend.devfordev.converter;
-import com.backend.devfordev.domain.*;
 
+import com.backend.devfordev.domain.MemberEntity.Member;
+import com.backend.devfordev.domain.PortfolioEntity.*;
 import com.backend.devfordev.domain.enums.AwardType;
-import com.backend.devfordev.dto.CommunityResponse;
-import com.backend.devfordev.dto.PortfolioRequest;
-import com.backend.devfordev.dto.PortfolioResponse;
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.web.multipart.MultipartFile;
+import com.backend.devfordev.dto.CommunityDto.CommunityResponse;
+import com.backend.devfordev.dto.PortfolioDto.PortfolioRequest;
+import com.backend.devfordev.dto.PortfolioDto.PortfolioResponse;
 
-import javax.sound.sampled.Port;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;

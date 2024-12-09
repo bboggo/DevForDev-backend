@@ -1,10 +1,9 @@
 package com.backend.devfordev.converter;
 
 import com.backend.devfordev.domain.Heart;
-import com.backend.devfordev.domain.Member;
-import com.backend.devfordev.domain.enums.LikeType;
-import com.backend.devfordev.dto.LikeRequest;
-import com.backend.devfordev.dto.LikeResponse;
+import com.backend.devfordev.domain.MemberEntity.Member;
+import com.backend.devfordev.dto.LikeDto.LikeRequest;
+import com.backend.devfordev.dto.LikeDto.LikeResponse;
 
 
 public class LikeConverter {

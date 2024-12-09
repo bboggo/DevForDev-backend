@@ -1,10 +1,8 @@
 package com.backend.devfordev.controller;
 
 import com.backend.devfordev.apiPayload.ApiResponse;
-import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
-import com.backend.devfordev.apiPayload.exception.handler.MemberHandler;
-import com.backend.devfordev.dto.*;
-import com.backend.devfordev.service.MemberService;
+import com.backend.devfordev.dto.MemberDto.*;
+import com.backend.devfordev.service.MemberService.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -15,9 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Tag(name = "회원 가입 및 로그인 API")
 @RequiredArgsConstructor

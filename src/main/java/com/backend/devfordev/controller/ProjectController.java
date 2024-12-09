@@ -1,12 +1,9 @@
 package com.backend.devfordev.controller;
 
 import com.backend.devfordev.apiPayload.ApiResponse;
-import com.backend.devfordev.dto.PortfolioRequest;
-import com.backend.devfordev.dto.PortfolioResponse;
-import com.backend.devfordev.dto.ProjectRequest;
-import com.backend.devfordev.dto.ProjectResponse;
-import com.backend.devfordev.service.PortfolioService;
-import com.backend.devfordev.service.ProjectService;
+import com.backend.devfordev.dto.ProjectDto.ProjectRequest;
+import com.backend.devfordev.dto.ProjectDto.ProjectResponse;
+import com.backend.devfordev.service.ProjectService.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

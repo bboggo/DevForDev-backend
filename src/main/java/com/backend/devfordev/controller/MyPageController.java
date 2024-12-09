@@ -2,8 +2,9 @@ package com.backend.devfordev.controller;
 
 import com.backend.devfordev.apiPayload.ApiResponse;
 import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
-import com.backend.devfordev.dto.*;
-import com.backend.devfordev.service.MyPageService;
+import com.backend.devfordev.dto.MemberDto.MyPageInfoRequest;
+import com.backend.devfordev.dto.MemberDto.MyPageInfoResponse;
+import com.backend.devfordev.service.MemberService.MyPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -14,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

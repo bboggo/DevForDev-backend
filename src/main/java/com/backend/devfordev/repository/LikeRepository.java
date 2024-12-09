@@ -1,7 +1,7 @@
 package com.backend.devfordev.repository;
 
 import com.backend.devfordev.domain.Heart;
-import com.backend.devfordev.domain.Member;
+import com.backend.devfordev.domain.MemberEntity.Member;
 import com.backend.devfordev.domain.enums.LikeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

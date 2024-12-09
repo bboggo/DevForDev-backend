@@ -2,12 +2,9 @@ package com.backend.devfordev.controller;
 
 
 import com.backend.devfordev.apiPayload.ApiResponse;
-import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
-import com.backend.devfordev.dto.CommunityRequest;
-import com.backend.devfordev.dto.MyPageInfoRequest;
-import com.backend.devfordev.dto.PortfolioRequest;
-import com.backend.devfordev.dto.PortfolioResponse;
-import com.backend.devfordev.service.PortfolioService;
+import com.backend.devfordev.dto.PortfolioDto.PortfolioRequest;
+import com.backend.devfordev.dto.PortfolioDto.PortfolioResponse;
+import com.backend.devfordev.service.PortfolioService.PortfolioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

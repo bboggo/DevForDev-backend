@@ -1,13 +1,9 @@
 package com.backend.devfordev.converter;
 
-import com.backend.devfordev.domain.Member;
-import com.backend.devfordev.domain.MemberInfo;
-import com.backend.devfordev.domain.enums.Affiliation;
-import com.backend.devfordev.dto.MyPageInfoRequest;
-import com.backend.devfordev.dto.MyPageInfoResponse;
-import com.backend.devfordev.dto.SignUpRequest;
-import com.backend.devfordev.dto.SignUpResponse;
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.backend.devfordev.domain.MemberEntity.Member;
+import com.backend.devfordev.domain.MemberEntity.MemberInfo;
+import com.backend.devfordev.dto.MemberDto.MyPageInfoRequest;
+import com.backend.devfordev.dto.MemberDto.MyPageInfoResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;

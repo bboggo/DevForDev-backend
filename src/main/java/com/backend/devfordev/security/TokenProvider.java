@@ -1,6 +1,6 @@
 package com.backend.devfordev.security;
 
-import com.backend.devfordev.repository.MemberRefreshTokenRepository;
+import com.backend.devfordev.repository.MemberRepository.MemberRefreshTokenRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.backend.devfordev.domain.MemberRefreshToken;
+import com.backend.devfordev.domain.MemberEntity.MemberRefreshToken;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;

@@ -1,13 +1,12 @@
 package com.backend.devfordev.converter;
 
-import com.backend.devfordev.domain.Member;
-import com.backend.devfordev.domain.MemberInfo;
-import com.backend.devfordev.dto.*;
-import com.backend.devfordev.repository.MemberInfoRepository;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import com.backend.devfordev.domain.MemberEntity.Member;
+import com.backend.devfordev.domain.MemberEntity.MemberInfo;
+import com.backend.devfordev.dto.MemberDto.MemberResponse;
+import com.backend.devfordev.dto.MemberDto.SignInResponse;
+import com.backend.devfordev.dto.MemberDto.SignUpRequest;
+import com.backend.devfordev.dto.MemberDto.SignUpResponse;
+import com.backend.devfordev.repository.MemberRepository.MemberInfoRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Random;
@@ -71,7 +70,7 @@ public class MemberConverter {
         );
     }
 
-    public static SignInResponse toSignInResponse(Member member,  MemberInfo memberInfo, String accessToken, String refreshToken) {
+    public static SignInResponse toSignInResponse(Member member, MemberInfo memberInfo, String accessToken, String refreshToken) {
         return new SignInResponse(
                 member.getId(),
                 member.getEmail(),

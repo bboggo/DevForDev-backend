@@ -1,5 +1,6 @@
 package com.backend.devfordev.domain;
 
+import com.backend.devfordev.domain.MemberEntity.Member;
 import com.backend.devfordev.domain.enums.LikeType;
 import jakarta.persistence.*;
 import lombok.*;

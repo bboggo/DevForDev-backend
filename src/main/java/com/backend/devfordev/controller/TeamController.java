@@ -3,12 +3,11 @@ package com.backend.devfordev.controller;
 import com.backend.devfordev.apiPayload.ApiResponse;
 import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
 
-import com.backend.devfordev.domain.enums.CommunityCategory;
 import com.backend.devfordev.domain.enums.TeamType;
-import com.backend.devfordev.dto.CommunityResponse;
-import com.backend.devfordev.dto.TeamRequest;
-import com.backend.devfordev.dto.TeamResponse;
-import com.backend.devfordev.service.TeamService;
+import com.backend.devfordev.dto.CommunityDto.CommunityResponse;
+import com.backend.devfordev.dto.TeamDto.TeamRequest;
+import com.backend.devfordev.dto.TeamDto.TeamResponse;
+import com.backend.devfordev.service.TeamService.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

@@ -4,6 +4,7 @@ import com.backend.devfordev.domain.*;
 import com.backend.devfordev.dto.ProjectRequest;
 import com.backend.devfordev.dto.ProjectResponse;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,13 +49,14 @@ public class ProjectConverter {
                 ))
                 .collect(Collectors.toList());
 
+        List<String> tags = project.getProjectTags() != null ? Collections.singletonList(project.getProjectTags()) : new ArrayList<>();
         return new ProjectResponse.ProjectCreateResponse(
                 project.getId(),
                 project.getMember().getId(),
                 project.getProjectTitle(),
                 project.getProjectContent(),
                 project.getProjectCategory(),
-                project.getProjectTags(),
+                tags,
                 project.getProjectImageUrl(),
                 project.getCreatedAt(),
                 linkResponses

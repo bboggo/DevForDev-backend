@@ -46,7 +46,7 @@ public class Project extends BaseEntity{
     private String projectTags;
 
     @Column(name = "pro_views", nullable = false)
-    private Long projectViews = 0L;  // 기본값 설정
+    private Long projectViews;  // 기본값 설정
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

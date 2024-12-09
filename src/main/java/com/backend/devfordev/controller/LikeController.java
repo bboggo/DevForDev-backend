@@ -30,7 +30,7 @@ public class LikeController {
         private final LikeService likeService;
 
         // 좋아요 추가
-        @Operation(summary = "좋아요")
+        @Operation(summary = "좋아요", description = "좋아요를 추가하고 삭제할 수 있는 api입니다. 팀, 프로젝트, 서비스, 포트폴리오에 모두 사용할 수 있습니다.")
         @PostMapping(value = "/v1/likes")
         public ResponseEntity<ApiResponse<LikeResponse>> addLike(@Valid @RequestBody LikeRequest request, @AuthenticationPrincipal User user) {
 

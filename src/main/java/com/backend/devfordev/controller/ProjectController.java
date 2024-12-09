@@ -30,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class ProjectController {
     private final ProjectService projectService;
-    @Operation(summary = "프로젝트 글 등록")
+    @Operation(summary = "프로젝트 글 등록", description = "프로젝트 글을 등록하는 api입니다.")
     @PostMapping(value = "/v1/project",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<ProjectResponse.ProjectCreateResponse>> createProject(@Valid @RequestPart("request") ProjectRequest.ProjectCreateRequest request, @AuthenticationPrincipal User user,
                                                                                             @RequestPart(value = "proImage", required = false) MultipartFile proImage) {

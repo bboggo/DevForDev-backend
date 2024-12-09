@@ -26,14 +26,14 @@ import org.springframework.web.multipart.MultipartFile;
 public class MyPageController {
     private final MyPageService myPageService;
 
-    @Operation(summary = "마이페이지 프로필 조회")
+    @Operation(summary = "마이페이지 프로필 조회", description = "마이페이지에서 로그인한 유저의 전체 프로필을 조회할 수 있는 api입니다.")
     @GetMapping("/v1/my-page/profile")
     public ResponseEntity<ApiResponse<MyPageInfoResponse.ProfileResponse>> getProfileInfo(@AuthenticationPrincipal User user) {
         MyPageInfoResponse.ProfileResponse memberResponse = myPageService.getProfile(Long.parseLong(user.getUsername()));
         ApiResponse<MyPageInfoResponse.ProfileResponse> apiResponse =ApiResponse.onSuccess(memberResponse);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
-    @Operation(summary = "마이페이지 프로필 저장")
+    @Operation(summary = "마이페이지 프로필 저장", description = "마이페이지에서 로그인한 유저의 프로필을 업데이트 할 수 있는 api입니다.")
     @PatchMapping(value = "/v1/my-page/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<MyPageInfoResponse.ProfileUpdateResponse>> updateProfileInfo(@Valid @RequestPart("request") MyPageInfoRequest.ProfileUpdateRequest request, @AuthenticationPrincipal User user,
                                                                                                    @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) {
@@ -45,7 +45,7 @@ public class MyPageController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    @Operation(summary = "마이페이지 비밀번호 수정")
+    @Operation(summary = "마이페이지 비밀번호 수정", description = "마이페이지에서 비밀번호를 수정할 수 있는 api입니다.")
     @PatchMapping(value = "/v1/my-page/password", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> updatePassword(@Valid @RequestBody MyPageInfoRequest.PasswordUpdateRequest request, @AuthenticationPrincipal User user) {
 
@@ -59,7 +59,7 @@ public class MyPageController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    @Operation(summary = "닉네임 중복 체크")
+    @Operation(summary = "닉네임 중복 체크", description = "마이페이지에서 닉에임 수정 시 이미 존재하는 닉네임인지 체크하는 api입니다.")
     @PostMapping("/v1/my-page/check-nickname")
     public ResponseEntity<ApiResponse<Boolean>> checkNicknameDuplicate(@RequestBody MyPageInfoRequest.checkNicknameRequest request) {
         boolean isDuplicate = myPageService.checkNicknameDuplicate(request.getNickname());

@@ -33,7 +33,7 @@ public class PortfolioController {
 
     private final PortfolioService portfolioService;
 
-    @Operation(summary = "포트폴리오 글 등록")
+    @Operation(summary = "포트폴리오 글 등록", description = "포트폴리오를 등록하는 api입니다.")
     @PostMapping(value = "/v1/portfolio",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<PortfolioResponse.PortCreateResponse>> createPortfolio(@Valid @RequestPart("request") PortfolioRequest.PortfolioCreateRequest request, @AuthenticationPrincipal User user,
                                                                                              @RequestPart(value = "portImage", required = false) MultipartFile portImage) {
@@ -45,7 +45,7 @@ public class PortfolioController {
     }
 
 
-    @Operation(summary = "포트폴리오 전체 리스트 조회")
+    @Operation(summary = "포트폴리오 전체 리스트 조회", description = "포트폴리오 전체 글 조회 api입니다. 검색, 필터링, 정렬 적용.")
     @GetMapping(value="/v1/portfolio")
     public ResponseEntity<ApiResponse<List<PortfolioResponse.PortfolioListResponse>>> getPortfolioList(
             @RequestParam(required = false) String position,

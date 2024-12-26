@@ -5,6 +5,11 @@ import com.backend.devfordev.domain.MemberEntity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static jakarta.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name = "community_comment")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,19 +23,24 @@ public class CommunityComment extends BaseEntity {
     @Column(name = "com_comment_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "comment_content", nullable = false)
+    private String commentContent;
+
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "com_id")
     private Community community;
 
-    @Column(name = "comment_content", nullable = false)
-    private String commentContent;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "parent_id")
+    private CommunityComment parent;
 
-    @Column(name = "is_ai_comment")
-    private Boolean isAiComment;
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<CommunityComment> children = new ArrayList<>();
 
 }

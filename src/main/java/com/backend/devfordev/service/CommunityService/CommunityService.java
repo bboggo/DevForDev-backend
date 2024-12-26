@@ -1,6 +1,8 @@
 package com.backend.devfordev.service.CommunityService;
 
 import com.backend.devfordev.domain.enums.CommunityCategory;
+import com.backend.devfordev.dto.CommunityDto.CommunityCommentRequest;
+import com.backend.devfordev.dto.CommunityDto.CommunityCommentResponse;
 import com.backend.devfordev.dto.CommunityDto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityDto.CommunityResponse;
 
@@ -17,4 +19,5 @@ public interface CommunityService {
 
     public void deleteCommunity(Long id, Long userId);
     public CommunityResponse.CommunityUpdateResponse updateCommunity(Long id, CommunityRequest.CommunityUpdateRequest request, Long userId);
+    public CommunityCommentResponse createComment(Long communityId, Long memberId, CommunityCommentRequest request);
 }

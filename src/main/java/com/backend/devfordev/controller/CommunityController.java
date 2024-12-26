@@ -3,6 +3,8 @@ package com.backend.devfordev.controller;
 import com.backend.devfordev.apiPayload.ApiResponse;
 import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
 import com.backend.devfordev.domain.enums.CommunityCategory;
+import com.backend.devfordev.dto.CommunityDto.CommunityCommentRequest;
+import com.backend.devfordev.dto.CommunityDto.CommunityCommentResponse;
 import com.backend.devfordev.dto.CommunityDto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityDto.CommunityResponse;
 import com.backend.devfordev.service.CommunityService.CommunityService;
@@ -102,4 +104,15 @@ public class CommunityController {
         // HTTP 상태 코드 204로 응답
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+    @Operation(summary = "커뮤니티 댓글 등록", description = "커뮤니티에 댓글 작성하는 api입니다.작성자만 해당 기능을 사용할 수 있습니다. 최상위 댓글의 경우 parentId를 null로 보내주세요!")
+    @PostMapping("/community/{communityId}/comments")
+    public ResponseEntity<ApiResponse<CommunityCommentResponse>> createComment(
+            @PathVariable Long communityId,
+            @RequestBody @Valid CommunityCommentRequest request,
+            @AuthenticationPrincipal User user) {
+        CommunityCommentResponse response = communityService.createComment(communityId, Long.parseLong(user.getUsername()), request);
+        return ResponseEntity.ok(ApiResponse.onSuccess(response));
+    }
+
 }

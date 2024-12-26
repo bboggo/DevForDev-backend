@@ -51,7 +51,4 @@ public class CommunityCommentServiceImpl implements CommunityCommentService{
 
         return CommunityConverter.toCommunityCommentResponse(savedComment);
     }
-
-
-
 }

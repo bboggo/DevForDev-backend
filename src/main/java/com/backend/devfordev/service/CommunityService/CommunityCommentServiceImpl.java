@@ -47,6 +47,7 @@ public class CommunityCommentServiceImpl implements CommunityCommentService{
 
         CommunityComment savedComment = commentRepository.save(comment);
 
+
         return CommunityConverter.toCommunityCommentResponse(savedComment);
     }
 

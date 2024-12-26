@@ -5,41 +5,45 @@
     <title>비밀번호 재설정</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #f9f9f9; font-family: Arial, sans-serif;">
-<div style="max-width: 600px; margin: 20px auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);">
+<div style="max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border: 1px solid #dcdcdc;">
     <!-- Header -->
-    <div style="padding: 10px 0; border-bottom: 1px solid #e0e0e0;">
-        <h1 style="font-size: 24px; margin: 0; text-align: left;">Dev<span style="color: #4A90E2;">For</span>Dev</h1>
+    <div style="padding: 20px 30px; text-align: left;">
+        <h1 style="font-size: 24px; margin: 0; color: #333333;">
+            Dev<span style="color: #4A90E2;">For</span>Dev<span style="color: #4A90E2;">.</span>
+        </h1>
     </div>
 
     <!-- Content -->
-    <div style="padding: 20px; text-align: left;">
-        <h2 style="color: #333333; font-size: 20px; margin: 0 0 20px;">비밀번호 재설정 메일</h2>
-        <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 10px 0;">
-            안녕하세요, <b>김민지</b>님.
+    <div style="padding: 0 30px 30px; text-align: left;">
+        <h2 style="color: #333333; font-size: 28px; font-weight: bold; margin: 0;">비밀번호 재설정 메일</h2>
+        <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 20px 0 0;">
+            안녕하세요, <b>[[${name}]]</b>님.
         </p>
-        <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 10px 0;">
+        <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 10px 0 20px;">
             아래 버튼을 클릭하면 비밀번호 재설정 페이지로 연결됩니다.
         </p>
-        <div style="text-align: left; margin: 20px 0;">
-            <a th:href="${resetLink}" style="display: inline-block; background-color: #4A90E2; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; font-size: 16px;">
+        <div style="text-align: left; margin-bottom: 20px;">
+            <a th:href="${resetLink}" style="display: inline-block; background-color: #4A90E2; color: white; text-decoration: none; padding: 14px 30px; border-radius: 8px; font-weight: bold; font-size: 16px;">
                 비밀번호 재설정
             </a>
         </div>
-        <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 10px 0;">
+        <p style="color: #333333; font-size: 14px; line-height: 1.6; margin: 10px 0;">
             만약, 가입한 적이 없거나 본인이 비밀번호 찾기 요청한 것이 아닌 경우, 본 메일을 무시하고 삭제하시기 바랍니다.
         </p>
-        <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 10px 0;">
+        <p style="color: #333333; font-size: 14px; line-height: 1.6; margin: 10px 0;">
             도움이 필요하시면 언제든지 도와드리겠습니다. <a href="http://example.com/contact" target="_blank" style="color: #4A90E2; text-decoration: none;">고객센터</a>
         </p>
-        <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 10px 0;">
-            감사합니다.<br>DevForDev 팀 드림.
+        <p style="color: #333333; font-size: 14px; line-height: 1.6; margin: 20px 0;">
+            감사합니다.<br><b>DevForDev</b> 팀 드림.
         </p>
     </div>
 
     <!-- Footer -->
-    <div style="text-align: left; margin-top: 20px; font-size: 12px; color: #a0a0a0; border-top: 1px solid #e0e0e0; padding-top: 20px;">
-        <p style="margin: 0;">
-            본 메일은 발신전용으로 회신이 되지 않습니다.<br>관련 문의는 고객센터(1234-5678)로 문의해 주시기 바랍니다.<br>©DevForDev
+    <div style="background-color: #f9f9f9; border-top: 1px solid #dcdcdc; padding: 20px 30px; text-align: left; font-size: 12px; color: #777777;">
+        <p style="margin: 0; line-height: 1.5;">
+            본 메일은 발신전용으로 회신이 되지 않습니다.<br>
+            관련 문의는 고객센터(1234-5678)로 문의해 주시기 바랍니다.<br>
+            ©DevForDev
         </p>
     </div>
 </div>

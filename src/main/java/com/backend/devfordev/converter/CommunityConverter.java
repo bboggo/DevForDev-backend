@@ -1,10 +1,15 @@
 package com.backend.devfordev.converter;
 
 import com.backend.devfordev.domain.CommunityEntity.Community;
+import com.backend.devfordev.domain.CommunityEntity.CommunityComment;
 import com.backend.devfordev.domain.MemberEntity.Member;
 import com.backend.devfordev.domain.enums.CommunityCategory;
+import com.backend.devfordev.dto.CommunityDto.CommunityCommentRequest;
+import com.backend.devfordev.dto.CommunityDto.CommunityCommentResponse;
 import com.backend.devfordev.dto.CommunityDto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityDto.CommunityResponse;
+
+import java.util.stream.Collectors;
 
 public class CommunityConverter {
     public static Community toCommunity(CommunityRequest.CommunityCreateRequest request, Member member, CommunityCategory category) {
@@ -91,4 +96,28 @@ public class CommunityConverter {
                 community.getModifiedAt()
         );
     }
+
+    public static CommunityComment toCommunityComment(CommunityCommentRequest request, Community community, Member member, CommunityComment parentComment) {
+        return CommunityComment.builder()
+                .commentContent(request.getContent())
+                .community(community) // 게시글 정보 설정
+                .member(member) // 작성자 정보 설정
+                .parent(parentComment) // 부모 댓글 정보 설정
+                .build();
+    }
+
+
+    public static CommunityCommentResponse toCommunityCommentResponse(CommunityComment comment) {
+        return CommunityCommentResponse.builder()
+                .commentId(comment.getId())
+                .parentCommentId(comment.getParent() != null ? comment.getParent().getId() : null)
+                .content(comment.getCommentContent())
+                .writer(comment.getMember().getId())
+                .createdAt(comment.getCreatedAt())
+//                .replies(comment.getChildren().stream()
+//                        .map(CommunityConverter::toCommunityCommentResponse) // 답글도 재귀적으로 변환
+//                        .collect(Collectors.toList()))
+                .build();
+    }
+
 }

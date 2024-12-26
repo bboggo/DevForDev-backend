@@ -15,7 +15,12 @@ public record SignUpRequest(
         String email,
 
         @Schema(description = "회원 비밀번호", example = "bboggo1234!")
-        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = " 비밀번호는 영문, 숫자, 특수문자 중 3종류 이상 조합하여 최소 8자리 이상이어야 합니다.")
+        //@Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = " 비밀번호는 영문, 숫자, 특수문자 중 3종류 이상 조합하여 최소 8자리 이상이어야 합니다.")
+
+        @Pattern(
+                regexp = "^(?=.*[a-zA-Z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,16}$",
+                message = "비밀번호는 영문 대소문자, 숫자 2가지 이상으로 조합해 8자 이상 16자 이하로 입력해주세요."
+        )
         @NotBlank(message = "This field must not be null.")
         String password,
 
@@ -29,7 +34,7 @@ public record SignUpRequest(
         String name,
 
         @Schema(description = "깃허브", example = "bboggo")
-        @NotBlank(message = "This field must not be null.")
+        //@NotBlank(message = "This field must not be null.")
         String gitHub
 
 ) {

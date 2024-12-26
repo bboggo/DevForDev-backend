@@ -34,7 +34,7 @@ public record SignUpRequest(
         String name,
 
         @Schema(description = "깃허브", example = "bboggo")
-        @NotBlank(message = "This field must not be null.")
+        //@NotBlank(message = "This field must not be null.")
         String gitHub
 
 ) {

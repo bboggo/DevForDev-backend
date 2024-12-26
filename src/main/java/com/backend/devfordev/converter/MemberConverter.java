@@ -13,16 +13,19 @@ import java.util.Random;
 
 public class MemberConverter {
     public static Member toMember(SignUpRequest signUpRequest, PasswordEncoder encoder) {
-        //String imageUrl = "domain.com";
-        String githubUrl = "https://github.com/" + signUpRequest.gitHub();  // 깃허브 URL 생성
+        // 깃허브 URL 생성 (입력 값이 null이거나 비어있을 경우 null 저장)
+        String githubUrl = (signUpRequest.gitHub() == null || signUpRequest.gitHub().isEmpty())
+                ? null
+                : "https://github.com/" + signUpRequest.gitHub();
 
         return Member.builder()
                 .email(signUpRequest.email())
                 .password(encoder.encode(signUpRequest.password()))
                 .name(signUpRequest.name())
-                .github(githubUrl)
+                .github(githubUrl) // 깃허브 URL 또는 null 저장
                 .build();
     }
+
 
     // 랜덤 닉네임 생성 메소드
     private static String generateRandomNickname() {

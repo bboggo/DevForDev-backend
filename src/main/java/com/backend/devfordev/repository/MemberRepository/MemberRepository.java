@@ -16,4 +16,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findByNameContainingIgnoreCase(String name);
 
     boolean existsByEmail(String email);
+
+    Optional<Member> findByResetToken(String resetToken);
 }

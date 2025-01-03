@@ -1,7 +1,10 @@
 package com.backend.devfordev.controller;
 
 import com.backend.devfordev.apiPayload.ApiResponse;
+import com.backend.devfordev.dto.EmailRequest;
+import com.backend.devfordev.dto.EmailResponse;
 import com.backend.devfordev.dto.MemberDto.*;
+import com.backend.devfordev.service.EmailService;
 import com.backend.devfordev.service.MemberService.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class MemberController {
     private final MemberService memberService;
+    private final EmailService emailService;
 
     @Operation(summary = "회원 가입", description = "회원가입 api입니다. 중복 이메일로는 회원가입 불가")
     @PostMapping(value = "/v1/auth/sign-up")
@@ -68,6 +72,20 @@ public class MemberController {
                 new TokenResponse.AccessTokenResponse(newAccessToken)
         ));
     }
+
+
+    // 비밀번호 찾기 이메일 관련
+
+    @Operation(summary = "비밀번호 찾기 이메일 전송 api", description = "비밀번호 찬기 용 이메일 발송 api 입니다.")
+    @PostMapping("/v1/auth/email")
+    public ResponseEntity<ApiResponse<EmailResponse>> sendEmail(@RequestBody @Valid EmailRequest request) {
+        EmailResponse sendEmailResponse = emailService.sendMail(request);
+        ApiResponse<EmailResponse> apiResponse = ApiResponse.onSuccess(sendEmailResponse);
+
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+
 
 
 }

@@ -42,6 +42,9 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_ORDER_ERROR(BAD_REQUEST, "ETC003", "Order values must be sequential, non-negative, and not null."),
     IMAGE_UPLOAD_FAILED(BAD_REQUEST, "ETC004", ""),
     EMAIL_SEND_ERROR(BAD_REQUEST, "ETC004", "Email cannot be sent."),
+    PASSWORD_NOT_MATCH(BAD_REQUEST, "PASSWORD001", "The passwords do not match."),
+    INVALID_RESET_TOKEN(BAD_REQUEST, "PASSWORD002", "The provided reset token is invalid."),
+    RESET_TOKEN_EXPIRED(BAD_REQUEST, "PASSWORD003", "The reset token has expired."),
     // 좋아요
     INVALID_LIKE_TYPE(BAD_REQUEST, "LIKE001", "The LikeType value must be one of the following: COMMUNITY, TEAM, PORTFOLIO, PROJECT."),
     // 회원

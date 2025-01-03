@@ -4,6 +4,7 @@ import com.backend.devfordev.apiPayload.ApiResponse;
 import com.backend.devfordev.dto.EmailRequest;
 import com.backend.devfordev.dto.EmailResponse;
 import com.backend.devfordev.dto.MemberDto.*;
+import com.backend.devfordev.dto.PasswordResetRequest;
 import com.backend.devfordev.service.EmailService;
 import com.backend.devfordev.service.MemberService.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -85,6 +86,12 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
+    @Operation(summary = "비밀번호 재설정 api", description = "비밀번호 재설정 페이지용 api입니다.")
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetPassword(@RequestBody @Valid PasswordResetRequest request) {
+        emailService.resetPassword(request);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
 
 

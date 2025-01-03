@@ -6,12 +6,14 @@ import com.backend.devfordev.domain.MemberEntity.Member;
 import com.backend.devfordev.dto.EmailMessage;
 import com.backend.devfordev.dto.EmailRequest;
 import com.backend.devfordev.dto.EmailResponse;
+import com.backend.devfordev.dto.PasswordResetRequest;
 import com.backend.devfordev.repository.MemberRepository.MemberRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -25,6 +27,7 @@ public class EmailService {
     private final JavaMailSender emailSender;
     private final SpringTemplateEngine templateEngine;
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public EmailResponse sendMail(EmailRequest emailRequest) {
         try {
@@ -83,6 +86,29 @@ public class EmailService {
         memberRepository.save(member); // 변경 사항 저장
 
         return resetToken;
+    }
+
+
+    public void resetPassword(PasswordResetRequest request) {
+        // 비밀번호 확인 검증
+        if (!request.newPassword().equals(request.confirmPassword())) {
+            throw new MemberHandler(ErrorStatus.PASSWORD_NOT_MATCH);
+        }
+
+        // 토큰으로 사용자 조회
+        Member member = memberRepository.findByResetToken(request.token())
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.INVALID_RESET_TOKEN));
+
+        // 토큰 만료 여부 확인
+        if (member.getTokenExpiry().isBefore(LocalDateTime.now())) {
+            throw new MemberHandler(ErrorStatus.RESET_TOKEN_EXPIRED);
+        }
+
+        // 비밀번호 암호화 및 저장
+        member.setPassword(passwordEncoder.encode(request.newPassword()));
+        member.setResetToken(null); // 토큰 제거
+        member.setTokenExpiry(null); // 토큰 만료 제거
+        memberRepository.save(member);
     }
 
 

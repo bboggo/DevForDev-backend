@@ -26,7 +26,7 @@ public class CommunityCommentResponse {
     @Schema(description = "작성일시", example = "2024-12-01T12:34:56")
     private LocalDateTime createdAt;
 
-//    @Schema(description = "답글 리스트 (없을 경우 빈 리스트)", example = "[]")
-//    private List<CommunityCommentResponse> replies;
+    @Schema(description = "답글 리스트 (없을 경우 빈 리스트)", example = "[]")
+    private List<CommunityCommentResponse> replies;
 
 }

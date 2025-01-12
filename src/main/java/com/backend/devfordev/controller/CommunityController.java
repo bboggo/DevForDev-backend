@@ -7,6 +7,7 @@ import com.backend.devfordev.dto.CommunityDto.CommunityCommentRequest;
 import com.backend.devfordev.dto.CommunityDto.CommunityCommentResponse;
 import com.backend.devfordev.dto.CommunityDto.CommunityRequest;
 import com.backend.devfordev.dto.CommunityDto.CommunityResponse;
+import com.backend.devfordev.service.CommunityService.CommunityCommentService;
 import com.backend.devfordev.service.CommunityService.CommunityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,6 +30,7 @@ import java.util.Optional;
 @Slf4j
 public class CommunityController {
     private final CommunityService communityService;
+    private final CommunityCommentService communityCommentService;
     @Operation(summary = "커뮤니티 글 등록",  description = "커뮤니티 글 등록 api입니다.")
     @PostMapping(value = "/v1/community")
     public ResponseEntity<ApiResponse<CommunityResponse.CommunityCreateResponse>> createCommunity(@Valid @RequestBody CommunityRequest.CommunityCreateRequest request, @AuthenticationPrincipal User user){
@@ -105,14 +107,21 @@ public class CommunityController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    @Operation(summary = "커뮤니티 댓글 등록", description = "커뮤니티에 댓글 작성하는 api입니다.작성자만 해당 기능을 사용할 수 있습니다. 최상위 댓글의 경우 parentId를 null로 보내주세요!")
+    @Operation(summary = "커뮤니티 댓글 등록", description = "커뮤니티에 댓글 작성하는 api입니다. 작성자만 해당 기능을 사용할 수 있습니다. 최상위 댓글의 경우 parentId를 null로 보내주세요!")
     @PostMapping("/community/{communityId}/comments")
     public ResponseEntity<ApiResponse<CommunityCommentResponse>> createComment(
             @PathVariable Long communityId,
             @RequestBody @Valid CommunityCommentRequest request,
             @AuthenticationPrincipal User user) {
-        CommunityCommentResponse response = communityService.createComment(communityId, Long.parseLong(user.getUsername()), request);
+        CommunityCommentResponse response = communityCommentService.addComment(communityId, Long.parseLong(user.getUsername()), request);
         return ResponseEntity.ok(ApiResponse.onSuccess(response));
     }
 
+    @Operation(summary = "커뮤니티 댓글 조회", description = "특정 커뮤니티의 댓글을 조회합니다. 댓글은 계층 구조로 반환됩니다.")
+    @GetMapping("/community/{communityId}/comments")
+    public ResponseEntity<ApiResponse<List<CommunityCommentResponse>>> getComments(
+            @PathVariable Long communityId) {
+        List<CommunityCommentResponse> responses = communityCommentService.getCommentsByCommunityId(communityId);
+        return ResponseEntity.ok(ApiResponse.onSuccess(responses));
+    }
 }

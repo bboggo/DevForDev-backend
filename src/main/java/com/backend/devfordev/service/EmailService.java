@@ -78,7 +78,7 @@ public class EmailService {
 
     public String generateResetToken(Member member) {
         String resetToken = UUID.randomUUID().toString(); // 고유한 토큰 생성
-        LocalDateTime expiryTime = LocalDateTime.now().plusHours(24); // 유효기간 설정 (24시간)
+        LocalDateTime expiryTime = LocalDateTime.now().plusMinutes(60); // 유효 시간 1시간
 
         member.setResetToken(resetToken);
         member.setTokenExpiry(expiryTime);

@@ -78,7 +78,7 @@ public class MemberController {
 
     // 비밀번호 찾기 이메일 관련
 
-    @Operation(summary = "비밀번호 찾기 이메일 전송 api", description = "비밀번호 찬기 용 이메일 발송 api 입니다.")
+    @Operation(summary = "비밀번호 찾기 이메일 전송 api", description = "비밀번호 찾기용 이메일 발송 api 입니다.")
     @PostMapping("/v1/auth/email")
     public ResponseEntity<ApiResponse<EmailResponse>> sendEmail(@RequestBody @Valid EmailRequest request) {
         EmailResponse sendEmailResponse = emailService.sendMail(request);

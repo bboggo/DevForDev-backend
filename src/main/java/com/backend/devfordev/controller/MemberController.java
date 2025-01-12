@@ -1,9 +1,11 @@
 package com.backend.devfordev.controller;
 
 import com.backend.devfordev.apiPayload.ApiResponse;
+import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
 import com.backend.devfordev.dto.EmailRequest;
 import com.backend.devfordev.dto.EmailResponse;
 import com.backend.devfordev.dto.MemberDto.*;
+import com.backend.devfordev.dto.PasswordResetRequest;
 import com.backend.devfordev.service.EmailService;
 import com.backend.devfordev.service.MemberService.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -76,7 +78,7 @@ public class MemberController {
 
     // 비밀번호 찾기 이메일 관련
 
-    @Operation(summary = "비밀번호 찾기 이메일 전송 api", description = "비밀번호 찬기 용 이메일 발송 api 입니다.")
+    @Operation(summary = "비밀번호 찾기 이메일 전송 api", description = "비밀번호 찾기용 이메일 발송 api 입니다.")
     @PostMapping("/v1/auth/email")
     public ResponseEntity<ApiResponse<EmailResponse>> sendEmail(@RequestBody @Valid EmailRequest request) {
         EmailResponse sendEmailResponse = emailService.sendMail(request);
@@ -85,7 +87,16 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-
-
+    @Operation(summary = "비밀번호 재설정 api", description = "비밀번호 재설정 페이지용 api입니다.")
+    @PostMapping("/v1/auth/reset-password")
+    public ResponseEntity<ApiResponse> resetPassword(@RequestBody @Valid PasswordResetRequest request) {
+        emailService.resetPassword(request);
+        ApiResponse apiResponse = ApiResponse.builder()
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message("비밀번호 재설정 성공!")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 
 }

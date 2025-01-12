@@ -19,5 +19,5 @@ public interface CommunityService {
 
     public void deleteCommunity(Long id, Long userId);
     public CommunityResponse.CommunityUpdateResponse updateCommunity(Long id, CommunityRequest.CommunityUpdateRequest request, Long userId);
-    public CommunityCommentResponse createComment(Long communityId, Long memberId, CommunityCommentRequest request);
+    //public CommunityCommentResponse createComment(Long communityId, Long memberId, CommunityCommentRequest request);
 }

@@ -272,33 +272,33 @@ public class CommunityServiceImpl implements CommunityService{
         return CommunityConverter.toCommunityUpdateResponse(community);
     }
 
-    @Transactional
-    @Override
-    public CommunityCommentResponse createComment(Long communityId, Long memberId, CommunityCommentRequest request) {
-        // 게시글 조회
-        Community community = communityRepository.findById(communityId)
-                .orElseThrow(() -> new IllegalArgumentException("Community post not found"));
-
-        // 작성자 조회
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
-
-        // 부모 댓글 조회 (답글인 경우)
-        CommunityComment parentComment = null;
-        if (request.getParentId() != null) {
-            parentComment = communityCommentRepository.findById(request.getParentId())
-                    .orElseThrow(() -> new IllegalArgumentException("Parent comment not found"));
-        }
-
-        // 댓글 엔티티 생성
-        CommunityComment comment = CommunityConverter.toCommunityComment(request, community, member, parentComment);
-
-        // 댓글 저장
-        CommunityComment savedComment = communityCommentRepository.save(comment);
-
-        // 저장된 댓글을 응답 객체로 변환하여 반환
-        return CommunityConverter.toCommunityCommentResponse(savedComment);
-    }
+//    @Transactional
+//    @Override
+//    public CommunityCommentResponse createComment(Long communityId, Long memberId, CommunityCommentRequest request) {
+//        // 게시글 조회
+//        Community community = communityRepository.findById(communityId)
+//                .orElseThrow(() -> new IllegalArgumentException("Community post not found"));
+//
+//        // 작성자 조회
+//        Member member = memberRepository.findById(memberId)
+//                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+//
+//        // 부모 댓글 조회 (답글인 경우)
+//        CommunityComment parentComment = null;
+//        if (request.getParentId() != null) {
+//            parentComment = communityCommentRepository.findById(request.getParentId())
+//                    .orElseThrow(() -> new IllegalArgumentException("Parent comment not found"));
+//        }
+//
+//        // 댓글 엔티티 생성
+//        CommunityComment comment = CommunityConverter.toCommunityComment(request, community, member, parentComment);
+//
+//        // 댓글 저장
+//        CommunityComment savedComment = communityCommentRepository.save(comment);
+//
+//        // 저장된 댓글을 응답 객체로 변환하여 반환
+//        return CommunityConverter.toCommunityCommentResponse(savedComment);
+//    }
 
 
 }

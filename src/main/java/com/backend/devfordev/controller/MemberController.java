@@ -1,6 +1,7 @@
 package com.backend.devfordev.controller;
 
 import com.backend.devfordev.apiPayload.ApiResponse;
+import com.backend.devfordev.apiPayload.code.status.SuccessStatus;
 import com.backend.devfordev.dto.EmailRequest;
 import com.backend.devfordev.dto.EmailResponse;
 import com.backend.devfordev.dto.MemberDto.*;
@@ -87,12 +88,15 @@ public class MemberController {
     }
 
     @Operation(summary = "비밀번호 재설정 api", description = "비밀번호 재설정 페이지용 api입니다.")
-    @PostMapping("/reset-password")
-    public ResponseEntity<Void> resetPassword(@RequestBody @Valid PasswordResetRequest request) {
+    @PostMapping("/v1/auth/reset-password")
+    public ResponseEntity<ApiResponse> resetPassword(@RequestBody @Valid PasswordResetRequest request) {
         emailService.resetPassword(request);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        ApiResponse apiResponse = ApiResponse.builder()
+                .isSuccess(SuccessStatus._OK.getReason().getIsSuccess())
+                .code(SuccessStatus._OK.getCode())
+                .message("비밀번호 재설정 성공!")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
-
-
 
 }

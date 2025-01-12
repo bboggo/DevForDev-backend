@@ -15,6 +15,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
+@Setter
 @Builder
 public class CommunityComment extends BaseEntity {
     //댓글 id, 커뮤니티 id, 유저 id, 댓글 내용, 댓글 길이, 부모 댓글 id, 인공지능 여부

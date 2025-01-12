@@ -51,4 +51,27 @@ public class CommunityCommentServiceImpl implements CommunityCommentService{
 
         return CommunityConverter.toCommunityCommentResponse(savedComment);
     }
+
+    @Transactional(readOnly = true)
+    public List<CommunityCommentResponse> getCommentsByCommunityId(Long communityId) {
+        // 최상위 댓글만 조회
+        List<CommunityComment> topLevelComments = commentRepository.findByCommunityIdAndParentIsNull(communityId);
+
+
+        return topLevelComments.stream()
+                .map(this::convertWithReplies)
+                .collect(Collectors.toList());
+    }
+
+    private CommunityCommentResponse convertWithReplies(CommunityComment comment) {
+        // 최상위 댓글 변환
+        CommunityCommentResponse response = CommunityConverter.toCommunityCommentResponse(comment);
+
+        List<CommunityCommentResponse> replies = comment.getChildren().stream()
+                .map(this::convertWithReplies) // 대댓글 변환
+                .collect(Collectors.toList());
+
+        response.setReplies(replies);
+        return response;
+    }
 }
